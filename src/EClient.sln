@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EClient", "EClient\EClient.csproj", "{212776F1-260A-4913-B793-CEDD3BDFD009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.App", "EService\EHost.App.csproj", "{46C7B635-6CF5-46C6-9B44-09E10758A25A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.App", "EHost.App\EHost.App.csproj", "{46C7B635-6CF5-46C6-9B44-09E10758A25A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBCF9245-FE2B-44E3-B9D9-9BCC9688295F}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,11 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniteTest", "UniteTest\Unit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EHostService", "EHostService", "{EA668254-5312-4837-8797-0A12309E61C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.Contract", "EHost.Model\EHost.Contract.csproj", "{C7239BDC-734F-4E77-8C55-0061C3EF7256}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.Contract", "EHost.Contract\EHost.Contract.csproj", "{C7239BDC-734F-4E77-8C55-0061C3EF7256}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.Db", "EHost.Db\EHost.Db.csproj", "{AE4FE010-9E53-4F64-839F-E3E87AB1AC10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.TcpServer", "EHost.TcpServer\EHost.TcpServer.csproj", "{E230D545-325C-42A8-971E-8F32D6165E30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHost.Tcp", "EHost.TcpServer\EHost.TcpServer.csproj", "{E230D545-325C-42A8-971E-8F32D6165E30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMqttRelay", "EMqttRelay\EMqttRelay.csproj", "{742C47C0-CC2B-42EB-92C9-BCA9E2BE7E89}"
 EndProject

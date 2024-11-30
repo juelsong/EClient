@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EHost.Contract\EHost.Contract.csproj" />
     <ProjectReference Include="..\EHost.Db\EHost.Db.csproj" />
-    <ProjectReference Include="..\EHost.Model\EHost.Contract.csproj" />
     <ProjectReference Include="..\EHost.TcpServer\EHost.TcpServer.csproj" />
   </ItemGroup>
 

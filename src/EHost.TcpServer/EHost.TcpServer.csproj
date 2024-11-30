@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EHost.Model\EHost.Contract.csproj" />
+    <ProjectReference Include="..\EHost.Contract\EHost.Contract.csproj" />
   </ItemGroup>
 
 </Project>
