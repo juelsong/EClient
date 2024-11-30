@@ -1,0 +1,7 @@
+obj
+Debug_*
+Release_*
+.vs
+.vscode
+bin
+*.user
