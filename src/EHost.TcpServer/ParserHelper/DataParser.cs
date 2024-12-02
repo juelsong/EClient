@@ -201,7 +201,7 @@ namespace EHost.TcpServer.ParserHelper
             {
                 Dictionary<string, string> dataMap = ParseKeyValuePairs(data);
                 result.Date = ConvertTimeStampToDateTime(dataMap["DataTime"]);//DateTime.Parse(dataMap["DataTime"]);
-                result.QuestCode = dataMap["QN"];
+                //result.QuestCode = dataMap["QN"];
                 result.SystemCode = dataMap["ST"];
                 result.Password = dataMap["PW"];
                 result.EquipmentCode = dataMap["MN"];

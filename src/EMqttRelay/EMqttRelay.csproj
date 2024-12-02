@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EHost.Contract\EHost.Contract.csproj" />
+    <ProjectReference Include="..\EHost.Mqtt\EHost.Mqtt.csproj" />
     <ProjectReference Include="..\EHost.TcpServer\EHost.TcpServer.csproj" />
   </ItemGroup>
 

@@ -3,8 +3,6 @@ using EMqttRelay.Service;
 using log4net.Config;
 using Microsoft.Extensions.Configuration;
 
-Console.WriteLine("Hello, World!");
-
 // 初始化log4net配置
 XmlConfigurator.Configure(new FileInfo("log4net.config"));
 
@@ -14,7 +12,25 @@ IConfigurationBuilder builder = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 IConfigurationRoot configuration = builder.Build();
 
-var myClass = new TcpMultiServer(configuration);
+Console.WriteLine("Start application!");
 
+Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelKeyPressed);
+Console.WriteLine("Press Ctrl+C to exit...");
 
-Console.ReadKey();
+var server = new TcpMultiServer(configuration);
+
+await server.StartAsync();
+
+static void CancelKeyPressed(object? sender, ConsoleCancelEventArgs e)
+{
+    // 阻止默认的退出行为
+    e.Cancel = true;
+
+    // 执行清理工作
+    Console.WriteLine("Exiting application...");
+
+    // 执行其他必要的清理操作...
+
+    // 退出程序
+    System.Environment.Exit(0);
+}

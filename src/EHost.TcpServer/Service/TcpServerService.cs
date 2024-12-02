@@ -18,6 +18,7 @@ namespace EHost.TcpServer.Service
         private readonly int port;
         private readonly TcpListener tcpListener;
         private readonly Thread listenThread;
+        private readonly ILog logger = LogManager.GetLogger(nameof(TcpSingleServer));
 
         public TcpSingleServer(int port)
         {
@@ -58,7 +59,7 @@ namespace EHost.TcpServer.Service
                     break;
                 }
                 string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                Console.WriteLine($"Received data from client: {data}");
+                logger.Info($"Received data from client: {data}");
 
                 // Echo the received data back to the client
                 byte[] echoData = Encoding.UTF8.GetBytes(data);
