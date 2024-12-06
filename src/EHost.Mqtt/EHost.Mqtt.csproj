@@ -8,8 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="3.0.3" />
+    <PackageReference Include="M2MqttDotnetCore" Version="1.1.0" />
     <PackageReference Include="MQTTnet" Version="4.3.7.1207" />
-    <PackageReference Include="MQTTnet.AspNetCore" Version="4.3.7.1207" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="cert\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,12 @@ using EHost.App.Db;
 using EHost.Contract.Entity;
 using EService.Service;
 using log4net;
+using log4net.Config;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Configuration;
+using System.Reflection;
+using System.Xml;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +25,7 @@ var configuration = new ConfigurationBuilder()
 builder.Configuration.AddConfiguration(configuration);
 
 
+
 //var loggerFactory = LoggerFactory.Create(builder =>
 //{
 //    builder.SetMinimumLevel(LogLevel.Information); // 设置最小日志级别
@@ -31,6 +38,7 @@ builder.Configuration.AddConfiguration(configuration);
 //    builder.AddConsole();
 //    builder.SetMinimumLevel(LogLevel.Information); // 设置最小日志级别
 //});
+
 
 builder.Logging.AddLog4Net("log4net.config");
 

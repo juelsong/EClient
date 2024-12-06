@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using EHost.Contract.Entity;
 using log4net;
+using System.Text.Json;
 
 namespace EHost.TcpServer.ParserHelper
 {
@@ -193,6 +194,23 @@ namespace EHost.TcpServer.ParserHelper
             }
             return sensorData;
         }
+        public static string JsonParse(this string rawData)
+        {
+            string[] parts = rawData.Split(new string[] { "&&" }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 1)
+            {
+                string dataAfterAnd = parts[1]; // 获取第二个部分，即&&之后的数据
+                logger.Info(dataAfterAnd);
+            }
+            else
+            {
+                logger.Error("No data found after '&&'.");
+            }
+            // 将动态对象转换为JSON字符串
+            return JsonSerializer.Serialize(ParseKeyValuePairs(parts[1]));
+
+        }
+
         public static FugitiveDust FugitiveDustParse(this string data)
         {
             FugitiveDust result = new FugitiveDust();
@@ -200,11 +218,23 @@ namespace EHost.TcpServer.ParserHelper
             try
             {
                 Dictionary<string, string> dataMap = ParseKeyValuePairs(data);
-                result.Date = ConvertTimeStampToDateTime(dataMap["DataTime"]);//DateTime.Parse(dataMap["DataTime"]);
+                if (dataMap.ContainsKey("DataTime"))
+                {
+                    result.Date = ConvertTimeStampToDateTime(dataMap["DataTime"]);//DateTime.Parse(dataMap["DataTime"]);
+                }
+                if (dataMap.ContainsKey("ST"))
+                {
+                    result.SystemCode = dataMap["ST"];
+                }
+                if (dataMap.ContainsKey("PW"))
+                {
+                    result.Password = dataMap["PW"];
+                }
+                if (dataMap.ContainsKey("MN"))
+                {
+                    result.EquipmentCode = dataMap["MN"];
+                }
                 //result.QuestCode = dataMap["QN"];
-                result.SystemCode = dataMap["ST"];
-                result.Password = dataMap["PW"];
-                result.EquipmentCode = dataMap["MN"];
                 if (dataMap.ContainsKey("a01001-Min"))
                 {
                     result.TemperatureMin = decimal.Parse(dataMap["a01001-Min"]);

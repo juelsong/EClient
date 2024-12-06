@@ -9,6 +9,7 @@
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// 可允许多连接
@@ -115,6 +116,7 @@
                                 if (Protocol.ProtocolExtract(data, out var dataStructure))
                                 {
                                     var fugitiveDust = dataStructure.DataSegment.FugitiveDustParse();
+                                    //var jsonData = dataStructure.DataSegment.JsonParse();
                                     //var mqttClient = new MqttClientManager(this.mqttServer, this.mqttPort, this.topic, this.username, this.password, fugitiveDust.EquipmentCode);
                                     currentMN = fugitiveDust.EquipmentCode;
                                     var mqttClient = _mqttClientManagers.Where(m => m.ClientId == currentMN).FirstOrDefault();
@@ -125,7 +127,7 @@
 
                                     }
                                     //TODO 数据加密
-                                    await mqttClient.PublishMessage(this.GetEncryptionData(data)).ConfigureAwait(false);
+                                    await mqttClient.PublishMessage(this.GetEncryptionData(dataStructure.DataSegment, fugitiveDust.Date)).ConfigureAwait(false);
                                 }
                             }
 
@@ -178,9 +180,34 @@
             //}
             //return true; // 如果两个字节都存在，返回 true
         }
-        private string GetEncryptionData(string data)
+        private string GetEncryptionData(string data,DateTime date)
         {
-            return data;
+            date = DateTime.Now;
+#if DEBUG
+            data = "ST=22;CN=2051;PW=123456;MN=HJZB0XH0150109;CP=&&DataTime=20241205100227;a34001-Avg=0.160,a34001-Max=0.160,a34001-Min=0.160,a34001-Flag=N;a01007-Avg=0.0,a01007-Max=0.0,a01007-Min=0.0,a01007-Flag=N;a01008-Avg=0,a01008-Max=0,a01008-Min=0,a01008-Flag=N;a01001-Avg=15.1,a01001-Max=15.2,a01001-Min=15.1,a01001-Flag=N;a01002-Avg=54.4,a01002-Max=54.5,a01002-Min=54.4,a01002-Flag=N;a01006-Avg=0.00,a01006-Max=0.00,a01006-Min=0.00,a01006-Flag=F;a50001-Avg=41.7,a50001-Max=43.1,a50001-Min=40.9,a50001-Flag=N;cpm-Avg=57,cpm-Max=57,cpm-Min=57,cpm-Flag=N;&&";
+            string currentTime = date.ToString("yyyyMMddHHmmss");
+            string pattern = @"DataTime=[0-9]{14}";
+            string replacement = "DataTime=" + currentTime;
+            string modifiedString = Regex.Replace(data, pattern, replacement);
+#else
+            StringBuilder sb = new StringBuilder(data);
+            int lastAndIndex = data.LastIndexOf("&&");
+
+            if (lastAndIndex != -1)
+            {
+                sb.Insert(lastAndIndex, ";");
+            }
+            string modifiedString = sb.ToString();
+#endif
+            modifiedString = $"QN={date.ToString("yyyyMMddHHmmssfff")};" + modifiedString;
+            //data = $"QN=20241205090532000;" + data;
+
+            byte[] bytes = Encoding.UTF8.GetBytes(modifiedString);
+
+            var crc = CrcHelper.CRC16_Checkout(bytes, bytes.Length).ToString("X4");
+
+            modifiedString = $"##{modifiedString.Length.ToString("0000")}{modifiedString}{crc}\r\n";
+            return modifiedString;
         }
     }
 

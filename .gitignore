@@ -5,3 +5,4 @@ Release_*
 .vscode
 bin
 *.user
+EMqttRelay/document
