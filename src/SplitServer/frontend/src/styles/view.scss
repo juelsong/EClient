@@ -1,0 +1,24 @@
+.node-deactive>.el-tree-node__content {
+    color: #d5dae5 !important;
+}
+
+$description-label-width :120px;
+
+.el-descriptions__label.el-descriptions__cell.is-bordered-label {
+    width    : $description-label-width;
+    max-width: $description-label-width;
+}
+
+.el-descriptions__cell.el-descriptions__content {
+    width     : calc(50% - $description-label-width);
+    word-wrap : break-word;
+    word-break: break-all;
+}
+
+.icon-danger {
+    color: red;
+}
+
+.icon-disabled {
+    cursor: not-allowed;
+}

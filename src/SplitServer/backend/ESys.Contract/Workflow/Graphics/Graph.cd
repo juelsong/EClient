@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Cell">
+    <Position X="11.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Cell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Node">
+    <Position X="10.25" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAABABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Node.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Edge">
+    <Position X="12.75" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Edge.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Graph">
+    <Position X="15.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.NodePorts">
+    <Position X="15.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\NodePorts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Port">
+    <Position X="15.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Port.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CN.Metaura.EMIS.Workflow.Graphics.Connector">
+    <Position X="17" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\Connector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

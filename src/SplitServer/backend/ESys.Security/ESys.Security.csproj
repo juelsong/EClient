@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.Security</AssemblyName>
+    <RootNamespace>ESys.Security</RootNamespace>
+    <DocumentationFile>..\$(Configuration)_$(Platform)\ESys.Security.xml</DocumentationFile>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <DocumentationFile>$(SolutionDir)$(Configuration)_$(Platform)\ESys.Security.xml</DocumentationFile>
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="i18n\en\passvalidation.json" />
+    <None Remove="i18n\zh-cn\passvalidation.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="i18n\en\passvalidation.json" />
+    <EmbeddedResource Include="i18n\zh-cn\passvalidation.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Contract\ESys.Contract.csproj" />
+    <ProjectReference Include="..\ESys.Infrastructure\ESys.Infrastructure.csproj" />
+    <ProjectReference Include="..\ESys.Utilty\ESys.Utilty.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.4" />
+    <PackageReference Include="Scrutor" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAnnotations\DataAnnotations.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference Include="..\DataGenerator\DataGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+  </ItemGroup>
+
+  
+</Project>

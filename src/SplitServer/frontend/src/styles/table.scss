@@ -1,0 +1,24 @@
+.disable_click {
+    pointer-events: none;
+}
+
+.table-pagination {
+    float     : right;
+    margin-top: 16px;
+}
+
+.table-operation-header {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.el-table .table-selected {
+    --el-table-tr-background-color: var(--el-color-primary-light-9);
+}
+
+.table-page-search-submitButtons {
+    float        : left;
+    overflow     : hidden;
+    margin-bottom: 20px;
+}

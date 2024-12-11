@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.DataAnnotations</AssemblyName>
+    <RootNamespace>ESys.DataAnnotations</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
+    <IsRosyComponent>true</IsRosyComponent>
+    <Authors>Gonna</Authors>
+    <Description>Shared DataGenerator source generator attributes.</Description>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+</Project>

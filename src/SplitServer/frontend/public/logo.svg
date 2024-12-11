@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg version="1.1" id="&#x56FE;&#x5C42;_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 309 88" style="enable-background:new 0 0 309 88;" xml:space="preserve">
+<font horiz-adv-x="1000">
+<font-face font-family="SJ-ruihei-Regular" units-per-em="1000" underline-position="-75" underline-thickness="50"/>
+<missing-glyph horiz-adv-x="1000"/>
+<glyph unicode="A" horiz-adv-x="613" d="M643,0l-120,0l-189,615l-96,-289l145,0l31,-100l-209,0l-75,-226l-100,0l232,700l166,0z"/>
+<glyph unicode="E" horiz-adv-x="536" d="M546,700l0,-100l-356,0l0,-200l310,0l0,-100l-310,0l0,-200l356,0l0,-100l-476,0l0,700z"/>
+<glyph unicode="T" horiz-adv-x="570" d="M50,700l530,0l0,-100l-205,0l0,-600l-120,0l0,600l-205,0z"/>
+<glyph unicode="U" horiz-adv-x="590" d="M70,700l120,0l0,-600l260,0l0,-100l-280,0l-100,100M480,0l0,700l120,0l0,-600l-100,-100z"/>
+<glyph unicode="R" horiz-adv-x="590" d="M600,600l0,-200l-120,-100l0,300l-290,0l0,-200l260,0l0,-100l-52,0l188,-300l-120,0l-188,300l-88,0l0,-300l-120,0l0,700l430,0z"/>
+</font>
+	<text transform="matrix(1 0 0 1 83.9586 60.67)" style="fill:#434142; font-family:'SJ-ruihei-Regular'; font-size:46px; letter-spacing:4;">ETAURA</text>
+<polygon style="fill:#2896D4;" points="66.693,24.637 54.146,34.295 32.813,17.857 32.813,60.67 40.125,60.67 40.125,33.482 
+	54.157,44.045 66.693,34.328 "/>
+<polygon style="fill:#7CAC2D;" points="75.5,27.485 75.5,17.857 68.193,23.482 68.193,33.153 "/>
+<polygon style="fill:#2896D4;" points="68.193,35.051 75.5,29.383 75.5,60.67 68.193,60.67 "/>
+</svg>

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>output</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMIS.Contract\EMIS.Contract.csproj" />
+    <ProjectReference Include="..\EMIS.Db\EMIS.Db.csproj" />
+    <ProjectReference Include="..\EMIS.Notification\EMIS.Notification.csproj" />
+    <ProjectReference Include="..\EMIS.Schedule\EMIS.Schedule.csproj" />
+    <ProjectReference Include="..\EMIS.Security\EMIS.Security.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+export default {
+  title: "电子签名",
+  label: {
+    category: "类别",
+  },
+  confirm: {
+    notSameUser: "账号和当前用户不匹配",
+    cancelESign: "是否取消签名？所做修改将无法保存",
+  },
+  editor: {
+    Account: "账号",
+    Password: "密码",
+    Comment: "备注",
+    CurrentUser: "当前用户",
+    Tips: "本人知晓并认可电子签名与手写签名具有同等效力。请在下方输入您的账号和密码。",
+  },
+  category: {
+    planReview: "复核",
+    planApprove: "不批准",
+    auditEdit: "编辑",
+    receiveTask: "领取当前任务",
+    assignTask: "分配当前任务",
+    executeTask: "执行当前任务",
+    returnTask: "退回当前任务到未分配",
+    addPlan: "新增计划条目,同时增加版本",
+    editPlan: "新增计划条目",
+    planEffective: "计划生效",
+    planRetire: "计划批准",
+    eSignTasks: "签名确认",
+    noTest: "无需测试",
+    auditReTest: "重新打开",
+    auditReview: "复核",
+    auditApprove: "批准",
+    auditReApprove: "重新打开",
+  },
+};

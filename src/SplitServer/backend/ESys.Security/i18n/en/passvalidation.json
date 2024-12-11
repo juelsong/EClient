@@ -1,0 +1,10 @@
+{
+  "PassValidationErrors": {
+    "MinLength": "must be a string with a minimum length of '{0}'.",
+    "ContainsNumber": "must contains number.",
+    "ContainsLowerChar": "must contains lower char.",
+    "ContainsUpperChar": "must contains upper char.",
+    "ContainsSpecialChar": "must contains special char.",
+    "CanNotRepeatedTimes": "used in last {0} times"
+  }
+}

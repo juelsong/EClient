@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+
+    <AssemblyName>ESys.SecurityTest</AssemblyName>
+    <RootNamespace>ESys.SecurityTest</RootNamespace>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>output</AppendTargetFrameworkToOutputPath>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1608;NU1701</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\UnitTest\UnitTestContext.cs" Link="UnitTestContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="securitytestsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="Scrutor" Version="4.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" PrivateAssets="all"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.App\ESys.App.csproj" />
+    <ProjectReference Include="..\ESys.Db\ESys.Db.csproj" />
+    <ProjectReference Include="..\ESys.Security\ESys.Security.csproj" />
+  </ItemGroup>
+</Project>

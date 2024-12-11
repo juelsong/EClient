@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.Notification</AssemblyName>
+    <RootNamespace>ESys.Notification</RootNamespace>
+    <DocumentationFile>..\$(Configuration)_$(Platform)\ESys.Notification.xml</DocumentationFile>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <DocumentationFile>$(SolutionDir)$(Configuration)_$(Platform)\ESys.Notification.xml</DocumentationFile>
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Contract\ESys.Contract.csproj" />
+    <ProjectReference Include="..\ESys.Infrastructure\ESys.Infrastructure.csproj" />
+    <ProjectReference Include="..\ESys.Security\ESys.Security.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAnnotations\DataAnnotations.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference Include="..\DataGenerator\DataGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference Include="..\ESys.Contract\ESys.Contract.csproj" />
+    <ProjectReference Include="..\ESys.Infrastructure\ESys.Infrastructure.csproj" />
+    <ProjectReference Include="..\ESys.Security\ESys.Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resource.en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Resource.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  
+</Project>

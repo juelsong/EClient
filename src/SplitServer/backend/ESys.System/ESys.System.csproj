@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.System</AssemblyName>
+    <RootNamespace>ESys.System</RootNamespace>
+    <DocumentationFile>..\$(Configuration)_$(Platform)\ESys.System.xml</DocumentationFile>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <DocumentationFile>$(SolutionDir)$(Configuration)_$(Platform)\ESys.System.xml</DocumentationFile>
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Utilty\ESys.Utilty.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAnnotations\DataAnnotations.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference Include="..\DataGenerator\DataGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,36 @@
+export default {
+  title: "ESign",
+  label: {
+    category: "category",
+  },
+  confirm: {
+    notSameUser: "notSameUser",
+    cancelESign: "all data will be lost",
+  },
+  editor: {
+    Account: "UserName",
+    Password: "Password",
+    Comment: "Comment",
+    CurrentUser: "CurrentUser",
+    Tips: "I know and accept that electronic signature and handwritten signature have the same effect. Enter your user name and password below.",
+  },
+  category: {
+    planReview: "planReview",
+    planApprove: "planApprove",
+    auditEdit: "auditEdit",
+    receiveTask: "receiveTask",
+    assignTask: "assignTask",
+    executeTask: "executeTask",
+    returnTask: "returnTask",
+    addPlan: "addPlan",
+    editPlan: "editPlan",
+    planEffective: "planEffective",
+    planRetire: "planRetire",
+    eSignTasks: "eSignTasks",
+    noTest: "NoTest",
+    auditReTest: "ReTest",
+    auditReview: "Review",
+    auditApprove: "Approve",
+    auditReApprove: "重新打开",
+  },
+};

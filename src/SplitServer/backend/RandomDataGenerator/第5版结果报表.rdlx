@@ -1,0 +1,2118 @@
+﻿<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition">
+	<dd:Name xmlns:dd="http://schemas.datadynamics.com/reporting/2005/02/reportdefinition">第5版结果报表.rdlx</dd:Name>
+	<PageHeader>
+		<Height>1.667105cm</Height>
+		<PrintOnFirstPage>true</PrintOnFirstPage>
+		<PrintOnLastPage>true</PrintOnLastPage>
+		<ReportItems>
+			<Shape Name="Shape1">
+				<Top>0.1114035cm</Top>
+				<Left>0.1949561cm</Left>
+				<Width>0.8cm</Width>
+				<Height>0.8cm</Height>
+				<Style>
+					<BackgroundColor>DeepSkyBlue</BackgroundColor>
+					<FontFamily>微软雅黑</FontFamily>
+					<BorderColor>
+						<Default>DeepSkyBlue</Default>
+					</BorderColor>
+					<BorderStyle>
+						<Default>Solid</Default>
+					</BorderStyle>
+				</Style>
+				<ZIndex>7</ZIndex>
+				<dd:ShapeStyle xmlns:dd="http://schemas.datadynamics.com/reporting/2005/02/reportdefinition">Rectangle</dd:ShapeStyle>
+			</Shape>
+			<Textbox Name="TextBox4">
+				<Top>0.1671053cm</Top>
+				<Left>1.239364cm</Left>
+				<Width>6.1606cm</Width>
+				<Height>0.75cm</Height>
+				<Style>
+					<Color>Black</Color>
+					<FontFamily>微软雅黑</FontFamily>
+					<FontSize>14pt</FontSize>
+					<PaddingBottom>2pt</PaddingBottom>
+					<PaddingLeft>2pt</PaddingLeft>
+					<PaddingRight>2pt</PaddingRight>
+					<PaddingTop>2pt</PaddingTop>
+				</Style>
+				<ZIndex>4</ZIndex>
+				<CanGrow>true</CanGrow>
+				<Value>=First(Fields!ComponyName.Value, "DataSet1")&amp;“公司”</Value>
+			</Textbox>
+			<Textbox Name="TextBox5">
+				<Top>0.1322917cm</Top>
+				<Left>14.68437cm</Left>
+				<Width>5.5156cm</Width>
+				<Height>0.75cm</Height>
+				<Style>
+					<FontFamily>微软雅黑</FontFamily>
+					<FontSize>12pt</FontSize>
+					<PaddingBottom>2pt</PaddingBottom>
+					<PaddingLeft>2pt</PaddingLeft>
+					<PaddingRight>2pt</PaddingRight>
+					<PaddingTop>2pt</PaddingTop>
+					<TextAlign>Left</TextAlign>
+				</Style>
+				<ZIndex>5</ZIndex>
+				<CanGrow>true</CanGrow>
+				<DataElementName>TextBox10</DataElementName>
+				<Value>="报告人:"&amp;First(Fields!UserName.Value, "DataSet1")</Value>
+			</Textbox>
+			<Textbox Name="TextBox2">
+				<Top>0.917105cm</Top>
+				<Left>14.68437cm</Left>
+				<Width>5.4cm</Width>
+				<Height>0.75cm</Height>
+				<Style>
+					<FontFamily>微软雅黑</FontFamily>
+					<FontSize>12pt</FontSize>
+					<PaddingBottom>2pt</PaddingBottom>
+					<PaddingLeft>2pt</PaddingLeft>
+					<PaddingRight>2pt</PaddingRight>
+					<PaddingTop>2pt</PaddingTop>
+					<TextAlign>Left</TextAlign>
+				</Style>
+				<ZIndex>2</ZIndex>
+				<CanGrow>true</CanGrow>
+				<Value>=Globals!ExecutionTime</Value>
+			</Textbox>
+		</ReportItems>
+	</PageHeader>
+	<Body>
+		<Height>74.2cm</Height>
+		<ReportItems>
+			<Table Name="表格1">
+				<Top>0cm</Top>
+				<Left>1cm</Left>
+				<Width>19.86812cm</Width>
+				<Height>15.99984cm</Height>
+				<Style>
+					<FontFamily>微软雅黑</FontFamily>
+					<PaddingBottom>0pt</PaddingBottom>
+					<PaddingLeft>0pt</PaddingLeft>
+					<PaddingRight>0pt</PaddingRight>
+					<PaddingTop>0pt</PaddingTop>
+				</Style>
+				<ZIndex>46</ZIndex>
+				<DataSetName>DataSet2</DataSetName>
+				<Details>
+					<Grouping Name="区域">
+						<GroupExpressions>
+							<GroupExpression>=Fields!LocationId.Value</GroupExpression>
+						</GroupExpressions>
+					</Grouping>
+					<TableRows>
+						<TableRow>
+							<Height>1.999939cm</Height>
+							<TableCells>
+								<TableCell>
+									<ColSpan>2</ColSpan>
+									<ReportItems>
+										<Textbox Name="文本框7">
+											<Style>
+												<FontFamily>微软雅黑</FontFamily>
+												<FontSize>18pt</FontSize>
+												<FontStyle>Normal</FontStyle>
+												<FontWeight>700</FontWeight>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Center</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<Value>趋势分析报告</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+						<TableRow>
+							<Height>0.999969cm</Height>
+							<TableCells>
+								<TableCell>
+									<ColSpan>2</ColSpan>
+									<ReportItems>
+										<Textbox Name="文本框13">
+											<Style>
+												<FontFamily>微软雅黑</FontFamily>
+												<FontSize>12pt</FontSize>
+												<FontStyle>Normal</FontStyle>
+												<FontWeight>700</FontWeight>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Center</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<Value>选定报告周期:</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+						<TableRow>
+							<Height>0.999969cm</Height>
+							<TableCells>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="文本框1">
+											<Style>
+												<Color>DodgerBlue</Color>
+												<FontFamily>微软雅黑</FontFamily>
+												<FontSize>12pt</FontSize>
+												<FontStyle>Normal</FontStyle>
+												<FontWeight>400</FontWeight>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Left</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<Value>区域:</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="文本框8">
+											<Style>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Left</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<DataElementName>Location Name</DataElementName>
+											<Value>=Fields!LocationName.Value</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+						<TableRow>
+							<Height>0.999969cm</Height>
+							<TableCells>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="文本框3">
+											<Style>
+												<Color>DodgerBlue</Color>
+												<FontFamily>微软雅黑</FontFamily>
+												<FontSize>12pt</FontSize>
+												<FontStyle>Normal</FontStyle>
+												<FontWeight>400</FontWeight>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Left</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<Value>洁净级别:</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="文本框6">
+											<Style>
+												<FontFamily>微软雅黑</FontFamily>
+												<FontSize>10pt</FontSize>
+												<FontStyle>Normal</FontStyle>
+												<FontWeight>400</FontWeight>
+												<PaddingBottom>2pt</PaddingBottom>
+												<PaddingLeft>2pt</PaddingLeft>
+												<PaddingRight>2pt</PaddingRight>
+												<PaddingTop>2pt</PaddingTop>
+												<TextAlign>Left</TextAlign>
+												<VerticalAlign>Middle</VerticalAlign>
+											</Style>
+											<CanGrow>true</CanGrow>
+											<DataElementName>Classification</DataElementName>
+											<Value>=Fields!Classification.Value</Value>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+						<TableRow>
+							<Height>11cm</Height>
+							<TableCells>
+								<TableCell>
+									<ColSpan>2</ColSpan>
+									<ReportItems>
+										<Table Name="表格2">
+											<Style>
+												<FontFamily>微软雅黑</FontFamily>
+											</Style>
+											<ZIndex>47</ZIndex>
+											<DataSetName>DataSet3</DataSetName>
+											<Details>
+												<TableRows>
+													<TableRow>
+														<Height>1.000705cm</Height>
+														<TableCells>
+															<TableCell>
+																<ReportItems>
+																	<Textbox Name="文本框16">
+																		<Style>
+																			<Color>DodgerBlue</Color>
+																			<FontFamily>微软雅黑</FontFamily>
+																			<FontSize>12pt</FontSize>
+																			<FontStyle>Normal</FontStyle>
+																			<FontWeight>400</FontWeight>
+																			<PaddingBottom>2pt</PaddingBottom>
+																			<PaddingLeft>2pt</PaddingLeft>
+																			<PaddingRight>2pt</PaddingRight>
+																			<PaddingTop>2pt</PaddingTop>
+																			<TextAlign>Left</TextAlign>
+																			<VerticalAlign>Middle</VerticalAlign>
+																		</Style>
+																		<CanGrow>true</CanGrow>
+																		<DataElementName>Id</DataElementName>
+																		<Value>测试方法:</Value>
+																	</Textbox>
+																</ReportItems>
+															</TableCell>
+															<TableCell>
+																<ReportItems>
+																	<Textbox Name="文本框17">
+																		<Style>
+																			<PaddingBottom>2pt</PaddingBottom>
+																			<PaddingLeft>2pt</PaddingLeft>
+																			<PaddingRight>2pt</PaddingRight>
+																			<PaddingTop>2pt</PaddingTop>
+																			<TextAlign>Left</TextAlign>
+																			<VerticalAlign>Middle</VerticalAlign>
+																		</Style>
+																		<CanGrow>true</CanGrow>
+																		<DataElementName>Test Type Name</DataElementName>
+																		<Value>=Fields!TestTypeName.Value</Value>
+																	</Textbox>
+																</ReportItems>
+															</TableCell>
+														</TableCells>
+													</TableRow>
+													<TableRow>
+														<Height>6.988684cm</Height>
+														<TableCells>
+															<TableCell>
+																<ColSpan>2</ColSpan>
+																<ReportItems>
+																	<List Name="列表1">
+																		<DataSetName>测试数据</DataSetName>
+																		<Filters>
+																			<Filter>
+																				<FilterExpression>=Fields!LocationId.Value</FilterExpression>
+																				<FilterValues>
+																					<FilterValue>=Fields!LocationId.Value</FilterValue>
+																				</FilterValues>
+																				<Operator>Equal</Operator>
+																			</Filter>
+																			<Filter>
+																				<FilterExpression>=Fields!TestTypeId.Value</FilterExpression>
+																				<FilterValues>
+																					<FilterValue>=Fields!TestTypeId.Value</FilterValue>
+																				</FilterValues>
+																				<Operator>Equal</Operator>
+																			</Filter>
+																		</Filters>
+																		<Grouping Name="列表1_Detail_Group">
+																			<GroupExpressions>
+																				<GroupExpression>=Fields!Name.Value</GroupExpression>
+																			</GroupExpressions>
+																		</Grouping>
+																		<Style>
+																			<FontFamily>微软雅黑</FontFamily>
+																		</Style>
+																		<ZIndex>48</ZIndex>
+																		<ReportItems>
+																			<Textbox Name="文本框2">
+																				<Top>0.2cm</Top>
+																				<Left>0cm</Left>
+																				<Width>5.3448cm</Width>
+																				<Height>0.75cm</Height>
+																				<Style>
+																					<FontFamily>微软雅黑</FontFamily>
+																					<PaddingBottom>2pt</PaddingBottom>
+																					<PaddingLeft>2pt</PaddingLeft>
+																					<PaddingRight>2pt</PaddingRight>
+																					<PaddingTop>2pt</PaddingTop>
+																				</Style>
+																				<ZIndex>32</ZIndex>
+																				<CanGrow>true</CanGrow>
+																				<DataElementName>Name</DataElementName>
+																				<Value>=“测试类别:”&amp;Fields!Name.Value</Value>
+																			</Textbox>
+																			<dd:DVChart Name="图表2" xmlns:dd="http://schemas.datadynamics.com/reporting/2005/02/reportdefinition">
+																				<DataSetName>测试数据</DataSetName>
+																				<Top>1cm</Top>
+																				<Left>0cm</Left>
+																				<Width>19.621cm</Width>
+																				<Height>5.4908cm</Height>
+																				<Style>
+																					<FontFamily>微软雅黑</FontFamily>
+																					<FontSize>8pt</FontSize>
+																				</Style>
+																				<ZIndex>31</ZIndex>
+																				<DisplayTypeSelector>false</DisplayTypeSelector>
+																				<Header>
+																					<Style>
+																						<FontSize>8pt</FontSize>
+																						<PaddingBottom>2pt</PaddingBottom>
+																						<PaddingLeft>2pt</PaddingLeft>
+																						<PaddingRight>2pt</PaddingRight>
+																						<PaddingTop>4pt</PaddingTop>
+																					</Style>
+																					<Text>
+																						<Style>
+																							<FontFamily>微软雅黑</FontFamily>
+																							<FontSize>10pt</FontSize>
+																						</Style>
+																					</Text>
+																				</Header>
+																				<Footer>
+																					<Style>
+																						<FontSize>8pt</FontSize>
+																						<PaddingBottom>4pt</PaddingBottom>
+																						<PaddingLeft>2pt</PaddingLeft>
+																						<PaddingRight>2pt</PaddingRight>
+																						<PaddingTop>2pt</PaddingTop>
+																					</Style>
+																					<Text>
+																						<Style>
+																							<FontSize>8pt</FontSize>
+																						</Style>
+																					</Text>
+																				</Footer>
+																				<Bar>
+																					<TopWidth>0.55</TopWidth>
+																					<BottomWidth>0.55</BottomWidth>
+																					<Width>0.55</Width>
+																				</Bar>
+																				<PlotArea>
+																					<Style>
+																						<FontSize>8pt</FontSize>
+																						<PaddingBottom>2pt</PaddingBottom>
+																						<PaddingLeft>2pt</PaddingLeft>
+																						<PaddingRight>10pt</PaddingRight>
+																						<PaddingTop>2pt</PaddingTop>
+																						<BorderColor>
+																							<Default>Red</Default>
+																						</BorderColor>
+																						<BorderStyle>
+																							<Default>None</Default>
+																						</BorderStyle>
+																					</Style>
+																					<Axes>
+																						<Axis>
+																							<AxisLine>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																									<BorderStyle>
+																										<Default>Solid</Default>
+																									</BorderStyle>
+																								</Style>
+																							</AxisLine>
+																							<Labels>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Labels>
+																							<MajorGrid>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</MajorGrid>
+																							<MinorGrid>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</MinorGrid>
+																							<MajorTicks>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																								<TickMark>Cross</TickMark>
+																								<Size>4pt</Size>
+																							</MajorTicks>
+																							<MinorTicks>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																								<TickMark>None</TickMark>
+																								<Size>2pt</Size>
+																							</MinorTicks>
+																							<Plots>
+																								<Plot>Plot1</Plot>
+																							</Plots>
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																							</Style>
+																							<Text>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<Title>
+																								<Style>
+																									<FontFamily>微软雅黑</FontFamily>
+																									<PaddingBottom>2pt</PaddingBottom>
+																									<PaddingLeft>2pt</PaddingLeft>
+																									<PaddingRight>2pt</PaddingRight>
+																									<PaddingTop>2pt</PaddingTop>
+																								</Style>
+																								<Caption>时间</Caption>
+																							</Title>
+																							<Type>X</Type>
+																						</Axis>
+																						<Axis>
+																							<AxisLine>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																									<BorderStyle>
+																										<Default>Solid</Default>
+																									</BorderStyle>
+																								</Style>
+																							</AxisLine>
+																							<Labels>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Labels>
+																							<MajorGrid>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																									<BorderColor>
+																										<Default>Silver</Default>
+																									</BorderColor>
+																									<BorderStyle>
+																										<Default>Solid</Default>
+																									</BorderStyle>
+																								</Style>
+																								<Visible>true</Visible>
+																							</MajorGrid>
+																							<MinorGrid>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</MinorGrid>
+																							<MajorTicks>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																								<TickMark>None</TickMark>
+																								<Size>4pt</Size>
+																							</MajorTicks>
+																							<MinorTicks>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																								<TickMark>None</TickMark>
+																								<Size>2pt</Size>
+																							</MinorTicks>
+																							<Plots>
+																								<Plot>Plot1</Plot>
+																							</Plots>
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																							</Style>
+																							<Text>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<Title>
+																								<Style>
+																									<FontFamily>微软雅黑</FontFamily>
+																									<PaddingBottom>2pt</PaddingBottom>
+																									<PaddingLeft>2pt</PaddingLeft>
+																									<PaddingRight>2pt</PaddingRight>
+																									<PaddingTop>2pt</PaddingTop>
+																								</Style>
+																								<Caption>结果值</Caption>
+																							</Title>
+																							<Type>Y</Type>
+																						</Axis>
+																					</Axes>
+																					<Legends>
+																						<Legend>
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																								<PaddingBottom>2pt</PaddingBottom>
+																								<PaddingLeft>2pt</PaddingLeft>
+																								<PaddingRight>2pt</PaddingRight>
+																								<PaddingTop>2pt</PaddingTop>
+																							</Style>
+																							<Title>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Title>
+																							<Text>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<Hidden>true</Hidden>
+																							<Type>Color</Type>
+																						</Legend>
+																						<Legend>
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																								<PaddingBottom>2pt</PaddingBottom>
+																								<PaddingLeft>2pt</PaddingLeft>
+																								<PaddingRight>2pt</PaddingRight>
+																								<PaddingTop>2pt</PaddingTop>
+																							</Style>
+																							<Title>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Title>
+																							<Text>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<IconColor>Black</IconColor>
+																							<Type>Shape</Type>
+																						</Legend>
+																						<Legend>
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																								<PaddingBottom>2pt</PaddingBottom>
+																								<PaddingLeft>2pt</PaddingLeft>
+																								<PaddingRight>2pt</PaddingRight>
+																								<PaddingTop>2pt</PaddingTop>
+																							</Style>
+																							<Title>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Title>
+																							<Text>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<IconColor>Black</IconColor>
+																							<Type>Size</Type>
+																						</Legend>
+																					</Legends>
+																				</PlotArea>
+																				<Legend>
+																					<Style>
+																						<FontSize>8pt</FontSize>
+																						<PaddingBottom>2pt</PaddingBottom>
+																						<PaddingLeft>2pt</PaddingLeft>
+																						<PaddingRight>2pt</PaddingRight>
+																						<PaddingTop>2pt</PaddingTop>
+																					</Style>
+																					<Text>
+																						<Style>
+																							<FontSize>8pt</FontSize>
+																						</Style>
+																					</Text>
+																					<Title>
+																						<Style>
+																							<FontSize>8pt</FontSize>
+																						</Style>
+																					</Title>
+																					<Orientation>Horizontal</Orientation>
+																				</Legend>
+																				<Palette>Custom</Palette>
+																				<Plots>
+																					<Plot>
+																						<Type>Line</Type>
+																						<Name>Plot1</Name>
+																						<PlotChartType>Line</PlotChartType>
+																						<Config>
+																							<Bar />
+																							<Style>
+																								<FontSize>8pt</FontSize>
+																								<BorderColor>
+																									<Default>Black</Default>
+																								</BorderColor>
+																								<BorderStyle>
+																									<Default>Solid</Default>
+																								</BorderStyle>
+																							</Style>
+																							<Symbols>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																									<BorderColor>
+																										<Default>Black</Default>
+																									</BorderColor>
+																									<BorderStyle>
+																										<Default>None</Default>
+																									</BorderStyle>
+																									<BorderWidth>
+																										<Default>1pt</Default>
+																									</BorderWidth>
+																								</Style>
+																								<Visible>true</Visible>
+																								<Shape>Dot</Shape>
+																							</Symbols>
+																							<Text>
+																								<ConnectingLine>
+																									<Style>
+																										<FontSize>8pt</FontSize>
+																									</Style>
+																								</ConnectingLine>
+																								<Style>
+																									<FontSize>8pt</FontSize>
+																								</Style>
+																							</Text>
+																							<Tooltip />
+																						</Config>
+																						<Encodings>
+																							<Values>
+																								<Value>
+																									<Field fieldType="Simple">
+																										<Value>
+																											<FieldItem>=Fields!Value.Value</FieldItem>
+																										</Value>
+																									</Field>
+																								</Value>
+																							</Values>
+																							<Category>
+																								<Field>
+																									<Value>
+																										<FieldItem>=Fields!TestDateTime.Value</FieldItem>
+																									</Value>
+																								</Field>
+																								<SortingField>=""</SortingField>
+																							</Category>
+																							<Color>
+																								<Field>
+																									<Value>
+																										<FieldItem>VALUESNAME</FieldItem>
+																									</Value>
+																								</Field>
+																								<Aggregate>List</Aggregate>
+																							</Color>
+																							<Shape>
+																								<Field>
+																									<Value />
+																								</Field>
+																								<Aggregate>List</Aggregate>
+																							</Shape>
+																							<Size>
+																								<Field>
+																									<Value />
+																								</Field>
+																								<Aggregate>None</Aggregate>
+																							</Size>
+																						</Encodings>
+																					</Plot>
+																				</Plots>
+																			</dd:DVChart>
+																		</ReportItems>
+																	</List>
+																</ReportItems>
+															</TableCell>
+														</TableCells>
+													</TableRow>
+													<TableRow>
+														<Height>3.010611cm</Height>
+														<TableCells>
+															<TableCell>
+																<ColSpan>2</ColSpan>
+																<ReportItems>
+																	<Table Name="表格3">
+																		<Style>
+																			<FontFamily>微软雅黑</FontFamily>
+																			<PaddingBottom>0pt</PaddingBottom>
+																			<PaddingLeft>0pt</PaddingLeft>
+																			<PaddingRight>0pt</PaddingRight>
+																			<PaddingTop>0pt</PaddingTop>
+																			<TextAlign>General</TextAlign>
+																		</Style>
+																		<DataSetName>测试数据</DataSetName>
+																		<Header>
+																			<TableRows>
+																				<TableRow>
+																					<Height>1.020211cm</Height>
+																					<TableCells>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框44">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>样本编码</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框43">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>采样日期</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框46">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>限度类型</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框63">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>限度描述</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框34">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>检测类型</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框38">
+																									<Style>
+																										<BackgroundColor>#5b9bd5</BackgroundColor>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>12pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<Value>检测数值</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																					</TableCells>
+																				</TableRow>
+																			</TableRows>
+																		</Header>
+																		<Details>
+																			<TableRows>
+																				<TableRow>
+																					<Height>1.990401cm</Height>
+																					<TableCells>
+																						<TableCell>
+																							<dd:AutoMerge xmlns:dd="http://schemas.datadynamics.com/reporting/2005/02/reportdefinition">True</dd:AutoMerge>
+																							<dd:AutoMergeMode xmlns:dd="http://schemas.datadynamics.com/reporting/2005/02/reportdefinition">Always</dd:AutoMergeMode>
+																							<ReportItems>
+																								<Textbox Name="文本框47">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Barcode</DataElementName>
+																									<Value>=Fields!Barcode.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框11">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Test Date Time</DataElementName>
+																									<Value>=Fields!TestDateTime.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框4">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Limit Level</DataElementName>
+																									<Value>=Fields!LimitLevel.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框9">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Limit Description</DataElementName>
+																									<Value>=Fields!LimitDescription.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框5">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Name</DataElementName>
+																									<Value>=Fields!Name.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																						<TableCell>
+																							<ReportItems>
+																								<Textbox Name="文本框12">
+																									<Style>
+																										<FontFamily>微软雅黑</FontFamily>
+																										<FontSize>10pt</FontSize>
+																										<FontStyle>Normal</FontStyle>
+																										<FontWeight>400</FontWeight>
+																										<PaddingBottom>2pt</PaddingBottom>
+																										<PaddingLeft>2pt</PaddingLeft>
+																										<PaddingRight>2pt</PaddingRight>
+																										<PaddingTop>2pt</PaddingTop>
+																										<TextAlign>Center</TextAlign>
+																										<VerticalAlign>Middle</VerticalAlign>
+																										<BorderColor>
+																											<Default>LightSkyBlue</Default>
+																										</BorderColor>
+																										<BorderStyle>
+																											<Default>Solid</Default>
+																										</BorderStyle>
+																									</Style>
+																									<CanGrow>true</CanGrow>
+																									<DataElementName>Value</DataElementName>
+																									<Value>=Fields!Value.Value</Value>
+																								</Textbox>
+																							</ReportItems>
+																						</TableCell>
+																					</TableCells>
+																				</TableRow>
+																			</TableRows>
+																		</Details>
+																		<Filters>
+																			<Filter>
+																				<FilterExpression>=Fields!LocationId.Value</FilterExpression>
+																				<FilterValues>
+																					<FilterValue>=Fields!LocationId.Value</FilterValue>
+																				</FilterValues>
+																				<Operator>Equal</Operator>
+																			</Filter>
+																			<Filter>
+																				<FilterExpression>=Fields!TestTypeId.Value</FilterExpression>
+																				<FilterValues>
+																					<FilterValue>=Fields!TestTypeId.Value</FilterValue>
+																				</FilterValues>
+																				<Operator>Equal</Operator>
+																			</Filter>
+																		</Filters>
+																		<TableColumns>
+																			<TableColumn>
+																				<Width>2.507897cm</Width>
+																			</TableColumn>
+																			<TableColumn>
+																				<Width>2.507897cm</Width>
+																			</TableColumn>
+																			<TableColumn>
+																				<Width>2.745762cm</Width>
+																			</TableColumn>
+																			<TableColumn>
+																				<Width>7.090768cm</Width>
+																			</TableColumn>
+																			<TableColumn>
+																				<Width>2.507897cm</Width>
+																			</TableColumn>
+																			<TableColumn>
+																				<Width>2.507897cm</Width>
+																			</TableColumn>
+																		</TableColumns>
+																	</Table>
+																</ReportItems>
+															</TableCell>
+														</TableCells>
+													</TableRow>
+												</TableRows>
+											</Details>
+											<Filters>
+												<Filter>
+													<FilterExpression>=Fields!LocationId.Value</FilterExpression>
+													<FilterValues>
+														<FilterValue>=Fields!LocationId.Value</FilterValue>
+													</FilterValues>
+													<Operator>Equal</Operator>
+												</Filter>
+											</Filters>
+											<PageBreakAtEnd>true</PageBreakAtEnd>
+											<TableColumns>
+												<TableColumn>
+													<Width>2.415933cm</Width>
+												</TableColumn>
+												<TableColumn>
+													<Width>17.45219cm</Width>
+												</TableColumn>
+											</TableColumns>
+										</Table>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+					</TableRows>
+				</Details>
+				<TableColumns>
+					<TableColumn>
+						<Width>2.4cm</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>17.46812cm</Width>
+					</TableColumn>
+				</TableColumns>
+			</Table>
+		</ReportItems>
+		<Style>
+			<BorderColor>
+				<Right>White</Right>
+			</BorderColor>
+		</Style>
+	</Body>
+	<PageFooter>
+		<Height>0.8cm</Height>
+		<PrintOnFirstPage>true</PrintOnFirstPage>
+		<PrintOnLastPage>true</PrintOnLastPage>
+		<ReportItems>
+			<Textbox Name="TextBox3">
+				<Top>0cm</Top>
+				<Left>0.2cm</Left>
+				<Width>20.6cm</Width>
+				<Height>0.75cm</Height>
+				<Style>
+					<FontFamily>微软雅黑</FontFamily>
+					<PaddingBottom>2pt</PaddingBottom>
+					<PaddingLeft>2pt</PaddingLeft>
+					<PaddingRight>2pt</PaddingRight>
+					<PaddingTop>2pt</PaddingTop>
+					<TextAlign>Center</TextAlign>
+				</Style>
+				<ZIndex>3</ZIndex>
+				<CanGrow>true</CanGrow>
+				<Value>="第 " &amp; Globals!CumulativePageNumber &amp; " 页、共 " &amp; Globals!CumulativeTotalPages &amp; " 页"</Value>
+			</Textbox>
+		</ReportItems>
+	</PageFooter>
+	<DataElementStyle>Auto</DataElementStyle>
+	<PageHeight>29.7cm</PageHeight>
+	<PageWidth>21cm</PageWidth>
+	<Width>23.23511cm</Width>
+	<DataSources>
+		<DataSource Name="DataSource1">
+			<ConnectionProperties>
+				<ConnectString>jsondata={
+  "Name": "结果统计报表",
+  "Description": "结果统计报表描述",
+  "CurrentDateTime": "2023-02-25T09:22:06.2633852+08:00",
+  "UserName": "Emis_Admin",
+  "ComponyName": "极光元",
+  "LocationsData": [
+    {
+      "LocationId": 0,
+      "Environment": "Static",
+      "Classification": "A",
+      "LocationName": "Location_0",
+      "TestTypeDatas": [
+        {
+          "LocationId": 0,
+          "TestTypeId": 1,
+          "TestTypeName": "悬浮粒子0",
+          "TestDatas": [
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "05Count",
+              "Value": 0.8843396878755763,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2606601+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "50Count",
+              "Value": 0.49998625336759184,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2606601+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "05Count",
+              "Value": 0.9114489561150207,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2630656+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "50Count",
+              "Value": 0.7820901731141973,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2630656+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "05Count",
+              "Value": 0.5105978171847634,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.263068+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "50Count",
+              "Value": 0.3274192263418365,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.263068+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "05Count",
+              "Value": 0.3810691396102537,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2630697+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "50Count",
+              "Value": 0.5073824339580301,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2630697+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "05Count",
+              "Value": 0.329016762096343,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2630705+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "50Count",
+              "Value": 0.10253998755228233,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2630705+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 5,
+              "Name": "05Count",
+              "Value": 0.45825056043332746,
+              "Barcode": "code_5",
+              "TestDateTime": "2023-02-25T09:22:06.2630782+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 1,
+              "TestId": 5,
+              "Name": "50Count",
+              "Value": 0.12186983566043696,
+              "Barcode": "code_5",
+              "TestDateTime": "2023-02-25T09:22:06.2630782+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.12617073324675676"
+            }
+          ]
+        },
+        {
+          "LocationId": 0,
+          "TestTypeId": 2,
+          "TestTypeName": "浮游菌",
+          "TestDatas": [
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 0,
+              "Name": "浮游菌测试结果",
+              "Value": 0.5805106773284755,
+              "Barcode": "8d914ae8-8f92-41ff-892a-62fff07dcecb",
+              "TestDateTime": "2023-02-25T09:22:06.263237+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 1,
+              "Name": "浮游菌测试结果",
+              "Value": 0.6391457151343791,
+              "Barcode": "81ac73d4-3f67-4296-8466-105254106559",
+              "TestDateTime": "2023-02-25T09:22:06.2632407+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 2,
+              "Name": "浮游菌测试结果",
+              "Value": 0.8099590307831295,
+              "Barcode": "080ec6dc-237b-4808-985c-6aa0cb0460a9",
+              "TestDateTime": "2023-02-25T09:22:06.2632416+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 3,
+              "Name": "浮游菌测试结果",
+              "Value": 0.36764935753237715,
+              "Barcode": "f4b9f100-fe74-437f-aee2-559a16252c22",
+              "TestDateTime": "2023-02-25T09:22:06.2632426+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 4,
+              "Name": "浮游菌测试结果",
+              "Value": 0.7197025036476854,
+              "Barcode": "facf2847-09cd-405e-a66e-1d293b2cdc09",
+              "TestDateTime": "2023-02-25T09:22:06.2632432+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            },
+            {
+              "LocationId": 0,
+              "TestTypeId": 2,
+              "TestId": 5,
+              "Name": "浮游菌测试结果",
+              "Value": 0.20530903458622352,
+              "Barcode": "008327f6-599b-4b63-89c7-c012bf027c25",
+              "TestDateTime": "2023-02-25T09:22:06.263244+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.8798836658618427"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "LocationId": 1,
+      "Environment": "Static",
+      "Classification": "A",
+      "LocationName": "Location_1",
+      "TestTypeDatas": [
+        {
+          "LocationId": 1,
+          "TestTypeId": 1,
+          "TestTypeName": "悬浮粒子1",
+          "TestDatas": [
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "05Count",
+              "Value": 0.3750577966165064,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2632482+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "50Count",
+              "Value": 0.29171291107133257,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2632482+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "05Count",
+              "Value": 0.4082806581950815,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2632501+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "50Count",
+              "Value": 0.06125940947632302,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2632501+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "05Count",
+              "Value": 0.9111441652903461,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.2632514+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "50Count",
+              "Value": 0.6512155132977051,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.2632514+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "05Count",
+              "Value": 0.32510867094833107,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2632532+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "50Count",
+              "Value": 0.7568266854228837,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2632532+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "05Count",
+              "Value": 0.7289949531999795,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2632545+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "50Count",
+              "Value": 0.6613578512756336,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2632545+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 5,
+              "Name": "05Count",
+              "Value": 0.11448831262417014,
+              "Barcode": "code_5",
+              "TestDateTime": "2023-02-25T09:22:06.2632561+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 5,
+              "Name": "50Count",
+              "Value": 0.2914137976227954,
+              "Barcode": "code_5",
+              "TestDateTime": "2023-02-25T09:22:06.2632561+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 6,
+              "Name": "05Count",
+              "Value": 0.07898442874403111,
+              "Barcode": "code_6",
+              "TestDateTime": "2023-02-25T09:22:06.2632574+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 6,
+              "Name": "50Count",
+              "Value": 0.0339780505944991,
+              "Barcode": "code_6",
+              "TestDateTime": "2023-02-25T09:22:06.2632574+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 7,
+              "Name": "05Count",
+              "Value": 0.9514967490327128,
+              "Barcode": "code_7",
+              "TestDateTime": "2023-02-25T09:22:06.2632589+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 7,
+              "Name": "50Count",
+              "Value": 0.541622420715153,
+              "Barcode": "code_7",
+              "TestDateTime": "2023-02-25T09:22:06.2632589+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 8,
+              "Name": "05Count",
+              "Value": 0.7440664438235939,
+              "Barcode": "code_8",
+              "TestDateTime": "2023-02-25T09:22:06.2632602+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 1,
+              "TestId": 8,
+              "Name": "50Count",
+              "Value": 0.6589922837244792,
+              "Barcode": "code_8",
+              "TestDateTime": "2023-02-25T09:22:06.2632602+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.4360731628338623"
+            }
+          ]
+        },
+        {
+          "LocationId": 1,
+          "TestTypeId": 2,
+          "TestTypeName": "浮游菌",
+          "TestDatas": [
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 0,
+              "Name": "浮游菌测试结果",
+              "Value": 0.1900617898034529,
+              "Barcode": "960eea8c-aebc-43b3-b9de-d063a25e23c0",
+              "TestDateTime": "2023-02-25T09:22:06.2632677+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 1,
+              "Name": "浮游菌测试结果",
+              "Value": 0.019652593366998095,
+              "Barcode": "2478cf18-c65f-45f1-a374-2179d3b7f2ff",
+              "TestDateTime": "2023-02-25T09:22:06.2632691+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 2,
+              "Name": "浮游菌测试结果",
+              "Value": 0.1615918323702017,
+              "Barcode": "be546429-b0b5-4580-bbe3-1c36605772e7",
+              "TestDateTime": "2023-02-25T09:22:06.2632702+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 3,
+              "Name": "浮游菌测试结果",
+              "Value": 0.5484396142504562,
+              "Barcode": "45d3fc04-c9bd-41f0-94b4-6bc34717af38",
+              "TestDateTime": "2023-02-25T09:22:06.2632714+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 4,
+              "Name": "浮游菌测试结果",
+              "Value": 0.9937106051197794,
+              "Barcode": "04113d41-6ad9-404a-ba0e-5c4627cb6c34",
+              "TestDateTime": "2023-02-25T09:22:06.2632724+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 5,
+              "Name": "浮游菌测试结果",
+              "Value": 0.6031663834844349,
+              "Barcode": "4d75bcc4-4690-4ca9-8965-80ea9c207a17",
+              "TestDateTime": "2023-02-25T09:22:06.2632736+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 6,
+              "Name": "浮游菌测试结果",
+              "Value": 0.5928375476155967,
+              "Barcode": "b9660cb8-1050-44e2-a99a-d52ea9953fba",
+              "TestDateTime": "2023-02-25T09:22:06.2632745+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 7,
+              "Name": "浮游菌测试结果",
+              "Value": 0.9470460917418886,
+              "Barcode": "665cb4e4-6c7e-407e-a385-9d8c690f1a3b",
+              "TestDateTime": "2023-02-25T09:22:06.2632758+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            },
+            {
+              "LocationId": 1,
+              "TestTypeId": 2,
+              "TestId": 8,
+              "Name": "浮游菌测试结果",
+              "Value": 0.4880333523877989,
+              "Barcode": "17b38637-9506-4cf5-beae-dd1a5837ae99",
+              "TestDateTime": "2023-02-25T09:22:06.2632768+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.9424210246445347"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "LocationId": 2,
+      "Environment": "Static",
+      "Classification": "A",
+      "LocationName": "Location_2",
+      "TestTypeDatas": [
+        {
+          "LocationId": 2,
+          "TestTypeId": 1,
+          "TestTypeName": "悬浮粒子2",
+          "TestDatas": [
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "05Count",
+              "Value": 0.8670774305374719,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2632789+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 0,
+              "Name": "50Count",
+              "Value": 0.7101710132166205,
+              "Barcode": "code_0",
+              "TestDateTime": "2023-02-25T09:22:06.2632789+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "05Count",
+              "Value": 0.5570610820797031,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2632803+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 1,
+              "Name": "50Count",
+              "Value": 0.16229855916665914,
+              "Barcode": "code_1",
+              "TestDateTime": "2023-02-25T09:22:06.2632803+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "05Count",
+              "Value": 0.805582732975374,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.2632819+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 2,
+              "Name": "50Count",
+              "Value": 0.17411350952599003,
+              "Barcode": "code_2",
+              "TestDateTime": "2023-02-25T09:22:06.2632819+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "05Count",
+              "Value": 0.5580194931663225,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2632832+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 3,
+              "Name": "50Count",
+              "Value": 0.40939742787112765,
+              "Barcode": "code_3",
+              "TestDateTime": "2023-02-25T09:22:06.2632832+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "05Count",
+              "Value": 0.21171290294128708,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2632848+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 1,
+              "TestId": 4,
+              "Name": "50Count",
+              "Value": 0.2183908549475374,
+              "Barcode": "code_4",
+              "TestDateTime": "2023-02-25T09:22:06.2632848+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.680464923900057"
+            }
+          ]
+        },
+        {
+          "LocationId": 2,
+          "TestTypeId": 2,
+          "TestTypeName": "浮游菌",
+          "TestDatas": [
+            {
+              "LocationId": 2,
+              "TestTypeId": 2,
+              "TestId": 0,
+              "Name": "浮游菌测试结果",
+              "Value": 0.08361403854285543,
+              "Barcode": "7604db8e-3efc-4580-8da8-60736684c5e3",
+              "TestDateTime": "2023-02-25T09:22:06.2632872+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.05303872988743252"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 2,
+              "TestId": 1,
+              "Name": "浮游菌测试结果",
+              "Value": 0.9474430290305499,
+              "Barcode": "18e352ca-6544-4c7e-b992-f77542e5abca",
+              "TestDateTime": "2023-02-25T09:22:06.2632883+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.05303872988743252"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 2,
+              "TestId": 2,
+              "Name": "浮游菌测试结果",
+              "Value": 0.2888657242829823,
+              "Barcode": "c2f982b0-3ef0-4cc6-a458-a68215655fca",
+              "TestDateTime": "2023-02-25T09:22:06.2632893+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.05303872988743252"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 2,
+              "TestId": 3,
+              "Name": "浮游菌测试结果",
+              "Value": 0.32218517584034934,
+              "Barcode": "235d36bf-1aee-4a1b-b73e-bd77cd3312dc",
+              "TestDateTime": "2023-02-25T09:22:06.2632907+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.05303872988743252"
+            },
+            {
+              "LocationId": 2,
+              "TestTypeId": 2,
+              "TestId": 4,
+              "Name": "浮游菌测试结果",
+              "Value": 0.6602618047832731,
+              "Barcode": "2cc36ae9-6c6c-4e9a-aa01-c377e75d802c",
+              "TestDateTime": "2023-02-25T09:22:06.2632917+08:00",
+              "LimitLevel": 1,
+              "LimitDescription": "0.05303872988743252"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</ConnectString>
+				<DataProvider>JSON</DataProvider>
+			</ConnectionProperties>
+		</DataSource>
+	</DataSources>
+	<DataSets>
+		<DataSet Name="DataSet1">
+			<Fields>
+				<Field Name="Name">
+					<DataField>Name</DataField>
+				</Field>
+				<Field Name="Description">
+					<DataField>Description</DataField>
+				</Field>
+				<Field Name="CurrentDateTime">
+					<DataField>CurrentDateTime</DataField>
+				</Field>
+				<Field Name="UserName">
+					<DataField>UserName</DataField>
+				</Field>
+				<Field Name="ComponyName">
+					<DataField>ComponyName</DataField>
+				</Field>
+			</Fields>
+			<Query>
+				<CommandText>$</CommandText>
+				<DataSourceName>DataSource1</DataSourceName>
+			</Query>
+		</DataSet>
+		<DataSet Name="DataSet2">
+			<Fields>
+				<Field Name="LocationId">
+					<DataField>LocationId</DataField>
+				</Field>
+				<Field Name="Environment">
+					<DataField>Environment</DataField>
+				</Field>
+				<Field Name="Classification">
+					<DataField>Classification</DataField>
+				</Field>
+				<Field Name="LocationName">
+					<DataField>LocationName</DataField>
+				</Field>
+				<Field Name="TestTypeDatas">
+					<DataField>TestTypeDatas</DataField>
+				</Field>
+				<Field Name="LocationId1">
+					<DataField>TestTypeDatas[*].LocationId</DataField>
+				</Field>
+				<Field Name="TestTypeId">
+					<DataField>TestTypeDatas[*].TestTypeId</DataField>
+				</Field>
+				<Field Name="TestTypeName">
+					<DataField>TestTypeDatas[*].TestTypeName</DataField>
+				</Field>
+				<Field Name="TestDatas">
+					<DataField>TestTypeDatas[*].TestDatas</DataField>
+				</Field>
+				<Field Name="LocationId2">
+					<DataField>TestTypeDatas[*].TestDatas[*].LocationId</DataField>
+				</Field>
+				<Field Name="TestTypeId1">
+					<DataField>TestTypeDatas[*].TestDatas[*].TestTypeId</DataField>
+				</Field>
+				<Field Name="TestId">
+					<DataField>TestTypeDatas[*].TestDatas[*].TestId</DataField>
+				</Field>
+				<Field Name="Name">
+					<DataField>TestTypeDatas[*].TestDatas[*].Name</DataField>
+				</Field>
+				<Field Name="Value">
+					<DataField>TestTypeDatas[*].TestDatas[*].Value</DataField>
+				</Field>
+				<Field Name="Barcode">
+					<DataField>TestTypeDatas[*].TestDatas[*].Barcode</DataField>
+				</Field>
+				<Field Name="TestDateTime">
+					<DataField>TestTypeDatas[*].TestDatas[*].TestDateTime</DataField>
+				</Field>
+				<Field Name="LimitLevel">
+					<DataField>TestTypeDatas[*].TestDatas[*].LimitLevel</DataField>
+				</Field>
+				<Field Name="LimitDescription">
+					<DataField>TestTypeDatas[*].TestDatas[*].LimitDescription</DataField>
+				</Field>
+			</Fields>
+			<Query>
+				<CommandText>$.LocationsData[*]</CommandText>
+				<DataSourceName>DataSource1</DataSourceName>
+			</Query>
+		</DataSet>
+		<DataSet Name="DataSet3">
+			<Fields>
+				<Field Name="LocationId">
+					<DataField>LocationId</DataField>
+				</Field>
+				<Field Name="TestTypeId">
+					<DataField>TestTypeId</DataField>
+				</Field>
+				<Field Name="TestTypeName">
+					<DataField>TestTypeName</DataField>
+				</Field>
+				<Field Name="TestDatas">
+					<DataField>TestDatas</DataField>
+				</Field>
+				<Field Name="LocationId1">
+					<DataField>TestDatas[*].LocationId</DataField>
+				</Field>
+				<Field Name="TestTypeId1">
+					<DataField>TestDatas[*].TestTypeId</DataField>
+				</Field>
+				<Field Name="TestId">
+					<DataField>TestDatas[*].TestId</DataField>
+				</Field>
+				<Field Name="Name">
+					<DataField>TestDatas[*].Name</DataField>
+				</Field>
+				<Field Name="Value">
+					<DataField>TestDatas[*].Value</DataField>
+				</Field>
+				<Field Name="Barcode">
+					<DataField>TestDatas[*].Barcode</DataField>
+				</Field>
+				<Field Name="TestDateTime">
+					<DataField>TestDatas[*].TestDateTime</DataField>
+				</Field>
+				<Field Name="LimitLevel">
+					<DataField>TestDatas[*].LimitLevel</DataField>
+				</Field>
+				<Field Name="LimitDescription">
+					<DataField>TestDatas[*].LimitDescription</DataField>
+				</Field>
+			</Fields>
+			<Query>
+				<CommandText>$.LocationsData[*].TestTypeDatas[*]</CommandText>
+				<DataSourceName>DataSource1</DataSourceName>
+			</Query>
+		</DataSet>
+		<DataSet Name="测试数据">
+			<Fields>
+				<Field Name="LocationId">
+					<DataField>LocationId</DataField>
+				</Field>
+				<Field Name="TestTypeId">
+					<DataField>TestTypeId</DataField>
+				</Field>
+				<Field Name="TestId">
+					<DataField>TestId</DataField>
+				</Field>
+				<Field Name="Name">
+					<DataField>Name</DataField>
+				</Field>
+				<Field Name="Value">
+					<DataField>Value</DataField>
+				</Field>
+				<Field Name="Barcode">
+					<DataField>Barcode</DataField>
+				</Field>
+				<Field Name="TestDateTime">
+					<DataField>TestDateTime</DataField>
+				</Field>
+				<Field Name="LimitLevel">
+					<DataField>LimitLevel</DataField>
+				</Field>
+				<Field Name="LimitDescription">
+					<DataField>LimitDescription</DataField>
+				</Field>
+			</Fields>
+			<Query>
+				<CommandText>$.LocationsData[*].TestTypeDatas[*].TestDatas[*]</CommandText>
+				<DataSourceName>DataSource1</DataSourceName>
+			</Query>
+		</DataSet>
+	</DataSets>
+	<CustomProperties>
+		<CustomProperty>
+			<Name>report:DesignTimeBackgroundRendering</Name>
+			<Value>True</Value>
+		</CustomProperty>
+	</CustomProperties>
+</Report>

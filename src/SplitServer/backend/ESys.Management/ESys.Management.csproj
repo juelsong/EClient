@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.Management</AssemblyName>
+    <RootNamespace>ESys.Management</RootNamespace>
+    <DocumentationFile>..\$(Configuration)_$(Platform)\ESys.Management.xml</DocumentationFile>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <DocumentationFile>$(SolutionDir)$(Configuration)_$(Platform)\ESys.Management.xml</DocumentationFile>
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\ESys.Utilty\Service\ESignDataHelper.cs" Link="Service\ESignDataHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Scrutor" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Contract\ESys.Contract.csproj" />
+    <ProjectReference Include="..\ESys.Db\ESys.Db.csproj" />
+  </ItemGroup>
+
+  
+</Project>

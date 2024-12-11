@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.Utilty</AssemblyName>
+    <RootNamespace>ESys.Utilty</RootNamespace>
+    <DocumentationFile>..\$(Configuration)_$(Platform)\ESys.Utilty.xml</DocumentationFile>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <DocumentationFile>$(SolutionDir)$(Configuration)_$(Platform)\ESys.Utilty.xml</DocumentationFile>
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Service\ESignDataHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service\ESignDataHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Contract\ESys.Contract.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Furion.Extras.Authentication.JwtBearer" Version="4.8.8" />
+  </ItemGroup>
+  
+  
+</Project>

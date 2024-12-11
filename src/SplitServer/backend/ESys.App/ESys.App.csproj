@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net60</TargetFramework>
+    <AssemblyName>ESys.App</AssemblyName>
+    <RootNamespace>ESys.App</RootNamespace>
+    <NoWarn>$(NoWarn);CS8032;NU1701</NoWarn>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <OutputPath>..\$(Configuration)_$(Platform)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(SolutionDir)' != '' ">
+    <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">$(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
+    <FileVersion>0.0.1.6</FileVersion>
+    <Company>Metaura</Company>
+    <Product>Emis</Product>
+    <Authors>Metaura</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ESys.Utilty\Service\ESignDataHelper.cs" Link="Service\ESignDataHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="appsettings.MigrationMySQL.json" />
+    <Content Remove="appsettings.MigrationSQLite.json" />
+    <Content Remove="appsettings.MigrationSqlServer.json" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Content Remove="appsettings.Production.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.ConcurrencyLimiter" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Scrutor" Version="4.2.0" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="8.0.5" />
+    <PackageReference Include="StackExchange.Redis.Extensions.System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" />
+    <PackageReference Include="PdfPig" Version="0.1.8" />
+    <PackageReference Include="Tabula" Version="0.1.3" />
+    <PackageReference Include="WorkflowCore.Persistence.MySQL" Version="3.8.3" />
+    <PackageReference Include="WorkflowCore.Persistence.Sqlite" Version="3.8.3" />
+    <PackageReference Include="WorkflowCore.Persistence.SqlServer" Version="3.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ESys.Db\ESys.Db.csproj" />
+    <ProjectReference Include="..\ESys.Security\ESys.Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.MigrationPostgreSQL.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  
+</Project>

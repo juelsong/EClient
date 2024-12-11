@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>  
+  
+  <% if(NODE_ENV==='production' ) {%>
+    <script type="text/javascript" src="<%= BASE_URL %>global.js"></script>
+  <% } %>
+  <% if(NODE_ENV==='client' ) {%>
+    <script type="text/javascript" src="/globalClient.js"></script>
+    <script type="text/javascript">
+      (async function () {
+		    await CefSharp.BindObjectAsync("device");
+		    await CefSharp.BindObjectAsync("syncService");
+      })();
+
+      window.getTitle = function () {
+          return "";
+      };
+      window.isClient = true;
+    </script>
+    <% } %><% if(NODE_ENV==='sync' ) {%>
+      <script type="text/javascript" src="/globalClient.js"></script>
+      <script type="text/javascript">
+        (async function () {
+          await CefSharp.BindObjectAsync("syncService");
+          await CefSharp.BindObjectAsync("deviceSyncService");
+        })();
+
+        window.getTitle = function () {
+          return "";
+        };
+        window.isSyncTool = true;
+      </script>
+      <% } %>
+</head>
+
+<body onselectstart = "return false">
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>

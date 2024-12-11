@@ -1,0 +1,338 @@
+[
+	{
+		"Code": "system",
+		"Desc": "系统管理",
+		"Type": "Menu",
+		"SubPermissions": [
+			{
+				"Code": "region",
+				"Desc": "区域",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "SiteType:Add",
+						"Desc": "添加采样点类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "SiteType:Edit",
+						"Desc": "编辑采样点类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "SiteType:Disable",
+						"Desc": "禁用采样点类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "LocationType:Add",
+						"Desc": "添加区域类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "LocationType:Edit",
+						"Desc": "编辑区域类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "LocationType:Disable",
+						"Desc": "禁用区域类型",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Location:Add",
+						"Desc": "添加区域",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Location:Edit",
+						"Desc": "编辑区域",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Location:Disable",
+						"Desc": "禁用区域",
+						"Type": "Action",
+						"SubPermissions": []
+					}
+				]
+			},
+			{
+				"Code": "production",
+				"Desc": "关联信息",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "ProductType:Add",
+						"Desc": "添加产品",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "ProductType:Edit",
+						"Desc": "编辑产品",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "ProductType:Disable",
+						"Desc": "禁用产品",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Product:Add",
+						"Desc": "添加产品",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Product:Edit",
+						"Desc": "编辑产品",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Product:Disable",
+						"Desc": "禁用产品",
+						"Type": "Action",
+						"SubPermissions": []
+					}
+				]
+			},
+			{
+				"Code": "device",
+				"Desc": "设备",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "Equipment:Add",
+						"Desc": "添加设备",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Equipment:Edit",
+						"Desc": "编辑设备",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Equipment:Disable",
+						"Desc": "禁用设备",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Equipment:UpdateConfig",
+						"Desc": "上传文件",
+						"Type": "Action",
+						"SubPermissions": []
+					}
+				]
+			},
+			{
+				"Code": "security",
+				"Desc": "安全",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "department",
+						"Desc": "部门管理",
+						"Type": "Menu",
+						"SubPermissions": [
+							{
+								"Code": "Department:Add",
+								"Desc": "添加部门",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "Department:Edit",
+								"Desc": "编辑部门",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "Department:Disable",
+								"Desc": "禁用部门",
+								"Type": "Action",
+								"SubPermissions": []
+							}
+						]
+					},
+					{
+						"Code": "user",
+						"Desc": "用户管理",
+						"Type": "Menu",
+						"SubPermissions": [
+							{
+								"Code": "User:Add",
+								"Desc": "添加用户",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "User:Edit",
+								"Desc": "编辑用户",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "User:Disable",
+								"Desc": "禁用用户",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "User:Password",
+								"Desc": "修改密码",
+								"Type": "Action",
+								"SubPermissions": []
+							}
+						]
+					},
+					{
+						"Code": "role",
+						"Desc": "角色管理",
+						"Type": "Menu",
+						"SubPermissions": [
+							{
+								"Code": "Role:Add",
+								"Desc": "添加角色",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "Role:Edit",
+								"Desc": "编辑角色",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "Role:Disable",
+								"Desc": "禁用角色",
+								"Type": "Action",
+								"SubPermissions": []
+							}
+						]
+					},
+					{
+						"Code": "booking",
+						"Desc": "预订管理",
+						"Type": "Menu",
+						"SubPermissions": [
+							{
+								"Code": "Subscription:Edit",
+								"Desc": "编辑警告订阅",
+								"Type": "Action",
+								"SubPermissions": []
+							},
+							{
+								"Code": "Subscription:Disable",
+								"Desc": "禁用警告订阅",
+								"Type": "Action",
+								"SubPermissions": []
+							}
+						]
+					}
+				]
+			},
+			{
+				"Code": "settings",
+				"Desc": "系统设置",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "Security:Password",
+						"Desc": "配置密码",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Security:Email",
+						"Desc": "配置邮箱",
+						"Type": "Action",
+						"SubPermissions": []
+					}
+					]
+			}
+		]
+	},
+	{
+		"Code": "visualization",
+		"Desc": "可视化",
+		"Type": "Menu",
+		"SubPermissions": [
+			{
+				"Code": "map",
+				"Desc": "地图管理",
+				"Type": "Menu",
+				"SubPermissions": [
+					{
+						"Code": "Map:Add",
+						"Desc": "添加地图",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Map:Disable",
+						"Desc": "禁用地图",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "Map:Edit",
+						"Desc": "编辑地图",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "MapCategory:Add",
+						"Desc": "添加地图分类",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "MapCategory:Disable",
+						"Desc": "禁用地图分类",
+						"Type": "Action",
+						"SubPermissions": []
+					},
+					{
+						"Code": "MapCategory:Edit",
+						"Desc": "编辑地图分类",
+						"Type": "Action",
+						"SubPermissions": []
+					}
+				]
+			},
+			{
+				"Code": "visualizations",
+				"Desc": "可视化呈现",
+				"Type": "Menu",
+				"SubPermissions": []
+			},
+			{
+				"Code": "orgnismVisualizations",
+				"Desc": "菌种可视化呈现",
+				"Type": "Menu",
+				"SubPermissions": []
+			}
+		]
+	},
+	{
+		"Code": "particleCounterData",
+		"Desc": "未匹配数据查询",
+		"Type": "Menu",
+		"SubPermissions": []
+	}
+]

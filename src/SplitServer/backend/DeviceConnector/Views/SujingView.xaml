@@ -1,0 +1,76 @@
+﻿<Window x:Class="DeviceConnector.Views.SujingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DeviceConnector.Views"
+        mc:Ignorable="d"
+        Title="苏净设备连接"
+        Height="450"
+        Width="800">
+    <Grid>
+        <!--<ContentControl x:Name="ActiveItem"
+                        Margin="20" />-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="10">
+                控制
+            </TextBlock>
+            <WrapPanel>
+                <Button x:Name="Connect"
+                        Width="80"
+                        Margin="5"
+                        Command="{Binding Path=ClickConnect}">Connect</Button>
+                <Button x:Name="DisConnect"
+                        Width="80"
+                        Margin="5"
+                        Command="{Binding Path=ClickDisConnect}">DisConnect</Button>
+                <TextBlock HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="10"
+                           Text="{Binding Path =ConfigData}" />
+            </WrapPanel>
+
+            <WrapPanel>
+                <Button x:Name="Read"
+                        Width="80"
+                        Margin="5"
+                        Command="{Binding Path=ClickRead}">Read</Button>
+                <TextBlock HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="10"
+                           Text="{Binding Path =ConfigData}" />
+            </WrapPanel>
+            <WrapPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="10"
+                           Text="{Binding Path =ConfigData}" />
+            </WrapPanel>
+
+        </StackPanel>
+        <Grid Grid.Column="1">
+
+            <ScrollViewer Height="auto"
+                          Width="auto">
+                <ScrollViewer.Content>
+                    <TextBlock HorizontalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="10"
+                               Text="{Binding Path =ReadData}">
+                    </TextBlock>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<EmisDevice>
+  <DeviceName>Sujing</DeviceName>
+  <ModelNumber>2408</ModelNumber>
+  <Description>Sujing Y09-310 Ac-Dc Particle Counter</Description>
+  <Version>1.0</Version>
+  <UOM>CFM</UOM>
+  <TestTypes>NONVIABLE,NV</TestTypes>
+
+  <DeviceSettings>
+    <TransportType>SERIAL</TransportType>
+    <ComPort>COM3</ComPort>
+    <BaudRate>115200</BaudRate>
+    <StopBits>One</StopBits>
+    <DataBits>8</DataBits>
+    <Parity>None</Parity>
+    <Handshake>None</Handshake>
+    <Timeout>5000</Timeout>
+  </DeviceSettings>
+  <!-- Measurement elements must be configured with a name attribute -->
+  <!-- The size attribute is optional but it is required for count measuements -->
+  <!-- Measurements with the header elements defined are used for csv import if supported by device -->
+  <Measurements>
+    <Measurement name="UM03" size="0.3" mappingName="um03"></Measurement>
+    <Measurement name="UM05" size="0.5" mappingName="um05"></Measurement>
+    <Measurement name="UM10" size="1.0" mappingName="um10"></Measurement>
+    <Measurement name="UM30" size="3.0" mappingName="um30"></Measurement>
+    <Measurement name="UM50" size="5.0" mappingName="um50"></Measurement>
+    <Measurement name="UM100" size="10.0" mappingName="um100"></Measurement>
+    <Measurement name="FlowRate" mappingName="Flow"></Measurement>
+  </Measurements>
+  <!-- Custom Settings are for custom name/value pairs that we want to pass to the device.  A sample setting follows -->
+  <CustomSettings>
+    <Setting name="ConvertTimeToLocalTime">False</Setting>
+    <Setting name="ClearBufferOnStart">False</Setting>
+  </CustomSettings>
+</EmisDevice>

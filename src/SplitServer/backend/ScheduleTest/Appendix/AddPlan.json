@@ -1,0 +1,361 @@
+{
+    "Id": 1,
+    "Name": "plan1",
+    "Description": "33333",
+    "Version": 0,
+    "Enabled": true,
+    "Approved": false,
+    "Status": 2,
+    "Environment": "Static",
+    "Barcode": null,
+    "FillDayOfMonth": 0,
+    "FillDayOfWeek": 0,
+    "FillTime": 0,
+    "FillHoursOfDay": 0,
+    "FillMinutesOfHour": 0,
+    "FillLength": 1,
+    "FillEffectiveDate": "2022-06-08T05:45:34Z",
+    "FirstDayOfWeek": 0,
+    "IsActive": true,
+    "LocationId": 1,
+    "PlanGroupId": 1,
+    "AutoFillFrequencyTypeId": 100,
+    "IsRepeatFill": false,
+    "Location": {
+        "Id": 1,
+        "Name": "金星"
+    },
+    "AutoFillFrequencyType": {
+        "Id": 100,
+        "Name": "None",
+        "Description": "None"
+    },
+    "Tests": [
+        {
+            "Id": 1,
+            "Name": "airtest1",
+            "Description": null,
+            "Interval": 1,
+            "MinutesOfHour": 0,
+            "HoursOfDay": 4163,
+            "DaysOfWeek": 1,
+            "DaysOfMonth": 0,
+            "MonthsOfYear": 0,
+            "Randomize": false,
+            "NegativeControl": false,
+            "Environment": "Static",
+            "ScheduleStartDate": null,
+            "ScheduleOffset": null,
+            "Price": 0,
+            "IsActive": true,
+            "NotificationFrequencyId": null,
+            "SiteId": 1,
+            "TestTypeId": 1,
+            "PlanId": 1,
+            "TestFrequencyId": null,
+            "TestFrequencyTypeId": 1,
+            "TestFrequencyOccurrenceId": null,
+            "Site": {
+                "Id": 1,
+                "Name": "101空气质量检测",
+                "Location": {
+                    "Id": 2,
+                    "Name": "101",
+                    "Description": null
+                }
+            },
+            "TestType": {
+                "Id": 1,
+                "Description": "airTest",
+                "LimitDefs": [
+                    {
+                        "Id": 1,
+                        "LimitTypeId": 1,
+                        "Prevalence": null,
+                        "Description": "eeeeee",
+                        "FreqLimit": false,
+                        "SourceLimitDefId": null,
+                        "OccurrenceCount": null,
+                        "Period": null,
+                        "PeriodCount": null,
+                        "Deviation": false,
+                        "EmailNotify": true,
+                        "ScreenNotify": false,
+                        "Reschedule": false,
+                        "RescheduleCount": null,
+                        "RescheduleOffset": null,
+                        "CountTowardFrequency": false,
+                        "ResetFreqLimit": false,
+                        "ExecutePerCycle": false,
+                        "ReportableOperator": null,
+                        "ReportableValue": null,
+                        "IsActive": false,
+                        "LimitRuleGroups": [
+                            {
+                                "Id": 1,
+                                "Description": null,
+                                "LogicSymbol": 1,
+                                "Sequence": 1,
+                                "LimitRules": [
+                                    {
+                                        "Id": 1,
+                                        "Description": null,
+                                        "LimitRuleGroupId": 1,
+                                        "LimitTokenId": null,
+                                        "MeasurementId": 1,
+                                        "SignId": 2,
+                                        "LimitValue": "10",
+                                        "Sequence": 1
+                                    },
+                                    {
+                                        "Id": 5,
+                                        "Description": null,
+                                        "LimitRuleGroupId": 1,
+                                        "LimitTokenId": 7,
+                                        "MeasurementId": null,
+                                        "SignId": 5,
+                                        "LimitValue": "1",
+                                        "Sequence": 2
+                                    }
+                                ]
+                            },
+                            {
+                                "Id": 2,
+                                "Description": null,
+                                "LogicSymbol": 1,
+                                "Sequence": 1,
+                                "LimitRules": [
+                                    {
+                                        "Id": 2,
+                                        "Description": null,
+                                        "LimitRuleGroupId": 2,
+                                        "LimitTokenId": null,
+                                        "MeasurementId": 1,
+                                        "SignId": 5,
+                                        "LimitValue": "10",
+                                        "Sequence": 1
+                                    }
+                                ]
+                            }
+                        ],
+                        "SourceLimitDef": null,
+                        "SourceLimitType": null
+                    },
+                    {
+                        "Id": 2,
+                        "LimitTypeId": 1,
+                        "Prevalence": null,
+                        "Description": "12345",
+                        "FreqLimit": false,
+                        "SourceLimitDefId": null,
+                        "OccurrenceCount": null,
+                        "Period": null,
+                        "PeriodCount": null,
+                        "Deviation": false,
+                        "EmailNotify": false,
+                        "ScreenNotify": false,
+                        "Reschedule": false,
+                        "RescheduleCount": null,
+                        "RescheduleOffset": null,
+                        "CountTowardFrequency": false,
+                        "ResetFreqLimit": false,
+                        "ExecutePerCycle": false,
+                        "ReportableOperator": null,
+                        "ReportableValue": null,
+                        "IsActive": true,
+                        "LimitRuleGroups": [
+                            {
+                                "Id": 3,
+                                "Description": null,
+                                "LogicSymbol": 1,
+                                "Sequence": 1,
+                                "LimitRules": [
+                                    {
+                                        "Id": 3,
+                                        "Description": null,
+                                        "LimitRuleGroupId": 3,
+                                        "LimitTokenId": null,
+                                        "MeasurementId": 1,
+                                        "SignId": 5,
+                                        "LimitValue": "22",
+                                        "Sequence": 1
+                                    }
+                                ]
+                            }
+                        ],
+                        "SourceLimitDef": null,
+                        "SourceLimitType": null
+                    },
+                    {
+                        "Id": 9,
+                        "LimitTypeId": 1,
+                        "Prevalence": null,
+                        "Description": "ppp",
+                        "FreqLimit": true,
+                        "SourceLimitDefId": 1,
+                        "OccurrenceCount": 2,
+                        "Period": 3,
+                        "PeriodCount": 2,
+                        "Deviation": false,
+                        "EmailNotify": false,
+                        "ScreenNotify": false,
+                        "Reschedule": false,
+                        "RescheduleCount": null,
+                        "RescheduleOffset": null,
+                        "CountTowardFrequency": false,
+                        "ResetFreqLimit": false,
+                        "ExecutePerCycle": false,
+                        "ReportableOperator": null,
+                        "ReportableValue": null,
+                        "IsActive": true,
+                        "LimitRuleGroups": [],
+                        "SourceLimitDef": {
+                            "Id": 1,
+                            "Description": "eeeeee"
+                        },
+                        "SourceLimitType": null
+                    }
+                ]
+            },
+            "TestFrequencyType": {
+                "Id": 1,
+                "Name": "Hourly"
+            },
+            "Limits": [
+                {
+                    "Id": 1,
+                    "LimitTypeId": 1,
+                    "TestId": 1,
+                    "Prevalence": null,
+                    "Description": "qq",
+                    "FreqLimit": false,
+                    "SourceLimitDefId": null,
+                    "OccurrenceCount": null,
+                    "Period": null,
+                    "PeriodCount": null,
+                    "Deviation": false,
+                    "EmailNotify": true,
+                    "ScreenNotify": false,
+                    "Reschedule": false,
+                    "RescheduleCount": null,
+                    "IsActive": true,
+                    "LimitType": {
+                        "Name": "Alert"
+                    },
+                    "SourceLimitDef": null,
+                    "ParentLimit": null,
+                    "LimitRuleGroups": [
+                        {
+                            "LogicSymbol": 1,
+                            "LimitRuleGroups": [],
+                            "LimitRules": [
+                                {
+                                    "Sequence": 1,
+                                    "LimitTokenId": null,
+                                    "LimitValue": "23",
+                                    "MeasurementId": 1,
+                                    "SignId": 2
+                                }
+                            ],
+                            "Sequence": 1,
+                            "Width": 460,
+                            "Height": 220,
+                            "LimitId": 1
+                        }
+                    ],
+                    "TestTypeId": 1
+                },
+                {
+                    "Id": 2,
+                    "LimitTypeId": 1,
+                    "TestId": 1,
+                    "Prevalence": null,
+                    "Description": "23333",
+                    "FreqLimit": true,
+                    "SourceLimitDefId": null,
+                    "OccurrenceCount": 1,
+                    "Period": null,
+                    "PeriodCount": 2,
+                    "Deviation": false,
+                    "EmailNotify": false,
+                    "ScreenNotify": false,
+                    "Reschedule": false,
+                    "RescheduleCount": null,
+                    "IsActive": false,
+                    "LimitType": {
+                        "Id": 1,
+                        "Description": "Alert",
+                        "Name": "Alert"
+                    },
+                    "SourceLimitDef": null,
+                    "ParentLimit": {
+                        "Id": 1,
+                        "Description": "233666"
+                    },
+                    "LimitRuleGroups": []
+                },
+                {
+                    "Id": 3,
+                    "LimitTypeId": 2,
+                    "TestId": 1,
+                    "Prevalence": null,
+                    "Description": "8888",
+                    "FreqLimit": true,
+                    "SourceLimitDefId": null,
+                    "OccurrenceCount": 1,
+                    "Period": null,
+                    "PeriodCount": 1,
+                    "Deviation": false,
+                    "EmailNotify": false,
+                    "ScreenNotify": false,
+                    "Reschedule": false,
+                    "RescheduleCount": null,
+                    "IsActive": false,
+                    "LimitType": {
+                        "Id": 2,
+                        "Description": "Action",
+                        "Name": "Action"
+                    },
+                    "SourceLimitDef": null,
+                    "ParentLimit": {
+                        "Id": 1,
+                        "Description": "233666"
+                    },
+                    "LimitRuleGroups": []
+                },
+                {
+                    "Id": 0,
+                    "LimitTypeId": 1,
+                    "Description": "222",
+                    "FreqLimit": true,
+                    "SourceLimitDefId": 2,
+                    "OccurrenceCount": 2,
+                    "Period": 2,
+                    "PeriodCount": 2,
+                    "Deviation": false,
+                    "EmailNotify": false,
+                    "ScreenNotify": false,
+                    "IsActive": true,
+                    "LimitType": {
+                        "Id": 1,
+                        "Description": "Alert",
+                        "Name": "Alert",
+                        "Color": "#FFFFA500",
+                        "Weight": 50,
+                        "CreatedTime": "2022-01-01T00:00:00+08:00",
+                        "UpdatedTime": null,
+                        "CreateBy": 1,
+                        "UpdateBy": null,
+                        "IsActive": true
+                    },
+                    "ParentLimit": {
+                        "Description": "qq"
+                    },
+                    "LimitRuleGroups": [],
+                    "TestTypeId": 1,
+                    "ParentLimitId": 1
+                }
+            ]
+        }
+    ]
+}

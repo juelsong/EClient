@@ -1,0 +1,3 @@
+ D:\项目资料\02Emis\code\emisdev\migrations\db_migration.ps1  -CTX TenantSlave -DB_TYPE Mysql -MIGRATION 20231213032408_v0.0.50  
+
+D:\项目资料\02Emis\code\emisdev\migrations\auto_migration.ps1 -CTX TenantSlave -DB_TYPE Sqlite

@@ -1,0 +1,25 @@
+{
+  "AppConnect": {
+    "Url": "https://emis.metaura.cn:9443/View/Version",
+    //"Url": "https://emis.metaura.cn:9443/View/Version",
+    "Tenant": "Minhai",
+    "Timeout": "00:00:30", //请求超时时间
+    "Intervel": "5000" //5000 //"900000" //循环访问时间ms 15Min
+  },
+  "Email": {
+    "hasSend": true,
+    "Server": "smtp.feishu.cn",
+    "Port": 587,
+    "Address": "emis_no_reply@metaura.cn",
+    "Password": "tQURcl3axmrWHe3r",
+    "IntervalSeconds": 10,
+    "GroupByNotificationType": true,
+    "EnableSSL": true,
+    "SbscribEmails": [
+      {
+        "UserName": "juelsong",
+        "Email": "juelsong@163.com"
+      },
+    ]
+  },
+}
