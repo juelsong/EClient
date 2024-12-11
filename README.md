@@ -18,3 +18,7 @@
 ## 4. `EHost.App` 后台服务
 
 ## 5. `EWebServer` 用于网页服务
+
+# SplitServer
+
+[移植服务](https://github.com/juelsong/SplitServer) 用于网站搭建
