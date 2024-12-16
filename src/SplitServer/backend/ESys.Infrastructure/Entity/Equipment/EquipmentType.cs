@@ -118,7 +118,7 @@ namespace ESys.Infrastructure.Entity
             yield return new EquipmentType()
             {
                 Id = id++,
-                Description = "No equipment type",
+                Description = "绿林粉尘仪",
 
                 CreateBy = 1,
                 CreatedTime = new DateTimeOffset(2022, 1, 1, 0, 0, 0, 0, new TimeSpan(0, 8, 0, 0, 0)),
@@ -127,25 +127,7 @@ namespace ESys.Infrastructure.Entity
             yield return new EquipmentType()
             {
                 Id = id++,
-                Description = "Incubator",
-
-                CreateBy = 1,
-                CreatedTime = new DateTimeOffset(2022, 1, 1, 0, 0, 0, 0, new TimeSpan(0, 8, 0, 0, 0)),
-                IsActive = true,
-            };
-            yield return new EquipmentType()
-            {
-                Id = id++,
-                Description = "Active Air Sampler",
-
-                CreateBy = 1,
-                CreatedTime = new DateTimeOffset(2022, 1, 1, 0, 0, 0, 0, new TimeSpan(0, 8, 0, 0, 0)),
-                IsActive = true,
-            };
-            yield return new EquipmentType()
-            {
-                Id = id++,
-                Description = "Particulate Counter",
+                Description = "朗亿粉尘仪",
 
                 CreateBy = 1,
                 CreatedTime = new DateTimeOffset(2022, 1, 1, 0, 0, 0, 0, new TimeSpan(0, 8, 0, 0, 0)),

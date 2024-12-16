@@ -22,9 +22,11 @@
  *          ┗┻┛ ┗┻┛+ + + +
  */
 
+using ESys.Contract.Defs;
 using ESys.Contract.Service;
 using Furion.DatabaseAccessor;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -43,13 +45,17 @@ namespace ESys.Management.Service
         private readonly IMemoryCache memoryCache;
         private string currentTenantId = null;
         private readonly IServiceProvider serviceProvider;
+        private readonly IConfiguration configuration;
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="tenantRepository"></param>
         /// <param name="memoryCache"></param>
         /// <param name="serviceProvider"></param>
         public TenantService(
+            IConfiguration configuration,
             IRepository<TenantEntity> tenantRepository,
             IMemoryCache memoryCache,
             IServiceProvider serviceProvider)
@@ -57,6 +63,8 @@ namespace ESys.Management.Service
             this.serviceProvider = serviceProvider;
             this.tenantRepository = tenantRepository;
             this.memoryCache = memoryCache;
+            this.configuration = configuration;
+
         }
 
         /// <summary>
@@ -93,10 +101,14 @@ namespace ESys.Management.Service
         /// <returns></returns>
         public async Task ExecuteInTenantScope(Func<IServiceScope, Task> action, bool validOnly)
         {
+
             // TODO cache
             var entities = this.tenantRepository.AsQueryable(false);
             //因为postgre时区问题，导致无法比较和存储Datetime 所以只能判断Master数据库类型
-            var isPostGre = this.tenantRepository.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
+            var dbType = this.configuration.GetSection("Db").GetValue<DbType>("type");
+            //var connectionStr = this.configuration.GetValue<string>("connectionStr");
+
+            var isPostGre = dbType == DbType.PostgreSQL;//this.tenantRepository.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
             if (validOnly)
             {
                 var now = isPostGre ? DateTime.Now.ToUniversalTime() : DateTime.Now;

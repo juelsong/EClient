@@ -171,33 +171,6 @@ namespace ESys.Security.Entity
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "添加洁净级别",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Classification:Add"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "编辑洁净级别",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Classification:Edit"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "禁用洁净级别",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Classification:Disable"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
                 Description = "添加采样点类型",
                 Type = PermissionType.Action,
                 Order = id,
@@ -321,152 +294,6 @@ namespace ESys.Security.Entity
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "测试方法",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "testMethod"
-            };
-            levelIds[1] = id;
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "添加测试方法",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "TestMethod:Add"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "编辑测试方法",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "TestMethod:Edit"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "禁用测试方法",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "TestMethod:Disable"
-            };
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "添加检测数据",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "Measurement:Add"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "编辑检测数据",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "Measurement:Edit"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "删除检测数据",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "Measurement:Delete"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "添加测试方法设备",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeEquipment:Add"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "编辑测试方法设备",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeEquipment:Edit"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "删除测试方法设备",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeEquipment:Delete"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "添加测试方法培养基",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeMedia:Add"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "编辑测试方法培养基",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeMedia:Edit"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "删除测试方法培养基",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "TestTypeMedia:Delete"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "添加测试方法限度",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "LimitDef:Add"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "编辑测试方法限度",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "LimitDef:Edit"
-            //};
-            //yield return new Permission()
-            //{
-            //    Id = ++id,
-            //    Description = "删除测试方法限度",
-            //    Type = PermissionType.Action,
-            //    Order = id,
-            //    ParentId = levelIds[1],
-            //    Code = "LimitDef:Delete"
-            //};
-
-            yield return new Permission()
-            {
-                Id = ++id,
                 Description = "设备",
                 Type = PermissionType.Menu,
                 Order = id,
@@ -523,79 +350,6 @@ namespace ESys.Security.Entity
                 Order = id,
                 ParentId = levelIds[0],
                 Code = "medium"
-            };
-
-            levelIds[1] = id;
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "添加培养基",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Media:Add"
-            };
-
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "编辑培养基",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Media:Edit"
-            };
-
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "禁用培养基",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Media:Disable"
-            };
-
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "微生物",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "microorganism"
-            };
-
-
-            levelIds[1] = id;
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "添加微生物",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Organism:Add"
-            };
-
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "编辑微生物",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Organism:Edit"
-            };
-
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "禁用微生物",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Organism:Disable"
             };
 
             yield return new Permission()
@@ -788,15 +542,6 @@ namespace ESys.Security.Entity
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "审计追踪",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "auditRecord"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
                 Description = "日志",
                 Type = PermissionType.Menu,
                 Order = id,
@@ -876,7 +621,6 @@ namespace ESys.Security.Entity
                 ParentId = levelIds[1],
                 Code = "MapCategory:Edit"
             };
-
             yield return new Permission()
             {
                 Id = ++id,
@@ -886,294 +630,71 @@ namespace ESys.Security.Entity
                 ParentId = levelIds[0],
                 Code = "visualizations"
             };
+
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "检验执行",
+                Description = "设备维护",
                 Type = PermissionType.Menu,
                 Order = id,
-                Code = "inspectionExecution"
+                Code = "equipment"
             };
             levelIds[0] = id;
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "任务管理",
+                Description = "设备维护",
                 Type = PermissionType.Menu,
                 Order = id,
                 ParentId = levelIds[0],
-                Code = "missions"
+                Code = "equipmentTPM"
             };
             levelIds[1] = id;
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "任务管理领取",
+                Description = "添加维护单",
                 Type = PermissionType.Action,
                 Order = id,
                 ParentId = levelIds[1],
-                Code = "Missions:Receive"
+                Code = "equipmentTPM:Add"
             };
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "任务管理分配",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Assign"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务管理复制",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Copy"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务管理退回",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Return"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务管理执行",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Execute"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务管理无需测试",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:NoTest"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务日历",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Calender"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "任务条码打印",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "Missions:Printer"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "结果录入",
+                Description = "设备维护单列表",
                 Type = PermissionType.Menu,
                 Order = id,
                 ParentId = levelIds[0],
-                Code = "inspectionRecord"
+                Code = "equipmentTPMList"
             };
             levelIds[1] = id;
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "采样",
-                Type = PermissionType.Menu,
+                Description = "导出维护单",
+                Type = PermissionType.Action,
                 Order = id,
                 ParentId = levelIds[1],
-                Code = "InspectionRecord:Sampling"
+                Code = "equipmentTPM:Export"
             };
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "孵化",
-                Type = PermissionType.Menu,
+                Description = "编辑维护单",
+                Type = PermissionType.Action,
                 Order = id,
                 ParentId = levelIds[1],
-                Code = "InspectionRecord:Incubation"
+                Code = "equipmentTPM:Edit"
             };
             yield return new Permission()
             {
                 Id = ++id,
-                Description = "测试",
-                Type = PermissionType.Menu,
+                Description = "禁用维护单",
+                Type = PermissionType.Action,
                 Order = id,
                 ParentId = levelIds[1],
-                Code = "InspectionRecord:Testing"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "录入",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "InspectionRecord:ResultEntry"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "编辑设备导入数据",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "InspectionRecord:EditDeviceImport"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "结果录入无需测试",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[1],
-                Code = "InspectionRecord:Notest"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "审核批准",
-                Type = PermissionType.Menu,
-                Order = id,
-                Code = "auditPrompt"
-            };
-            levelIds[0] = id;
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "审核批准再测试",
-                Type = PermissionType.Action,
-                ParentId = levelIds[0],
-                Order = id,
-                Code = "AuditPrompt:ReTest"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "审核批准无需测试",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "AuditPrompt:Notest"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "批准",
-                Type = PermissionType.Action,
-                ParentId = levelIds[0],
-                Order = id,
-                Code = "AuditPrompt:Approve"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "审核",
-                Type = PermissionType.Action,
-                ParentId = levelIds[0],
-                Order = id,
-                Code = "AuditPrompt:Review"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "复核修改数据",
-                Type = PermissionType.Action,
-                ParentId = levelIds[0],
-                Order = id,
-                Code = "AuditPrompt:Edit"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "检验计划",
-                Type = PermissionType.Menu,
-                Order = id,
-                Code = "plan"
-            };
-            levelIds[0] = id;
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划添加",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Add"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划编辑",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Edit"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划批准",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Approve"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划激活",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Effective"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划废弃",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Retire"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划添加到任务列表",
-                Type = PermissionType.Action,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:AddToPool"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "计划日历",
-                Type = PermissionType.Menu,
-                Order = id,
-                ParentId = levelIds[0],
-                Code = "Plan:Calender"
-            };
-            yield return new Permission()
-            {
-                Id = ++id,
-                Description = "分析报表",
-                Type = PermissionType.Menu,
-                Order = id,
-                Code = "analyse"
+                Code = "equipmentTPM:Disable"
             };
         }
     }

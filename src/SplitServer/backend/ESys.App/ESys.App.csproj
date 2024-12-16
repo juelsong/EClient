@@ -15,10 +15,10 @@
 
   <PropertyGroup>
     <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">$(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
-    <FileVersion>0.0.1.6</FileVersion>
-    <Company>Metaura</Company>
-    <Product>Emis</Product>
-    <Authors>Metaura</Authors>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Company>ESys</Company>
+    <Product>ESys</Product>
+    <Authors>Juelsong</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +44,7 @@
     <Content Remove="appsettings.MigrationMySQL.json" />
     <Content Remove="appsettings.MigrationSQLite.json" />
     <Content Remove="appsettings.MigrationSqlServer.json" />
+    <Content Remove="appsettings.MigrationPostgreSQL.json" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Content Remove="appsettings.Production.json" />
@@ -74,13 +75,4 @@
     <ProjectReference Include="..\ESys.Security\ESys.Security.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.MigrationPostgreSQL.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  
 </Project>

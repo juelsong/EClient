@@ -41,13 +41,13 @@ namespace ESys.App
                     webBuilder
                       .Inject()
                       .UseContentRoot(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
-#if PRODUCTION
+#if DEBUG
                       .UseKestrel(opt =>
                       {
                           opt.ConfigureEndpointDefaults(options =>
                           {
                               //测试环境部署，非https需要注掉
-                              options.UseHttps();
+                              //options.UseHttps();
                           });
                       })
 #endif

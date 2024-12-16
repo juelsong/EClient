@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ESys.Db.PostgreSQL.TenantSlave
 {
     [DbContext(typeof(TenantSlaveDbContext))]
-    [Migration("20241210091641_v0.0.1")]
+    [Migration("20241213023120_v0.0.1")]
     partial class v001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,16 +57,19 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<int?>("EquipmentConfigId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("EquipmentTypeId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("LastSyncDataTimestamp")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<bool>("IsOperation")
+                        .HasColumnType("boolean");
 
-                    b.Property<int?>("LastSyncUserId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -76,14 +79,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                     b.Property<DateTimeOffset?>("NextCalibrationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("PerformedBy")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SerialNumber")
                         .HasColumnType("text");
-
-                    b.Property<int?>("UnitOfMeasureId")
-                        .HasColumnType("integer");
 
                     b.Property<int?>("UpdateBy")
                         .HasColumnType("integer");
@@ -93,13 +90,313 @@ namespace ESys.Db.PostgreSQL.TenantSlave
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EquipmentConfigId")
+                        .IsUnique();
+
                     b.HasIndex("EquipmentTypeId");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("Name");
 
                     b.HasIndex("SerialNumber");
 
                     b.ToTable("Equipment");
+                });
+
+            modelBuilder.Entity("ESys.Infrastructure.Entity.EquipmentConfig", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdditionalConfig")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Barcode")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("UpdateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EquipmentConfig");
+                });
+
+            modelBuilder.Entity("ESys.Infrastructure.Entity.EquipmentConfigAudit", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<byte>("Action")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("AdditionalConfig")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("AuditTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Barcode")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("UpdateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
+
+                    b.ToTable("EquipmentConfigAudit");
+                });
+
+            modelBuilder.Entity("ESys.Infrastructure.Entity.EquipmentTPM", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("BeforeEquipmentQualified")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("BeforeFlow1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BeforeFlow2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BeforeFlow3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BeforeRelativeError")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("BeforeSetFlow")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("BehindCalibration")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("BehindEquipmentQualified")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("BehindEquipmentRelativeError")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BehindFlow1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BehindFlow2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BehindFlow3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BehindRelativeError")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("BehindSetFlow")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("C1EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("C1StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("C2EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("C2StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CalibrationZero")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("DataTransmissionIsError")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("DataTransmissionMsg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DescriptionC1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DescriptionC2")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("DeviceIsError")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("DeviceLocation")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeviceMsg")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("EnvironmentIsError")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("EnvironmentMsg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentControlNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EquipmentName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentReal1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentReal2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentReal3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentRelativeError")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentSerialNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentSpan")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EquipmentZero")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("PowerSupplyIsError")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PowerSupplyMsg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResetC1Equipment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResetC2Equipment")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("ResetEquipment")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ResetEquipmentMsg")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("SampleIsNormal")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SampleMsg")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SetFlow")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SetFlow2")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TemperatureData")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TemperatureMsg")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("UpdateBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("VedioIsError")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("VedioMsg")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipmentControlNumber");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("EquipmentTPM");
                 });
 
             modelBuilder.Entity("ESys.Infrastructure.Entity.EquipmentType", b =>
@@ -159,7 +456,7 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                             Id = 1,
                             CreateBy = 1,
                             CreatedTime = new DateTimeOffset(new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 8, 0, 0, 0)),
-                            Description = "No equipment type",
+                            Description = "绿林粉尘仪",
                             IsActive = true,
                             Version = 0
                         },
@@ -168,25 +465,7 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                             Id = 2,
                             CreateBy = 1,
                             CreatedTime = new DateTimeOffset(new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 8, 0, 0, 0)),
-                            Description = "Incubator",
-                            IsActive = true,
-                            Version = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreateBy = 1,
-                            CreatedTime = new DateTimeOffset(new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 8, 0, 0, 0)),
-                            Description = "Active Air Sampler",
-                            IsActive = true,
-                            Version = 0
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreateBy = 1,
-                            CreatedTime = new DateTimeOffset(new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 8, 0, 0, 0)),
-                            Description = "Particulate Counter",
+                            Description = "朗亿粉尘仪",
                             IsActive = true,
                             Version = 0
                         });
@@ -2614,8 +2893,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 3,
-                            Code = "Classification:Add",
-                            Description = "添加洁净级别",
+                            Code = "SiteType:Add",
+                            Description = "添加采样点类型",
                             Order = 3,
                             ParentId = 2,
                             Type = 2
@@ -2623,8 +2902,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 4,
-                            Code = "Classification:Edit",
-                            Description = "编辑洁净级别",
+                            Code = "SiteType:Edit",
+                            Description = "编辑采样点类型",
                             Order = 4,
                             ParentId = 2,
                             Type = 2
@@ -2632,8 +2911,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 5,
-                            Code = "Classification:Disable",
-                            Description = "禁用洁净级别",
+                            Code = "SiteType:Disable",
+                            Description = "禁用采样点类型",
                             Order = 5,
                             ParentId = 2,
                             Type = 2
@@ -2641,8 +2920,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 6,
-                            Code = "SiteType:Add",
-                            Description = "添加采样点类型",
+                            Code = "LocationType:Add",
+                            Description = "添加区域类型",
                             Order = 6,
                             ParentId = 2,
                             Type = 2
@@ -2650,8 +2929,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 7,
-                            Code = "SiteType:Edit",
-                            Description = "编辑采样点类型",
+                            Code = "LocationType:Edit",
+                            Description = "编辑区域类型",
                             Order = 7,
                             ParentId = 2,
                             Type = 2
@@ -2659,8 +2938,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 8,
-                            Code = "SiteType:Disable",
-                            Description = "禁用采样点类型",
+                            Code = "LocationType:Disable",
+                            Description = "禁用区域类型",
                             Order = 8,
                             ParentId = 2,
                             Type = 2
@@ -2668,8 +2947,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 9,
-                            Code = "LocationType:Add",
-                            Description = "添加区域类型",
+                            Code = "Location:Add",
+                            Description = "添加区域",
                             Order = 9,
                             ParentId = 2,
                             Type = 2
@@ -2677,8 +2956,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 10,
-                            Code = "LocationType:Edit",
-                            Description = "编辑区域类型",
+                            Code = "Location:Edit",
+                            Description = "编辑区域",
                             Order = 10,
                             ParentId = 2,
                             Type = 2
@@ -2686,8 +2965,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 11,
-                            Code = "LocationType:Disable",
-                            Description = "禁用区域类型",
+                            Code = "Location:Disable",
+                            Description = "禁用区域",
                             Order = 11,
                             ParentId = 2,
                             Type = 2
@@ -2695,116 +2974,116 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 12,
-                            Code = "Location:Add",
-                            Description = "添加区域",
+                            Code = "production",
+                            Description = "产品",
                             Order = 12,
-                            ParentId = 2,
-                            Type = 2
+                            ParentId = 1,
+                            Type = 1
                         },
                         new
                         {
                             Id = 13,
-                            Code = "Location:Edit",
-                            Description = "编辑区域",
+                            Code = "Product:Add",
+                            Description = "添加产品",
                             Order = 13,
-                            ParentId = 2,
+                            ParentId = 12,
                             Type = 2
                         },
                         new
                         {
                             Id = 14,
-                            Code = "Location:Disable",
-                            Description = "禁用区域",
+                            Code = "Product:Edit",
+                            Description = "编辑产品",
                             Order = 14,
-                            ParentId = 2,
+                            ParentId = 12,
                             Type = 2
                         },
                         new
                         {
                             Id = 15,
-                            Code = "production",
-                            Description = "产品",
+                            Code = "Product:Disable",
+                            Description = "禁用产品",
                             Order = 15,
+                            ParentId = 12,
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Code = "device",
+                            Description = "设备",
+                            Order = 16,
                             ParentId = 1,
                             Type = 1
                         },
                         new
                         {
-                            Id = 16,
-                            Code = "Product:Add",
-                            Description = "添加产品",
-                            Order = 16,
-                            ParentId = 15,
-                            Type = 2
-                        },
-                        new
-                        {
                             Id = 17,
-                            Code = "Product:Edit",
-                            Description = "编辑产品",
+                            Code = "Equipment:Add",
+                            Description = "添加设备",
                             Order = 17,
-                            ParentId = 15,
+                            ParentId = 16,
                             Type = 2
                         },
                         new
                         {
                             Id = 18,
-                            Code = "Product:Disable",
-                            Description = "禁用产品",
+                            Code = "Equipment:Edit",
+                            Description = "编辑设备",
                             Order = 18,
-                            ParentId = 15,
+                            ParentId = 16,
                             Type = 2
                         },
                         new
                         {
                             Id = 19,
-                            Code = "testMethod",
-                            Description = "测试方法",
+                            Code = "Equipment:Disable",
+                            Description = "禁用设备",
                             Order = 19,
-                            ParentId = 1,
-                            Type = 1
+                            ParentId = 16,
+                            Type = 2
                         },
                         new
                         {
                             Id = 20,
-                            Code = "TestMethod:Add",
-                            Description = "添加测试方法",
+                            Code = "Equipment:UpdateConfig",
+                            Description = "上传文件",
                             Order = 20,
-                            ParentId = 19,
+                            ParentId = 16,
                             Type = 2
                         },
                         new
                         {
                             Id = 21,
-                            Code = "TestMethod:Edit",
-                            Description = "编辑测试方法",
+                            Code = "medium",
+                            Description = "培养基",
                             Order = 21,
-                            ParentId = 19,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Code = "TestMethod:Disable",
-                            Description = "禁用测试方法",
-                            Order = 22,
-                            ParentId = 19,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Code = "device",
-                            Description = "设备",
-                            Order = 23,
                             ParentId = 1,
                             Type = 1
                         },
                         new
                         {
+                            Id = 22,
+                            Code = "security",
+                            Description = "安全",
+                            Order = 22,
+                            ParentId = 1,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Code = "department",
+                            Description = "部门管理",
+                            Order = 23,
+                            ParentId = 22,
+                            Type = 1
+                        },
+                        new
+                        {
                             Id = 24,
-                            Code = "Equipment:Add",
-                            Description = "添加设备",
+                            Code = "Department:Add",
+                            Description = "添加部门",
                             Order = 24,
                             ParentId = 23,
                             Type = 2
@@ -2812,8 +3091,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 25,
-                            Code = "Equipment:Edit",
-                            Description = "编辑设备",
+                            Code = "Department:Edit",
+                            Description = "编辑部门",
                             Order = 25,
                             ParentId = 23,
                             Type = 2
@@ -2821,8 +3100,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 26,
-                            Code = "Equipment:Disable",
-                            Description = "禁用设备",
+                            Code = "Department:Disable",
+                            Description = "禁用部门",
                             Order = 26,
                             ParentId = 23,
                             Type = 2
@@ -2830,62 +3109,62 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 27,
-                            Code = "Equipment:UpdateConfig",
-                            Description = "上传文件",
+                            Code = "user",
+                            Description = "用户管理",
                             Order = 27,
-                            ParentId = 23,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Code = "medium",
-                            Description = "培养基",
-                            Order = 28,
-                            ParentId = 1,
+                            ParentId = 22,
                             Type = 1
                         },
                         new
                         {
+                            Id = 28,
+                            Code = "User:Add",
+                            Description = "添加用户",
+                            Order = 28,
+                            ParentId = 27,
+                            Type = 2
+                        },
+                        new
+                        {
                             Id = 29,
-                            Code = "Media:Add",
-                            Description = "添加培养基",
+                            Code = "User:Edit",
+                            Description = "编辑用户",
                             Order = 29,
-                            ParentId = 28,
+                            ParentId = 27,
                             Type = 2
                         },
                         new
                         {
                             Id = 30,
-                            Code = "Media:Edit",
-                            Description = "编辑培养基",
+                            Code = "User:Disable",
+                            Description = "禁用用户",
                             Order = 30,
-                            ParentId = 28,
+                            ParentId = 27,
                             Type = 2
                         },
                         new
                         {
                             Id = 31,
-                            Code = "Media:Disable",
-                            Description = "禁用培养基",
+                            Code = "User:Password",
+                            Description = "修改密码",
                             Order = 31,
-                            ParentId = 28,
+                            ParentId = 27,
                             Type = 2
                         },
                         new
                         {
                             Id = 32,
-                            Code = "microorganism",
-                            Description = "微生物",
+                            Code = "role",
+                            Description = "角色管理",
                             Order = 32,
-                            ParentId = 1,
+                            ParentId = 22,
                             Type = 1
                         },
                         new
                         {
                             Id = 33,
-                            Code = "Organism:Add",
-                            Description = "添加微生物",
+                            Code = "Role:Add",
+                            Description = "添加角色",
                             Order = 33,
                             ParentId = 32,
                             Type = 2
@@ -2893,8 +3172,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 34,
-                            Code = "Organism:Edit",
-                            Description = "编辑微生物",
+                            Code = "Role:Edit",
+                            Description = "编辑角色",
                             Order = 34,
                             ParentId = 32,
                             Type = 2
@@ -2902,8 +3181,8 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 35,
-                            Code = "Organism:Disable",
-                            Description = "禁用微生物",
+                            Code = "Role:Disable",
+                            Description = "禁用角色",
                             Order = 35,
                             ParentId = 32,
                             Type = 2
@@ -2911,564 +3190,207 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                         new
                         {
                             Id = 36,
-                            Code = "security",
-                            Description = "安全",
+                            Code = "booking",
+                            Description = "预订管理",
                             Order = 36,
-                            ParentId = 1,
+                            ParentId = 22,
                             Type = 1
                         },
                         new
                         {
                             Id = 37,
-                            Code = "department",
-                            Description = "部门管理",
+                            Code = "Subscription:Edit",
+                            Description = "编辑警告订阅",
                             Order = 37,
                             ParentId = 36,
-                            Type = 1
+                            Type = 2
                         },
                         new
                         {
                             Id = 38,
-                            Code = "Department:Add",
-                            Description = "添加部门",
+                            Code = "Subscription:Disable",
+                            Description = "禁用警告订阅",
                             Order = 38,
-                            ParentId = 37,
+                            ParentId = 36,
                             Type = 2
                         },
                         new
                         {
                             Id = 39,
-                            Code = "Department:Edit",
-                            Description = "编辑部门",
+                            Code = "settings",
+                            Description = "系统设置",
                             Order = 39,
-                            ParentId = 37,
-                            Type = 2
+                            ParentId = 1,
+                            Type = 1
                         },
                         new
                         {
                             Id = 40,
-                            Code = "Department:Disable",
-                            Description = "禁用部门",
+                            Code = "Security:Password",
+                            Description = "配置密码",
                             Order = 40,
-                            ParentId = 37,
-                            Type = 2
+                            ParentId = 39,
+                            Type = 1
                         },
                         new
                         {
                             Id = 41,
-                            Code = "user",
-                            Description = "用户管理",
+                            Code = "Security:Email",
+                            Description = "配置邮箱",
                             Order = 41,
-                            ParentId = 36,
+                            ParentId = 39,
                             Type = 1
                         },
                         new
                         {
                             Id = 42,
-                            Code = "User:Add",
-                            Description = "添加用户",
+                            Code = "log",
+                            Description = "日志",
                             Order = 42,
-                            ParentId = 41,
-                            Type = 2
+                            ParentId = 1,
+                            Type = 1
                         },
                         new
                         {
                             Id = 43,
-                            Code = "User:Edit",
-                            Description = "编辑用户",
+                            Code = "visualization",
+                            Description = "可视化",
                             Order = 43,
-                            ParentId = 41,
-                            Type = 2
+                            Type = 1
                         },
                         new
                         {
                             Id = 44,
-                            Code = "User:Disable",
-                            Description = "禁用用户",
+                            Code = "map",
+                            Description = "地图管理",
                             Order = 44,
-                            ParentId = 41,
-                            Type = 2
+                            ParentId = 43,
+                            Type = 1
                         },
                         new
                         {
                             Id = 45,
-                            Code = "User:Password",
-                            Description = "修改密码",
+                            Code = "Map:Add",
+                            Description = "添加地图",
                             Order = 45,
-                            ParentId = 41,
+                            ParentId = 44,
                             Type = 2
                         },
                         new
                         {
                             Id = 46,
-                            Code = "role",
-                            Description = "角色管理",
+                            Code = "Map:Disable",
+                            Description = "禁用地图",
                             Order = 46,
-                            ParentId = 36,
-                            Type = 1
+                            ParentId = 44,
+                            Type = 2
                         },
                         new
                         {
                             Id = 47,
-                            Code = "Role:Add",
-                            Description = "添加角色",
+                            Code = "Map:Edit",
+                            Description = "编辑地图",
                             Order = 47,
-                            ParentId = 46,
+                            ParentId = 44,
                             Type = 2
                         },
                         new
                         {
                             Id = 48,
-                            Code = "Role:Edit",
-                            Description = "编辑角色",
+                            Code = "MapCategory:Add",
+                            Description = "添加地图分类",
                             Order = 48,
-                            ParentId = 46,
+                            ParentId = 44,
                             Type = 2
                         },
                         new
                         {
                             Id = 49,
-                            Code = "Role:Disable",
-                            Description = "禁用角色",
+                            Code = "MapCategory:Disable",
+                            Description = "禁用地图分类",
                             Order = 49,
-                            ParentId = 46,
+                            ParentId = 44,
                             Type = 2
                         },
                         new
                         {
                             Id = 50,
-                            Code = "booking",
-                            Description = "预订管理",
+                            Code = "MapCategory:Edit",
+                            Description = "编辑地图分类",
                             Order = 50,
-                            ParentId = 36,
-                            Type = 1
+                            ParentId = 44,
+                            Type = 2
                         },
                         new
                         {
                             Id = 51,
-                            Code = "Subscription:Edit",
-                            Description = "编辑警告订阅",
+                            Code = "visualizations",
+                            Description = "可视化呈现",
                             Order = 51,
-                            ParentId = 50,
-                            Type = 2
+                            ParentId = 43,
+                            Type = 1
                         },
                         new
                         {
                             Id = 52,
-                            Code = "Subscription:Disable",
-                            Description = "禁用警告订阅",
+                            Code = "equipment",
+                            Description = "设备维护",
                             Order = 52,
-                            ParentId = 50,
-                            Type = 2
+                            Type = 1
                         },
                         new
                         {
                             Id = 53,
-                            Code = "settings",
-                            Description = "系统设置",
+                            Code = "equipmentTPM",
+                            Description = "设备维护",
                             Order = 53,
-                            ParentId = 1,
+                            ParentId = 52,
                             Type = 1
                         },
                         new
                         {
                             Id = 54,
-                            Code = "Security:Password",
-                            Description = "配置密码",
+                            Code = "equipmentTPM:Add",
+                            Description = "添加维护单",
                             Order = 54,
                             ParentId = 53,
-                            Type = 1
+                            Type = 2
                         },
                         new
                         {
                             Id = 55,
-                            Code = "Security:Email",
-                            Description = "配置邮箱",
+                            Code = "equipmentTPMList",
+                            Description = "设备维护单列表",
                             Order = 55,
-                            ParentId = 53,
+                            ParentId = 52,
                             Type = 1
                         },
                         new
                         {
                             Id = 56,
-                            Code = "auditRecord",
-                            Description = "审计追踪",
+                            Code = "equipmentTPM:Export",
+                            Description = "导出维护单",
                             Order = 56,
-                            ParentId = 1,
-                            Type = 1
+                            ParentId = 55,
+                            Type = 2
                         },
                         new
                         {
                             Id = 57,
-                            Code = "log",
-                            Description = "日志",
+                            Code = "equipmentTPM:Edit",
+                            Description = "编辑维护单",
                             Order = 57,
-                            ParentId = 1,
-                            Type = 1
+                            ParentId = 55,
+                            Type = 2
                         },
                         new
                         {
                             Id = 58,
-                            Code = "visualization",
-                            Description = "可视化",
+                            Code = "equipmentTPM:Disable",
+                            Description = "禁用维护单",
                             Order = 58,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 59,
-                            Code = "map",
-                            Description = "地图管理",
-                            Order = 59,
-                            ParentId = 58,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 60,
-                            Code = "Map:Add",
-                            Description = "添加地图",
-                            Order = 60,
-                            ParentId = 59,
+                            ParentId = 55,
                             Type = 2
-                        },
-                        new
-                        {
-                            Id = 61,
-                            Code = "Map:Disable",
-                            Description = "禁用地图",
-                            Order = 61,
-                            ParentId = 59,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 62,
-                            Code = "Map:Edit",
-                            Description = "编辑地图",
-                            Order = 62,
-                            ParentId = 59,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 63,
-                            Code = "MapCategory:Add",
-                            Description = "添加地图分类",
-                            Order = 63,
-                            ParentId = 59,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 64,
-                            Code = "MapCategory:Disable",
-                            Description = "禁用地图分类",
-                            Order = 64,
-                            ParentId = 59,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 65,
-                            Code = "MapCategory:Edit",
-                            Description = "编辑地图分类",
-                            Order = 65,
-                            ParentId = 59,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 66,
-                            Code = "visualizations",
-                            Description = "可视化呈现",
-                            Order = 66,
-                            ParentId = 58,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 67,
-                            Code = "inspectionExecution",
-                            Description = "检验执行",
-                            Order = 67,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 68,
-                            Code = "missions",
-                            Description = "任务管理",
-                            Order = 68,
-                            ParentId = 67,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 69,
-                            Code = "Missions:Receive",
-                            Description = "任务管理领取",
-                            Order = 69,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 70,
-                            Code = "Missions:Assign",
-                            Description = "任务管理分配",
-                            Order = 70,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 71,
-                            Code = "Missions:Copy",
-                            Description = "任务管理复制",
-                            Order = 71,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 72,
-                            Code = "Missions:Return",
-                            Description = "任务管理退回",
-                            Order = 72,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 73,
-                            Code = "Missions:Execute",
-                            Description = "任务管理执行",
-                            Order = 73,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 74,
-                            Code = "Missions:NoTest",
-                            Description = "任务管理无需测试",
-                            Order = 74,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 75,
-                            Code = "Missions:Calender",
-                            Description = "任务日历",
-                            Order = 75,
-                            ParentId = 68,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 76,
-                            Code = "Missions:Printer",
-                            Description = "任务条码打印",
-                            Order = 76,
-                            ParentId = 68,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 77,
-                            Code = "inspectionRecord",
-                            Description = "结果录入",
-                            Order = 77,
-                            ParentId = 67,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 78,
-                            Code = "InspectionRecord:Sampling",
-                            Description = "采样",
-                            Order = 78,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 79,
-                            Code = "InspectionRecord:Incubation",
-                            Description = "孵化",
-                            Order = 79,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 80,
-                            Code = "InspectionRecord:Testing",
-                            Description = "测试",
-                            Order = 80,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 81,
-                            Code = "InspectionRecord:ResultEntry",
-                            Description = "录入",
-                            Order = 81,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 82,
-                            Code = "InspectionRecord:EditDeviceImport",
-                            Description = "编辑设备导入数据",
-                            Order = 82,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 83,
-                            Code = "InspectionRecord:Notest",
-                            Description = "结果录入无需测试",
-                            Order = 83,
-                            ParentId = 77,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 84,
-                            Code = "auditPrompt",
-                            Description = "审核批准",
-                            Order = 84,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 85,
-                            Code = "AuditPrompt:ReTest",
-                            Description = "审核批准再测试",
-                            Order = 85,
-                            ParentId = 84,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 86,
-                            Code = "AuditPrompt:Notest",
-                            Description = "审核批准无需测试",
-                            Order = 86,
-                            ParentId = 84,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 87,
-                            Code = "AuditPrompt:Approve",
-                            Description = "批准",
-                            Order = 87,
-                            ParentId = 84,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 88,
-                            Code = "AuditPrompt:Review",
-                            Description = "审核",
-                            Order = 88,
-                            ParentId = 84,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 89,
-                            Code = "AuditPrompt:Edit",
-                            Description = "复核修改数据",
-                            Order = 89,
-                            ParentId = 84,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 90,
-                            Code = "plan",
-                            Description = "检验计划",
-                            Order = 90,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 91,
-                            Code = "Plan:Add",
-                            Description = "计划添加",
-                            Order = 91,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 92,
-                            Code = "Plan:Edit",
-                            Description = "计划编辑",
-                            Order = 92,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 93,
-                            Code = "Plan:Approve",
-                            Description = "计划批准",
-                            Order = 93,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 94,
-                            Code = "Plan:Effective",
-                            Description = "计划激活",
-                            Order = 94,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 95,
-                            Code = "Plan:Retire",
-                            Description = "计划废弃",
-                            Order = 95,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 96,
-                            Code = "Plan:AddToPool",
-                            Description = "计划添加到任务列表",
-                            Order = 96,
-                            ParentId = 90,
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 97,
-                            Code = "Plan:Calender",
-                            Description = "计划日历",
-                            Order = 97,
-                            ParentId = 90,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 98,
-                            Code = "analyse",
-                            Description = "分析报表",
-                            Order = 98,
-                            Type = 1
                         });
                 });
 
@@ -4250,11 +4172,35 @@ namespace ESys.Db.PostgreSQL.TenantSlave
 
             modelBuilder.Entity("ESys.Infrastructure.Entity.Equipment", b =>
                 {
+                    b.HasOne("ESys.Infrastructure.Entity.EquipmentConfig", "EquipmentConfig")
+                        .WithOne()
+                        .HasForeignKey("ESys.Infrastructure.Entity.Equipment", "EquipmentConfigId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("ESys.Infrastructure.Entity.EquipmentType", "EquipmentType")
                         .WithMany()
                         .HasForeignKey("EquipmentTypeId");
 
+                    b.HasOne("ESys.Infrastructure.Entity.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.Navigation("EquipmentConfig");
+
                     b.Navigation("EquipmentType");
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("ESys.Infrastructure.Entity.EquipmentTPM", b =>
+                {
+                    b.HasOne("ESys.Infrastructure.Entity.Equipment", "Equipment")
+                        .WithMany("EquipmentTPMs")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("ESys.Infrastructure.Entity.Location", b =>
@@ -4615,6 +4561,11 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ESys.Infrastructure.Entity.Equipment", b =>
+                {
+                    b.Navigation("EquipmentTPMs");
                 });
 
             modelBuilder.Entity("ESys.Infrastructure.Entity.Location", b =>

@@ -50,6 +50,9 @@
                 {
                     traceableEntity.CreateBy = userId;
                 }
+                foreach (var item in entry.Entity.GetType().GetProperties().Where(i=>i.GetType() == typeof(DateTimeOffset)))
+                {
+                }
             }
             foreach (var entry in dbContext.ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Modified))
