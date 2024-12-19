@@ -27,6 +27,7 @@ using ESys.Utilty.Defs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ESys.Security.Middleware
 {
@@ -51,6 +52,8 @@ namespace ESys.Security.Middleware
         /// <returns></returns>
         public async Task InvokeAsync(HttpContext ctx)
         {
+            //var ass = Furion.App.Assemblies.Where(a => a.GetName().Name.Contains("ESys")).ToArray();
+            //System.Diagnostics.Debugger.Launch();
             var tenant = ctx.GetTenantId();
             var tenantService = ctx.RequestServices.GetService<ITenantService>();
             // odata batch

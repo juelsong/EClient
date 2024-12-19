@@ -25,9 +25,9 @@ namespace ESys.App
             Host.CreateDefaultBuilder(args)
                 .Inject((b, c) =>
                 {
-#if DEBUG
+//#if DEBUG
                     c.AutoRegisterBackgroundService = false;
-#endif
+//#endif
                 })
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
@@ -41,7 +41,7 @@ namespace ESys.App
                     webBuilder
                       .Inject()
                       .UseContentRoot(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
-#if DEBUG
+#if !DEBUG
                       .UseKestrel(opt =>
                       {
                           opt.ConfigureEndpointDefaults(options =>

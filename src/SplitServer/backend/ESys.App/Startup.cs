@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -249,7 +250,7 @@ namespace ESys.App
 #if DEBUG
                 config?.Configure(services, false);
 #else
-                config?.Configure(services, true);
+                config?.Configure(services, false);
 #endif
             }
             var buildConfigure = Furion.App.EffectiveTypes
@@ -266,6 +267,16 @@ namespace ESys.App
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var ass = Furion.App.Assemblies.Where(a => a.GetName().Name.Contains("ESys")).ToArray();
+            //System.Diagnostics.Debugger.Launch();
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            var loadedAssemblies = currentDomain.GetAssemblies().Where(a => a.GetName().Name.Contains("ESys"));
+
+            Console.WriteLine("\nLoaded assemblies in the current AppDomain:");
+            foreach (Assembly assembly in loadedAssemblies)
+            {
+                Console.WriteLine(assembly.FullName);
+            }
             //if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();

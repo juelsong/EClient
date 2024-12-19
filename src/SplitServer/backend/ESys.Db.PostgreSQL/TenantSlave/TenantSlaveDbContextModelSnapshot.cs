@@ -3717,6 +3717,7 @@ namespace ESys.Db.PostgreSQL.TenantSlave
                             IsActive = true,
                             IsHidden = true,
                             Password = "l8YyUDcfKuGGgLaMKT4E6mg/8ClZOK8tczolqvakrA8=",
+                            RealName = "super",
                             Salt = "f5ZTUveTZ6szf7wR3qCmvg==",
                             Status = 0
                         },

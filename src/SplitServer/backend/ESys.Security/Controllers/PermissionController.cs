@@ -34,6 +34,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ESys.Security.Models;
 using Microsoft.AspNetCore.Authorization;
+using ESys.Contract.Service;
 
 namespace ESys.Security.ApiControllers
 {
@@ -46,16 +47,20 @@ namespace ESys.Security.ApiControllers
     public class PermissionController : Controller
     {
         private readonly IMSRepository<TenantMasterLocator, TenantSlaveLocator> msRepository;
+        private readonly ITenantService tenantService;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="msRepository"></param>
         public PermissionController(
-            IMSRepository<TenantMasterLocator, TenantSlaveLocator> msRepository
+            IMSRepository<TenantMasterLocator, TenantSlaveLocator> msRepository,
+            ITenantService tenantService
             )
         {
             this.msRepository = msRepository;
+            this.tenantService = tenantService;
+
         }
 #if DEBUG
         /// <summary>
@@ -135,12 +140,24 @@ namespace ESys.Security.ApiControllers
                 }
                 rpRepo.SaveNow();
                 var pRepo = this.msRepository.Master<Permission>();
+                if (this.tenantService.GetCurrentTenant().DbType == Contract.Defs.DbType.PostgreSQL)
+                {
+                    //PostGre 会把null 顺序倒序放最前
+                    var pnotnullIds = pRepo.AsQueryable().Where(i => i.ParentId != null).OrderByDescending(p => p.ParentId).Select(p => p.Id).ToArray();
+                    foreach (var item in pnotnullIds)
+                    {
+                        pRepo.DeleteNow(item);
+                    }
+                    pRepo.SaveNow();
+                }
                 var pIds = pRepo.AsQueryable().OrderByDescending(p => p.ParentId).Select(p => p.Id).ToArray();
+
                 foreach (var item in pIds)
                 {
                     pRepo.DeleteNow(item);
                 }
                 pRepo.SaveNow();
+
                 if (permissions != null && permissions.Count > 0)
                 {
                     var order = 1;

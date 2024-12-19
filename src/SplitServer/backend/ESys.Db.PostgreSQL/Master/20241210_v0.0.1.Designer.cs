@@ -52,8 +52,8 @@ namespace ESys.Db.PostgreSQL.Master
                     {
                         Id = 1,
                         Code = "Test",
-                        DbType = 0,
-                        Limits = new DateTime(2121, 12, 21, 0, 50, 48, 20, DateTimeKind.Utc).AddTicks(1344),
+                        DbType = 3,
+                        Limits = DateTime.SpecifyKind(new DateTime(2121, 12, 21, 0, 50, 48, 20), DateTimeKind.Unspecified).AddTicks(1344),
                         MasterDbConnStr = "Host=127.0.0.1;Port=5432;Database=etestData;User Id=postgres;Password=123456;",
                         Name = "Test",
                         SlaveDbConnStr = "Host=127.0.0.1;Port=5432;Database=etestData;User Id=postgres;Password=123456;"
