@@ -27,19 +27,22 @@ export default {
   components: { Department, User, Role, Booking },
   data() {
     return {
-      departmentShow: true,
+      departmentShow: false,
       userShow: true,
-      roleShow: true,
-      bookingShow: true,
+      roleShow: false,
+      bookingShow: false,
     };
   },
   mounted() {
     // const permissions = ;
     const permissions = this.$store.state.user.permissions.map((p) => p.Code);
-    this.departmentShow = permissions.includes("department", 0);
+    // this.departmentShow = permissions.includes("department", 0);
     this.userShow = permissions.includes("user", 0);
-    this.roleShow = permissions.includes("role", 0);
-    this.bookingShow = permissions.includes("booking", 0);
+    if (this.$store.state.user.userName == "super") {
+      this.roleShow = permissions.includes("role", 0);
+    }
+
+    // this.bookingShow = permissions.includes("booking", 0);
   },
 };
 </script>

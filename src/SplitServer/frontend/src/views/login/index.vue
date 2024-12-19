@@ -59,7 +59,7 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-row :gutter="0">
+      <!-- <el-row :gutter="0">
         <el-col :span="16">
           <el-form-item prop="captcha">
             <span class="svg-container">
@@ -88,7 +88,7 @@
             @click="handleChangeCheckCode"
           />
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-button
         :loading="loading"
         type="primary"

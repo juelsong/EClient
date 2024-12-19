@@ -17,8 +17,8 @@
       </el-row>
     </el-scrollbar>
     <div class="dashboard-container-img" v-else>
-      <img src="logo.svg" width="618" height="176" />
-      <div class="info">欢迎使用EMIS系统</div>
+      <!-- <img src="logo.svg" width="618" height="176" /> -->
+      <div class="info">欢迎使用后台系统</div>
     </div>
   </div>
 </template>

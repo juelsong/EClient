@@ -114,9 +114,9 @@ let msgs = {
     closeAll: "全部关闭",
   },
   menu: {
-    dashboard: "常用图表",
+    dashboard: "首页",
     system: "系统管理",
-    region: "检测区域",
+    region: "区域",
     production: "关联信息",
     "Product:Add": "添加产品",
     "Product:Edit": "编辑产品",
@@ -156,10 +156,15 @@ let msgs = {
     analyse: "分析报表",
     settings: "系统设置",
     particleCounterData: "未匹配数据查询",
+    equipment:"设备管理",
+    equipmentTPM: "设备维护",
+    equipments: "设备列表",
+    equipmentTPMList: "维护清单",
+
   },
   permission: {
     system: "系统管理",
-    region: "检测区域",
+    region: "区域",
     "Classification:Add": "添加洁净级别",
     "Classification:Edit": "编辑洁净级别",
     "Classification:Disable": "禁用洁净级别",
@@ -318,6 +323,13 @@ let msgs = {
     "Export:Equipment":"导出设备",
     "Import:Organism":"导入菌种",
     "Export:Organism":"导出菌种",
+    equipment: "设备",
+    equipmentTPM: "设备维护",
+    "equipmentTPM:Add":"添加维护单",
+    "equipmentTPM:Export":"导出维护单",
+    "equipmentTPM:Edit":"编辑维护单",
+    equipmentTPMList: "设备维护单列表",
+    "equipmentTPM:Disable":"禁用维护单",
   },
 };
 

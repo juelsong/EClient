@@ -209,36 +209,39 @@ export default defineComponent({
         Name: undefined,
         Description: undefined,
         Barcode: undefined,
+        UnitOfMeasureId: undefined,
+        LocationId: undefined,
         CalibrationDate: undefined,
         NextCalibrationDate: undefined,
         CalibrationValue: undefined,
         ControlNumber: undefined,
         IsActive: undefined,
-        // DeviceConfig: {
-        //   OfficialConfig: undefined,
-        //   Version: undefined,
-        // },
+        EquipmentConfig: {
+          Version: undefined,
+        },
       },
       query: {
         $expand:
-          "EquipmentType($select=Id,Description)",
+          "EquipmentType($select=Id,Description),Location($select=Id,Name),EquipmentConfig($select=Id,Version)",
         $select:
-          "Id,EquipmentTypeId,Name,Description,Barcode,CalibrationDate," +
-          "NextCalibrationDate,CalibrationValue,ControlNumber,SerialNumber,IsActive",
+          "Id,EquipmentTypeId,Name,Description,Barcode,LocationId,CalibrationDate," +
+          "NextCalibrationDate,CalibrationValue,ControlNumber,SerialNumber,IsActive,EquipmentConfigId",
       },
       editModel: {
         EquipmentTypeId: undefined,
         Name: undefined,
         Description: undefined,
         Barcode: undefined,
+        UnitOfMeasureId: undefined,
+        LocationId: undefined,
         CalibrationDate: undefined,
         NextCalibrationDate: undefined,
         CalibrationValue: undefined,
         ControlNumber: undefined,
-        // DeviceConfig: {
-        //   OfficialConfig: undefined,
-        //   Version: undefined,
-        // },
+        EquipmentConfig: {
+          OfficialConfig: undefined,
+          Version: undefined,
+        },
       },
     };
   },
@@ -298,7 +301,7 @@ export default defineComponent({
       }
 
       let api = this.createNew ? this.$insert : this.$update;
-      delete data.DeviceConfig;
+      delete data.EquipmentConfig;
 
       api(this.entityName, data).then(() => {
         this.loadData();

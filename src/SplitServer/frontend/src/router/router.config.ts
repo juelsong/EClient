@@ -53,31 +53,7 @@ export const constantRouterMap: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    //http://localhost:3300/#/syncData/syncData
-    path: "/syncData",
-    redirect: "/syncData/syncData",
-    component: () => import("@/layout/index.vue"),
-    name: "syncData",
-    meta: {
-      hidden: true,
-      code: "menu.SyncData",
-      icon: "SyncData",
-      permissions: ["production"],
-    },
-    children: [
-      {
-        path: "syncData",
-        component: () => import("@/views/device/SyncData.vue"),
-        name: "syncData",
-        meta: {
-          code: "menu.region",
-          icon: "region",
-          permissions: ["region"],
-        },
-      },
-    ],
-  },
+
   {
     path: "/404",
     component: () => import("@/views/error-page/404.vue"),
@@ -141,7 +117,7 @@ const asyncRoutesArray = [
     children: [
       {
         path: "region",
-        component: () => import("@/views/region/Region.vue"),
+        component: () => import("@/views/environment/Location.vue"),
         name: "Region",
         meta: {
           code: "menu.region",
@@ -149,19 +125,19 @@ const asyncRoutesArray = [
           permissions: ["region"],
         },
       },
-      {
-        path: "production",
-        component: () => import("@/views/production/Production.vue"),
-        name: "Production",
-        meta: {
-          code: "menu.production",
-          icon: "production",
-          permissions: ["production"],
-        },
-      },
+      // {
+      //   path: "production",
+      //   component: () => import("@/views/production/Production.vue"),
+      //   name: "Production",
+      //   meta: {
+      //     code: "menu.production",
+      //     icon: "production",
+      //     permissions: ["production"],
+      //   },
+      // },
       {
         path: "device",
-        component: () => import("@/views/device/Device.vue"),
+        component: () => import("@/views/environment/Equipment.vue"),
         name: "Device",
         meta: {
           code: "menu.device",
@@ -169,26 +145,26 @@ const asyncRoutesArray = [
           permissions: ["device"],
         },
       },
-      {
-        path: "medium",
-        component: () => import("@/views/medium/Medium.vue"),
-        name: "Medium",
-        meta: {
-          code: "menu.medium",
-          icon: "medium",
-          permissions: ["medium"],
-        },
-      },
-      {
-        path: "microorganism",
-        component: () => import("@/views/microorganism/Microorganism.vue"),
-        name: "Microorganism",
-        meta: {
-          code: "menu.microorganism",
-          icon: "microorganism",
-          permissions: ["microorganism"],
-        },
-      },
+      // {
+      //   path: "medium",
+      //   component: () => import("@/views/medium/Medium.vue"),
+      //   name: "Medium",
+      //   meta: {
+      //     code: "menu.medium",
+      //     icon: "medium",
+      //     permissions: ["medium"],
+      //   },
+      // },
+      // {
+      //   path: "microorganism",
+      //   component: () => import("@/views/microorganism/Microorganism.vue"),
+      //   name: "Microorganism",
+      //   meta: {
+      //     code: "menu.microorganism",
+      //     icon: "microorganism",
+      //     permissions: ["microorganism"],
+      //   },
+      // },
       {
         path: "security",
         component: () => import("@/views/security/Security.vue"),
@@ -199,97 +175,129 @@ const asyncRoutesArray = [
           permissions: ["security"],
         },
       },
-      {
-        path: "auditRecord",
-        component: () => import("@/views/auditrecord/Index.vue"),
-        name: "AuditRecord",
-        meta: {
-          code: "menu.auditRecord",
-          icon: "auditRecord",
-          permissions: ["auditRecord"],
-        },
-      },
-      {
-        path: "log",
-        component: () => import("@/views/system/Log.vue"),
-        name: "Log",
-        meta: {
-          code: "menu.log",
-          icon: "log",
-          permissions: ["log"],
-        },
-      },
-      {
-        path: "settings",
-        component: () => import("@/views/system/Settings/index.vue"),
-        name: "Settings",
-        meta: {
-          code: "menu.settings",
-          icon: "setting",
-          permissions: ["settings"],
-        },
-      },
+      // {
+      //   path: "auditRecord",
+      //   component: () => import("@/views/auditrecord/Index.vue"),
+      //   name: "AuditRecord",
+      //   meta: {
+      //     code: "menu.auditRecord",
+      //     icon: "auditRecord",
+      //     permissions: ["auditRecord"],
+      //   },
+      // },
+      // {
+      //   path: "log",
+      //   component: () => import("@/views/system/Log.vue"),
+      //   name: "Log",
+      //   meta: {
+      //     code: "menu.log",
+      //     icon: "log",
+      //     permissions: ["log"],
+      //   },
+      // },
+      // {
+      //   path: "settings",
+      //   component: () => import("@/views/system/Settings/index.vue"),
+      //   name: "Settings",
+      //   meta: {
+      //     code: "menu.settings",
+      //     icon: "setting",
+      //     permissions: ["settings"],
+      //   },
+      // },
     ],
   },
+  // {
+  //   path: "/visualization",
+  //   component: () => import("@/layout/index.vue"),
+  //   name: "Visualization",
+  //   redirect: "noRedirect",
+  //   meta: {
+  //     code: "menu.visualization",
+  //     icon: "visualization",
+  //   },
+  //   children: [
+  //     {
+  //       path: "map",
+  //       component: () => import("@/views/visualization/MapManagement.vue"),
+  //       name: "Map",
+  //       meta: {
+  //         code: "menu.map",
+  //         icon: "map",
+  //         permissions: ["map"],
+  //       },
+  //     },
+  //     {
+  //       path: "visualizations",
+  //       component: () => import("@/views/visualization/Visualizations.vue"),
+  //       name: "Visualizations",
+  //       meta: {
+  //         code: "menu.visualizations",
+  //         icon: "visualizations",
+  //         permissions: ["visualizations"],
+  //       },
+  //     },
+  //     {
+  //       path: "orgnismVisualizations",
+  //       component: () =>
+  //         import("@/views/visualization/VisualizationOrgnisms.vue"),
+  //       name: "orgnismVisualizations",
+  //       meta: {
+  //         code: "menu.orgnismVisualizations",
+  //         icon: "visualizations",
+  //         permissions: ["orgnismVisualizations"],
+  //       },
+  //     },
+  //   ],
+  // },
   {
-    path: "/visualization",
+    path: "/equipment",
     component: () => import("@/layout/index.vue"),
-    name: "Visualization",
+    name: "Equipment",
     redirect: "noRedirect",
     meta: {
-      code: "menu.visualization",
-      icon: "visualization",
-    },
-    children: [
-      {
-        path: "map",
-        component: () => import("@/views/visualization/MapManagement.vue"),
-        name: "Map",
-        meta: {
-          code: "menu.map",
-          icon: "map",
-          permissions: ["map"],
-        },
-      },
-      {
-        path: "visualizations",
-        component: () => import("@/views/visualization/Visualizations.vue"),
-        name: "Visualizations",
-        meta: {
-          code: "menu.visualizations",
-          icon: "visualizations",
-          permissions: ["visualizations"],
-        },
-      },
-      {
-        path: "orgnismVisualizations",
-        component: () =>
-          import("@/views/visualization/VisualizationOrgnisms.vue"),
-        name: "orgnismVisualizations",
-        meta: {
-          code: "menu.orgnismVisualizations",
-          icon: "visualizations",
-          permissions: ["orgnismVisualizations"],
-        },
-      },
-    ],
-  },
-  {
-    path: "/deviceTMP",
-    component: () => import("@/layout/index.vue"),
-    name: "DeviceTMP",
-    meta: {
+      code: "menu.equipment",
       icon: "auditPrompt",
     },
     children: [
+      // {
+      //   path: "device",
+      //   component: () => import("@/views/environment/Equipment.vue"),
+      //   name: "Device",
+      //   meta: {
+      //     code: "menu.device",
+      //     icon: "device",
+      //     permissions: ["device"],
+      //   },
+      // },
+      // {
+      //   path: "location",
+      //   component: () => import("@/views/environment/Location.vue"),
+      //   name: "location",
+      //   meta: {
+      //     code: "menu.region",
+      //     icon: "device",
+      //     permissions: ["region"],
+      //   },
+      // },
       {
-        path: "/deviceTMP",
-        component: () => import("@/views/environment/DeviceTMP.vue"),
-        name: "DeviceTMP",
+        path: "/equipmentTPM",
+        component: () => import("@/views/environment/EquipmentTPM.vue"),
+        name: "EquipmentTPM",
         meta: {
-          code: "menu.deviceTMP",
+          code: "menu.equipments",
           icon: "auditPrompt",
-          permissions: ["region"],
+          permissions: ["equipmentTPM"],
+        },
+      },
+      {
+        path: "/equipmentTPMList",
+        component: () => import("@/views/environment/EquipmentTPMList.vue"),
+        name: "EquipmentTPMList",
+        meta: {
+          code: "menu.equipmentTPMList",
+          icon: "auditPrompt",
+          permissions: ["equipmentTPMList"],
         },
       },
     ],

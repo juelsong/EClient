@@ -5,58 +5,58 @@ export function createUserManagementLdap(data: LDAPConfig) {
   return request.request<Result<boolean>, Result<boolean>>({
     url: `/System/UserManagementLdap`,
     method: "post",
-    data,
-  });
+    data
+  })
 }
 
 export function createUserManagementEmis() {
   return request.request<Result<boolean>, Result<boolean>>({
     url: `/System/UserManagementEmis`,
-    method: "post",
-  });
+    method: "post"
+  })
 }
 
 export function editDefaultDashboard() {
   return request.request<Result<boolean>, Result<boolean>>({
     url: `/System/DefaultDashboard`,
-    method: "patch",
-  });
+    method: "patch"
+  })
 }
 
 export function queryDefaultDashboard() {
   return request.request<Result<string[]>, Result<string[]>>({
     url: `/System/DefaultDashboard`,
-    method: "get",
-  });
+    method: "get"
+  })
 }
 
 export function editDefaultLayout(data: DashboardLayout) {
   return request.request<Result<boolean>, Result<boolean>>({
     url: `/System/DefaultLayout`,
     method: "patch",
-    data,
-  });
+    data
+  })
 }
 
 export function queryDefaultLayout() {
   return request.request<Result<DashboardLayout>, Result<DashboardLayout>>({
     url: `/System/DefaultLayout`,
-    method: "get",
-  });
+    method: "get"
+  })
 }
 
 export function editComponents() {
   return request.request<Result<boolean>, Result<boolean>>({
     url: `/System/Components`,
-    method: "patch",
-  });
+    method: "patch"
+  })
 }
 
 export function queryComponents() {
   return request.request<Result<string[]>, Result<string[]>>({
     url: `/System/Components`,
-    method: "get",
-  });
+    method: "get"
+  })
 }
 
 export function querySystemConfig() {

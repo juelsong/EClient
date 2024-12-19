@@ -27,13 +27,9 @@ export declare class Equipment extends BizEntity {
      */
     Description?: string;
     /**
-     *序列号 和设备连接有关
+     *序列号 用于编辑显示的Id
      */
     SerialNumber?: string;
-    /**
-     *最后一次同步数据时间戳
-     */
-    LastSyncDataTimestamp?: MomentInput;
     /**
      *校准日期
      */
@@ -51,13 +47,13 @@ export declare class Equipment extends BizEntity {
      */
     Barcode?: string;
     /**
-     *控制编号
+     *控制编号 用于 粉尘仪编号
      */
     ControlNumber?: string;
     /**
-     *设备校准人
+     *是否运维打卡
      */
-    PerformedBy?: number;
+    IsOperation?: boolean;
     /**
      *创建时间
      */
@@ -83,17 +79,29 @@ export declare class Equipment extends BizEntity {
      */
     EquipmentTypeId?: number;
     /**
-     *设备单位Id
+     *设备配置Id
      */
-    UnitOfMeasureId?: number;
+    EquipmentConfigId?: number;
     /**
-     *最后一次同步数据用户
+     *区域Id
      */
-    LastSyncUserId?: number;
+    LocationId?: number;
     /**
-     *设备类型
+     *设备类型 粉尘仪型号
      */
     EquipmentType?: EquipmentType;
+    /**
+     *设备配置
+     */
+    EquipmentConfig?: EquipmentConfig;
+    /**
+     *区域
+     */
+    Location?: Location;
+    /**
+     *设备配置
+     */
+    EquipmentTPMs?: Array<EquipmentTPM>;
 }
 
 /**
@@ -144,6 +152,437 @@ export declare class EquipmentType extends BizEntity {
      *是否启用
      */
     IsActive?: boolean;
+}
+
+/**
+ *设备配置
+ */
+export declare class EquipmentConfig extends BizEntity {
+    /**
+     *条形码
+     */
+    Barcode?: string;
+    /**
+     *版本
+     */
+    Version?: number;
+    /**
+     *附加配置
+     */
+    AdditionalConfig?: string;
+    /**
+     *创建时间
+     */
+    CreatedTime?: MomentInput;
+    /**
+     *更新时间
+     */
+    UpdatedTime?: MomentInput;
+    /**
+     *创建人
+     */
+    CreateBy?: number;
+    /**
+     *更新人
+     */
+    UpdateBy?: number;
+    /**
+     *是否启用
+     */
+    IsActive?: boolean;
+}
+
+/**
+ *区域实体
+ */
+export declare class Location extends BizEntity {
+    /**
+     *名称
+     */
+    Name?: string;
+    /**
+     *描述
+     */
+    Description?: string;
+    /**
+     *条码
+     */
+    Barcode?: string;
+    /**
+     *代码
+     */
+    Code?: string;
+    /**
+     *创建时间
+     */
+    CreatedTime?: MomentInput;
+    /**
+     *更新时间
+     */
+    UpdatedTime?: MomentInput;
+    /**
+     *创建人
+     */
+    CreateBy?: number;
+    /**
+     *更新人
+     */
+    UpdateBy?: number;
+    /**
+     *是否启用
+     */
+    IsActive?: boolean;
+    /**
+     *父对象Id
+     */
+    ParentId?: number;
+    /**
+     *区域类型Id
+     */
+    LocationTypeId?: number;
+    /**
+     *可视化图Id
+     */
+    VisioDiagramId?: number;
+    /**
+     *可视化图
+     */
+    VisioDiagram?: VisioDiagram;
+    /**
+     *区域扩展信息
+     */
+    LocationExtra?: LocationExtra;
+    /**
+     *采样点集合
+     */
+    Sites?: Array<Site>;
+    /**
+     *父对象
+     */
+    Parent?: Location;
+    /**
+     *区域类型
+     */
+    LocationType?: LocationType;
+}
+
+/**
+ *产品实体
+ */
+export declare class EquipmentTPM extends BizEntity {
+    /**
+     *运行维护单位名称
+     */
+    Name?: string;
+    /**
+     *当前设备的设备 SerialNumber
+     */
+    EquipmentSerialNumber?: string;
+    /**
+     *控制编号 用于 当前设备的粉尘仪编号
+     */
+    EquipmentControlNumber?: string;
+    /**
+     *站点名称 来源于设备
+     */
+    EquipmentName?: string;
+    /**
+     *操作人
+     */
+    UserName?: string;
+    /**
+     *工程报建号
+     */
+    ProjectNumber?: string;
+    /**
+     *备注
+     */
+    Description?: string;
+    /**
+     *表单一 开始
+     */
+    StartDate?: MomentInput;
+    /**
+     *全部 结束
+     */
+    EndDate?: MomentInput;
+    /**
+     *供电是否正常 默认正常
+     */
+    PowerSupplyIsError?: boolean;
+    /**
+     *处理方法
+     */
+    PowerSupplyMsg?: string;
+    /**
+     *采样头、链接线路 默认正常
+     */
+    SampleIsNormal?: boolean;
+    /**
+     *处理方法
+     */
+    SampleMsg?: string;
+    /**
+     *加热除湿温度测温结果 用于填写温度 使用℃
+     */
+    TemperatureData?: string;
+    /**
+     *加热除湿温度测温结果 信息
+     */
+    TemperatureMsg?: string;
+    /**
+     *扬尘系统
+            检查仪器线路、采样泵、校准系统是否正常
+     */
+    DeviceIsError?: boolean;
+    /**
+     *处理方法
+     */
+    DeviceMsg?: string;
+    /**
+     *扬尘系统
+            检查仪器滤罐是否需更换
+     */
+    ResetEquipment?: boolean;
+    /**
+     *处理方法
+     */
+    ResetEquipmentMsg?: string;
+    /**
+     *气象参数
+            检查温度、湿度、大气压、风速、风向是否正常
+     */
+    EnvironmentIsError?: boolean;
+    /**
+     *处理方法
+     */
+    EnvironmentMsg?: string;
+    /**
+     *数据采集传输
+            数据传输是否正常
+     */
+    DataTransmissionIsError?: boolean;
+    /**
+     *处理方法
+     */
+    DataTransmissionMsg?: string;
+    /**
+     *视频监控是否正常
+     */
+    VedioIsError?: boolean;
+    /**
+     *处理方法
+     */
+    VedioMsg?: string;
+    /**
+     *设备现场位置
+     */
+    DeviceLocation?: string;
+    /**
+     *表单二 开始
+     */
+    C1StartDate?: MomentInput;
+    /**
+     *表单一 结束
+     */
+    C1EndDate?: MomentInput;
+    /**
+     *设定流量
+     */
+    SetFlow?: string;
+    /**
+     *实测流量1
+     */
+    BeforeFlow1?: string;
+    /**
+     *实测流量2
+     */
+    BeforeFlow2?: string;
+    /**
+     *实测流量3
+     */
+    BeforeFlow3?: string;
+    /**
+     *相对误差
+     */
+    BeforeRelativeError?: string;
+    /**
+     *是否需要调整流量 
+            根据 相对误差的结果 
+            满足超过10%  则 取值为 “是” 如果 为是 则需要输入校准后的内容
+            否的话可以直接提交
+     */
+    BeforeSetFlow?: boolean;
+    /**
+     *设定流量2
+     */
+    SetFlow2?: string;
+    /**
+     *实测流量1
+     */
+    BehindFlow1?: string;
+    /**
+     *实测流量2
+     */
+    BehindFlow2?: string;
+    /**
+     *实测流量3
+     */
+    BehindFlow3?: string;
+    /**
+     *相对误差
+     */
+    BehindRelativeError?: string;
+    /**
+     *是否需要调整流量
+     */
+    BehindSetFlow?: boolean;
+    /**
+     *是否更换备机
+     */
+    ResetC1Equipment?: string;
+    /**
+     *备注C1
+     */
+    DescriptionC1?: string;
+    /**
+     *表单一 开始
+     */
+    C2StartDate?: MomentInput;
+    /**
+     *表单一 结束
+     */
+    C2EndDate?: MomentInput;
+    /**
+     *仪器零值
+     */
+    EquipmentZero?: string;
+    /**
+     *实测值1
+     */
+    EquipmentReal1?: string;
+    /**
+     *实测值2
+     */
+    EquipmentReal2?: string;
+    /**
+     *C2相对误差
+     */
+    EquipmentRelativeError?: string;
+    /**
+     *校零
+     */
+    CalibrationZero?: string;
+    /**
+     *是否合格
+     */
+    BeforeEquipmentQualified?: boolean;
+    /**
+     *仪器跨度值
+     */
+    EquipmentSpan?: string;
+    /**
+     *实测值 3
+     */
+    EquipmentReal3?: string;
+    /**
+     *相对误差
+     */
+    BehindEquipmentRelativeError?: string;
+    /**
+     *校标
+     */
+    BehindCalibration?: string;
+    /**
+     *是否合格
+     */
+    BehindEquipmentQualified?: boolean;
+    /**
+     *是否更换备机
+     */
+    ResetC2Equipment?: string;
+    /**
+     *备注C2
+     */
+    DescriptionC2?: string;
+    /**
+     *创建时间
+     */
+    CreatedTime?: MomentInput;
+    /**
+     *更新时间
+     */
+    UpdatedTime?: MomentInput;
+    /**
+     *创建人
+     */
+    CreateBy?: number;
+    /**
+     *更新人
+     */
+    UpdateBy?: number;
+    /**
+     *是否启用
+     */
+    IsActive?: boolean;
+    /**
+     *设备配置Id
+     */
+    EquipmentId?: number;
+    /**
+     *设备
+     */
+    Equipment?: Equipment;
+}
+
+/**
+ *EquipmentConfig审计 自动生成，请勿修改
+ */
+export declare class EquipmentConfigAudit extends BizEntity {
+    /**
+     *条形码
+     */
+    Barcode?: string;
+    /**
+     *版本
+     */
+    Version?: number;
+    /**
+     *附加配置
+     */
+    AdditionalConfig?: string;
+    /**
+     *创建时间
+     */
+    CreatedTime?: MomentInput;
+    /**
+     *更新时间
+     */
+    UpdatedTime?: MomentInput;
+    /**
+     *创建人
+     */
+    CreateBy?: number;
+    /**
+     *更新人
+     */
+    UpdateBy?: number;
+    /**
+     *是否启用
+     */
+    IsActive?: boolean;
+    /**
+     *操作
+     */
+    Action?: AuditAction;
+    /**
+     *操作时间
+     */
+    AuditTime?: MomentInput;
+    /**
+     *实体Id
+     */
+    EntityId?: number;
 }
 
 /**
@@ -234,80 +673,6 @@ export declare class EquipmentV extends BizView {
      *是否启用
      */
     IsActive?: boolean;
-}
-
-/**
- *区域实体
- */
-export declare class Location extends BizEntity {
-    /**
-     *名称
-     */
-    Name?: string;
-    /**
-     *描述
-     */
-    Description?: string;
-    /**
-     *条码
-     */
-    Barcode?: string;
-    /**
-     *代码
-     */
-    Code?: string;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-    /**
-     *是否启用
-     */
-    IsActive?: boolean;
-    /**
-     *父对象Id
-     */
-    ParentId?: number;
-    /**
-     *区域类型Id
-     */
-    LocationTypeId?: number;
-    /**
-     *可视化图Id
-     */
-    VisioDiagramId?: number;
-    /**
-     *可视化图
-     */
-    VisioDiagram?: VisioDiagram;
-    /**
-     *区域扩展信息
-     */
-    LocationExtra?: LocationExtra;
-    /**
-     *采样点集合
-     */
-    Sites?: Array<Site>;
-    /**
-     *父对象
-     */
-    Parent?: Location;
-    /**
-     *区域类型
-     */
-    LocationType?: LocationType;
 }
 
 /**
@@ -3243,8 +3608,10 @@ export declare type AuditAction = "Insert" | "Update" | "Delete";
 export const ActivedEntities = [
     'Equipment',
     'EquipmentType',
-    'EquipmentV',
+    'EquipmentConfig',
     'Location',
+    'EquipmentTPM',
+    'EquipmentV',
     'VisioDiagram',
     'Site',
     'LocationType',

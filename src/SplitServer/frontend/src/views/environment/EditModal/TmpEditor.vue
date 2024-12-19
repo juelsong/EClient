@@ -1,12 +1,9 @@
 <template>
   <el-dialog
     v-model="visibleInner"
-    :before-close="closeDialog"
     :close-on-click-modal="false"
     :show-close="false"
-    :title="`${createNew ? $t('template.new') : $t('template.edit')}-${$t(
-      'Equipment.entity'
-    )}`"
+    :title="`设备维护`"
     width="600px"
   >
     <template #footer>
@@ -14,9 +11,12 @@
         <el-button v-no-more-click v-show="active > 1" @click="pre">
           上一步
         </el-button>
-        <el-button v-no-more-click v-show="active < 3" @click="next">
+        <el-button v-show="active < 3" :disabled="disableNext" @click="next">
           下一步
         </el-button>
+        <!-- <el-button v-no-more-click v-show="active == 3" @click="exportPdf">
+          导出
+        </el-button> -->
         <el-button @click="visibleInner = false">
           {{ $t("template.cancel") }}
         </el-button>
@@ -30,15 +30,17 @@
         </el-button>
       </span>
     </template>
-    <el-steps style="max-width: 600px" :active="active" finish-status="success">
-      <el-step title="第一步" />
-      <el-step title="第二步" />
-      <el-step title="第三步" />
-    </el-steps>
+    <div class="steps-container">
+      <el-steps :active="active" finish-status="success">
+        <el-step title="第一步" />
+        <el-step title="第二步" />
+        <el-step title="第三步" />
+      </el-steps>
+    </div>
     <el-form
       ref="dataForm"
-      :model="form"
-      :rules="formRules"
+      :model="equipmentTMP"
+      :rules="rules"
       label-position="left"
       label-width="100px"
       style="width: 500px; margin-left: 50px"
@@ -47,7 +49,7 @@
         <div class="info-title">
           <span>扬尘在线监测系统运行维护记录表</span>
         </div>
-        <div class="info-container">
+        <!-- <div class="info-container">
           <span>运行维护单位:</span>
           <span>上海龙涤环保技术工程有限公司</span>
           <span>编号:</span>
@@ -62,7 +64,7 @@
           <span>14:45</span>
           <span>检查人:</span>
           <span>周义华</span>
-        </div>
+        </div> -->
         <el-form-item label="电力系统" class="form-lable">
           <el-row style="width: 400px">
             <el-col :span="8">
@@ -70,7 +72,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.PowerSupplyIsError"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -81,9 +83,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.PowerSupplyIsError"
+                v-model="equipmentTMP.PowerSupplyMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -95,7 +97,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.SampleIsNormal"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -106,9 +108,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.SampleIsNormal"
+                v-model="equipmentTMP.SampleMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -119,22 +121,17 @@
               <span class="form-span">加热除湿测温结果</span>
             </el-col>
             <el-col :span="4">
-              <el-switch
-                v-if="false"
-                v-model="form.delivery"
-                class="ml-2"
-                width="55px"
-                inline-prompt
-                active-text="不正常"
-                inactive-text="正常"
+              <el-input
+                class="align-right"
+                v-model="equipmentTMP.TemperatureData"
+                placeholder="温度℃"
               />
             </el-col>
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.TemperatureMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -146,7 +143,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.DeviceIsError"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -157,9 +154,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.DeviceIsError"
+                v-model="equipmentTMP.DeviceMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -169,7 +166,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.ResetEquipment"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -180,9 +177,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.ResetEquipment"
+                v-model="equipmentTMP.ResetEquipmentMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -196,7 +193,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.EnvironmentIsError"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -207,9 +204,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.EnvironmentIsError"
+                v-model="equipmentTMP.EnvironmentMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -221,7 +218,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.DataTransmissionIsError"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -232,9 +229,9 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.DataTransmissionIsError"
+                v-model="equipmentTMP.DataTransmissionMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -244,7 +241,7 @@
             </el-col>
             <el-col :span="4">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.VedioIsError"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -255,11 +252,20 @@
             <el-col :span="12">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-show="equipmentTMP.VedioIsError"
+                v-model="equipmentTMP.VedioMsg"
                 placeholder="处理方法"
-                :suffix-icon="Calendar"
               />
             </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="设备现场位置" class="form-lable">
+          <el-row style="width: 400px">
+            <el-input
+              class="align-right"
+              v-model="equipmentTMP.DeviceLocation"
+              placeholder="设备现场位置"
+            />
           </el-row>
         </el-form-item>
       </div>
@@ -267,7 +273,7 @@
         <div class="info-title">
           <span>C.1 流量校准记录表</span>
         </div>
-        <div class="info-container">
+        <!-- <div class="info-container">
           <span>工地名称:</span>
           <span>静安区灵石社区N070402单元081b-03地块租赁住房项目</span>
           <span>仪器名称:</span>
@@ -280,14 +286,13 @@
           <span>上海龙涤环保技术工程有限公司</span>
           <span>检查人:</span>
           <span>周义华</span>
-        </div>
-        <el-form-item label="使用单位名称" class="form-lable">
+        </div> -->
+        <!-- <el-form-item label="使用单位名称" class="form-lable">
           <el-row style="width: 400px">
             <el-input
               class="align-right"
-              v-model="form.remark"
+              v-model="equipmentTMP.remark"
               placeholder="单位名称"
-              :suffix-icon="Calendar"
             />
           </el-row>
         </el-form-item>
@@ -295,14 +300,13 @@
           <el-row style="width: 400px">
             <el-input
               class="align-right"
-              v-model="form.remark"
+              v-model="equipmentTMP.remark"
               placeholder="工程报建号"
-              :suffix-icon="Calendar"
             />
           </el-row>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="校准前" class="form-lable">
-          <el-row style="width: 400px">
+          <!-- <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">设定流量 L/min</span>
             </el-col>
@@ -310,12 +314,11 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.remark"
                 placeholder="设定流量"
-                :suffix-icon="Calendar"
               />
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">实测流量1 L/min</span>
@@ -324,9 +327,9 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BeforeFlow1"
+                @change="setC1Data"
                 placeholder="实测流量1"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -338,9 +341,9 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BeforeFlow2"
+                @change="setC1Data"
                 placeholder="实测流量2"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -352,23 +355,23 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BeforeFlow3"
+                @change="setC1Data"
                 placeholder="实测流量3"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">相对误差</span>
+              <span class="form-span">相对误差 %</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                :readonly="true"
+                v-model="equipmentTMP.BeforeRelativeError"
                 placeholder="相对误差"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -378,7 +381,7 @@
             </el-col>
             <el-col :span="10">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.BeforeSetFlow"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -389,8 +392,12 @@
             <el-col :span="10" />
           </el-row>
         </el-form-item>
-        <el-form-item label="校准后" class="form-lable">
-          <el-row style="width: 400px">
+        <el-form-item
+          label="校准后"
+          class="form-lable"
+          v-show="equipmentTMP.BeforeSetFlow"
+        >
+          <!-- <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">设定流量 L/min</span>
             </el-col>
@@ -398,12 +405,11 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.remark"
                 placeholder="设定流量"
-                :suffix-icon="Calendar"
               />
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">实测流量1 L/min</span>
@@ -412,9 +418,9 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BehindFlow1"
+                @change="setC1Data"
                 placeholder="实测流量1"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -426,9 +432,9 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BehindFlow2"
+                @change="setC1Data"
                 placeholder="实测流量2"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -440,23 +446,23 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BehindFlow3"
+                @change="setC1Data"
                 placeholder="实测流量3"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">相对误差</span>
+              <span class="form-span">相对误差 %</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                :readonly="true"
+                v-model="equipmentTMP.BehindRelativeError"
                 placeholder="相对误差"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -466,7 +472,7 @@
             </el-col>
             <el-col :span="10">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.BehindSetFlow"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -477,14 +483,22 @@
             <el-col :span="10" />
           </el-row>
         </el-form-item>
-        <el-form-item label="是否更换备机" class="form-lable">
-          <el-switch
-            v-model="form.delivery"
-            class="ml-2"
-            width="55px"
-            inline-prompt
-            active-text="是"
-            inactive-text="否"
+        <el-form-item
+          v-show="equipmentTMP.BeforeSetFlow || equipmentTMP.BehindSetFlow"
+          label="是否更换备机"
+          class="form-lable"
+        >
+          <el-input
+            class="align-right"
+            v-model="equipmentTMP.ResetC1Equipment"
+            placeholder="是否更换备机"
+          />
+        </el-form-item>
+        <el-form-item label="备注信息" class="form-lable">
+          <el-input
+            class="align-right"
+            v-model="equipmentTMP.DescriptionC1"
+            placeholder="备注信息"
           />
         </el-form-item>
       </div>
@@ -492,7 +506,7 @@
         <div class="info-title">
           <span>C.2 颗粒物监测仪校准记录表</span>
         </div>
-        <div class="info-container">
+        <!-- <div class="info-container">
           <span>工地名称:</span>
           <span>静安区灵石社区N070402单元081b-03地块租赁住房项目</span>
           <span>仪器名称:</span>
@@ -505,14 +519,13 @@
           <span>上海龙涤环保技术工程有限公司</span>
           <span>检查人:</span>
           <span>周义华</span>
-        </div>
-        <el-form-item label="使用单位名称" class="form-lable">
+        </div> -->
+        <!-- <el-form-item label="使用单位名称" class="form-lable">
           <el-row style="width: 400px">
             <el-input
               class="align-right"
-              v-model="form.remark"
+              v-model="equipmentTMP.remark"
               placeholder="单位名称"
-              :suffix-icon="Calendar"
             />
           </el-row>
         </el-form-item>
@@ -520,12 +533,11 @@
           <el-row style="width: 400px">
             <el-input
               class="align-right"
-              v-model="form.remark"
+              v-model="equipmentTMP.remark"
               placeholder="工程报建号"
-              :suffix-icon="Calendar"
             />
           </el-row>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="校零" class="form-lable">
           <el-row style="width: 400px">
             <el-col :span="10">
@@ -535,9 +547,9 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                :readonly="true"
+                v-model="equipmentTMP.EquipmentZero"
                 placeholder="仪器零值"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -549,9 +561,8 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.EquipmentReal1"
                 placeholder="实测值1"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
@@ -563,27 +574,25 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.EquipmentReal2"
                 placeholder="实测值2"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">相对误差</span>
+              <span class="form-span">相对误差 %</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.EquipmentRelativeError"
                 placeholder="相对误差"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
-          <el-row style="width: 400px">
+          <!-- <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">校零</span>
             </el-col>
@@ -591,19 +600,18 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.CalibrationZero"
                 placeholder="校零"
-                :suffix-icon="Calendar"
               />
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">是否合格</span>
             </el-col>
             <el-col :span="10">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.BeforeEquipmentQualified"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -614,18 +622,21 @@
             <el-col :span="10" />
           </el-row>
         </el-form-item>
-        <el-form-item label="校准后" class="form-lable">
+        <el-form-item
+          label="校标"
+          class="form-lable"
+        >
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">仪器零值 mg/m³</span>
+              <span class="form-span">仪器跨度值 mg/m³</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
-                placeholder="仪器零值"
-                :suffix-icon="Calendar"
+                v-model="equipmentTMP.EquipmentSpan"
+                :readonly="true"
+                placeholder="仪器跨度值"
               />
             </el-col>
           </el-row>
@@ -637,27 +648,27 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.EquipmentReal3"
                 placeholder="实测值"
-                :suffix-icon="Calendar"
+                @change="setC2Data"
               />
             </el-col>
           </el-row>
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">相对误差</span>
+              <span class="form-span">相对误差 %</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                :readonly="true"
+                v-model="equipmentTMP.BehindEquipmentRelativeError"
                 placeholder="相对误差"
-                :suffix-icon="Calendar"
               />
             </el-col>
           </el-row>
-          <el-row style="width: 400px">
+          <!-- <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">校标</span>
             </el-col>
@@ -665,19 +676,18 @@
             <el-col :span="10">
               <el-input
                 class="align-right"
-                v-model="form.remark"
+                v-model="equipmentTMP.BehindCalibration"
                 placeholder="校标"
-                :suffix-icon="Calendar"
               />
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">是否合格</span>
             </el-col>
             <el-col :span="10">
               <el-switch
-                v-model="form.delivery"
+                v-model="equipmentTMP.BehindEquipmentQualified"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -688,205 +698,50 @@
             <el-col :span="10" />
           </el-row>
         </el-form-item>
-        <el-form-item label="是否更换备机" class="form-lable">
-          <el-switch
-            v-model="form.delivery"
-            class="ml-2"
-            width="55px"
-            inline-prompt
-            active-text="是"
-            inactive-text="否"
+
+        <el-form-item
+          v-show="
+            !equipmentTMP.BeforeEquipmentQualified ||
+            !equipmentTMP.BehindEquipmentQualified
+          "
+          label="更换备机编号"
+          class="form-lable"
+        >
+          <el-input
+            class="align-right"
+            v-model="equipmentTMP.ResetC2Equipment"
+            placeholder="备机编号"
+          />
+        </el-form-item>
+        <el-form-item label="备注信息" class="form-lable">
+          <el-input
+            class="align-right"
+            v-model="equipmentTMP.DescriptionC2"
+            placeholder="备注信息"
           />
         </el-form-item>
       </div>
       <div v-show="active == 4"></div>
     </el-form>
-
-    <!-- <el-form
-      ref="editForm"
-      :model="modelInner"
-      :rules="rules"
-      label-width="110px"
-      label-position="right"
-    >
-      <el-form-item
-        :label="$t('Equipment.editor.EquipmentType')"
-        prop="EquipmentType"
-      >
-        <o-data-selector
-          ref="EquipmentType"
-          :placeholder="`${$t('template.select', [
-            $t('Equipment.editor.EquipmentType'),
-          ])}`"
-          :multiple="false"
-          v-model="modelInner.EquipmentTypeId"
-          entity="EquipmentType"
-          label="Description"
-          value="Id"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('Equipment.editor.Name')" prop="Name">
-        <el-input
-          ref="modelInner.Name"
-          v-model="modelInner.Name"
-          :placeholder="$t('Equipment.editor.Name')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.Description')"
-        prop="Description"
-      >
-        <el-input
-          ref="modelInner.Description"
-          v-model="modelInner.Description"
-          :placeholder="$t('Equipment.editor.Description')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('Equipment.editor.Barcode')" prop="Barcode">
-        <el-input
-          ref="modelInner.Barcode"
-          v-model="modelInner.Barcode"
-          :placeholder="$t('Equipment.editor.Barcode')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.UnitOfMeasure')"
-        prop="UnitOfMeasure"
-      >
-        <o-data-selector
-          :placeholder="`${$t('template.select', [
-            $t('Equipment.editor.UnitOfMeasure'),
-          ])}`"
-          :multiple="false"
-          :clearable="true"
-          v-model="modelInner.UnitOfMeasureId"
-          entity="UnitOfMeasure"
-          label="Description"
-          value="Id"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('Equipment.editor.Location')" prop="Location">
-        <region-tree ref="regionTreeRef" v-model="modelInner.LocationId" />
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.CalibrationDate')"
-        prop="CalibrationDate"
-      >
-        <el-date-picker
-          ref="calibrationDate"
-          v-model="modelInner.CalibrationDate"
-          type="date"
-          :placeholder="`${$t('template.select', [
-            $t('Equipment.editor.CalibrationDate'),
-          ])}`"
-          @change="changeCalibrationDate"
-        />
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.NextCalibrationDate')"
-        prop="NextCalibrationDate"
-      >
-        <el-date-picker
-          ref="nextCalibrationDate"
-          v-model="modelInner.NextCalibrationDate"
-          type="date"
-          :placeholder="`${$t('template.select', [
-            $t('Equipment.editor.NextCalibrationDate'),
-          ])}`"
-          :disabled-date="disabledNextCalibrationDate"
-        />
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.CalibrationValue')"
-        prop="CalibrationValue"
-      >
-        <el-input-number
-          ref="modelInner.CalibrationValue"
-          style="width: 350px"
-          v-model="modelInner.CalibrationValue"
-          :max="999999999.999999"
-          :step="0.000001"
-          :placeholder="$t('Equipment.editor.CalibrationValue')"
-        ></el-input-number>
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.ControlNumber')"
-        prop="ControlNumber"
-      >
-        <el-input
-          ref="modelInner.ControlNumber"
-          v-model="modelInner.ControlNumber"
-          :maxlength="15"
-          :placeholder="$t('Equipment.editor.ControlNumber')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        :label="$t('Equipment.editor.SerialNumber')"
-        prop="SerialNumber"
-      >
-        <el-input
-          ref="modelInner.SerialNumber"
-          v-model="modelInner.SerialNumber"
-          :maxlength="15"
-          :placeholder="$t('Equipment.editor.SerialNumber')"
-        ></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('Equipment.editor.ConfigDocument')">
-        <el-row style="width: 100%">
-          <el-col :span="8">
-            <span>
-              {{
-                `${
-                  modelInner.DeviceConfig == undefined
-                    ? $t("Equipment.editor.configEmpty")
-                    : $t("Equipment.editor.configHasData")
-                }`
-              }}
-            </span>
-          </el-col>
-          <el-col :span="7">
-            <el-upload
-              ref="upload"
-              :auto-upload="false"
-              action=""
-              :on-change="openFile"
-              :multiple="false"
-              :show-file-list="false"
-              v-has="'Equipment:UpdateConfig'"
-            >
-              <el-button type="primary">
-                {{ $t("Equipment.editor.UpLoad") }}
-              </el-button>
-            </el-upload>
-          </el-col>
-          
-
-          <el-col :span="7">
-            <el-button
-              type="primary"
-              @click="downLoadXml"
-              v-has="'Equipment:UpdateConfig'"
-            >
-              {{ $t("Equipment.editor.DownLoad") }}
-            </el-button>
-          </el-col>
-        </el-row>
-      </el-form-item>
-    </el-form> -->
   </el-dialog>
 </template>
 
-<script>
-import { defineComponent, toRaw, computed, ref } from "vue";
+<script lang="ts">
+import * as vue from "vue";
 import cloneDeep from "lodash.clonedeep";
+import { getBaseUrl, getTenant, getHeader } from "@/utils/global";
+
 // import ODataSelector from "@/components/ODataSelector.vue";
 // import RegionTree from "@/components/RegionTree.vue";
-import { saveAs } from "file-saver";
-import { reactive } from "vue";
-import { Check, Close } from "@element-plus/icons-vue";
+import { Equipment, EquipmentTPM } from "@/defs/Entity";
+import store from "@/store";
+import Decimal from "decimal.js";
+import { equipmentTMPExport} from "@/utils/ExportPdf";
+import { oDataQuery } from "@/utils/odata";
+import { ElMessageBox } from "element-plus";
 
-export default defineComponent({
-  name: "EquipmentEditor",
+export default vue.defineComponent({
+  name: "EquipmentTMPAdd",
   // components: { ODataSelector, RegionTree },
   props: {
     visible: {
@@ -894,213 +749,244 @@ export default defineComponent({
       default: false,
     },
     model: {
-      type: Object,
-    },
-    createNew: {
-      type: Boolean,
-      default: false,
-    },
-    equipmentTypeId: {
-      type: Number,
-      default: null,
+      type: Equipment,
     },
   },
   emits: ["update:visible", "update:model", "accept"],
   setup(props, ctx) {
-    const visibleInner = computed({
+    const visibleInner = vue.computed({
       get: () => props.visible,
       set: (newVal) => ctx.emit("update:visible", newVal),
     });
-    const modelInner = ref({});
-    return { visibleInner, modelInner };
-  },
-  watch: {
-    visibleInner(newVal) {
+    const modelInner = vue.ref<Equipment>();
+    const equipmentTMP = vue.ref<EquipmentTPM>({ Id: 0, EquipmentId: 0 });
+    if (getTenant() === "Longdi") {
+      equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
+    } else {
+      equipmentTMP.value!.Name = "上海爱启环境技术工程有限公司";
+    }
+    equipmentTMP.value.StartDate = new Date();
+
+    vue.watch(visibleInner, (newVal) => {
       if (newVal) {
-        let copyQuery = cloneDeep(toRaw(this.model));
-        this.modelInner = copyQuery;
-        // if (this.modelInner.EquipmentTypeId == undefined) {
-        //   if (this.equipmentTypeId) {
-        //     this.modelInner.EquipmentTypeId = this.equipmentTypeId;
-        //   }
-        // }
+        let copyQuery = cloneDeep(vue.toRaw(props.model));
+        modelInner.value = copyQuery;
       }
-      // this.$nextTick(() => {
-      //   if (newVal) {
-      //     this.$refs.regionTreeRef.loadData();
-      //   }
-      //   this.$refs.editForm.clearValidate();
-      //   this.$refs["EquipmentType"].loadData();
-      //   this.$refs["modelInner.Name"].focus();
-      // });
-    },
+      console.log(store.state.user.userName);
+
+      equipmentTMP.value.EquipmentId = modelInner.value!.Id;
+      equipmentTMP.value.UserName = store.state.user.userName;
+      //1为绿林 2 为朗亿
+
+      equipmentTMP.value.SetFlow =
+        modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+      equipmentTMP.value.SetFlow2 =
+        modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+
+      equipmentTMP.value.EquipmentName = modelInner.value!.Name;
+      equipmentTMP.value.EquipmentControlNumber =
+        modelInner.value!.ControlNumber;
+      equipmentTMP.value.EquipmentSerialNumber = modelInner.value!.SerialNumber;
+
+      equipmentTMP.value.EquipmentZero = "0";
+      equipmentTMP.value.EquipmentSpan =
+        modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
+      equipmentTMP.value.BeforeEquipmentQualified = true;
+      equipmentTMP.value.BehindEquipmentQualified = true;
+    });
+    return { visibleInner, modelInner, equipmentTMP };
   },
-  computed: {},
   data() {
     return {
       //默认第一步
       active: 1,
-      form: {
-        name: "",
-        remark: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
-      },
-      rules: {
-        Name: [
-          {
-            required: true,
-            message: () =>
-              this.$t("validator.template.required", [
-                this.$t("Equipment.editor.Name"),
-              ]),
-            trigger: "blur",
-          },
-          {
-            validator: (rule, value, callback) => {
-              if (value) {
-                this.$exist(
-                  "Equipment",
-                  "Name",
-                  value,
-                  this.modelInner.Id
-                ).then((exist) => {
-                  if (exist) {
-                    callback(
-                      new Error(
-                        this.$t("validator.template.exist", [
-                          this.$t("Equipment.editor.Name"),
-                        ])
-                      )
-                    );
-                  } else {
-                    callback();
-                  }
-                });
-              }
-            },
-            trigger: "blur",
-          },
-        ],
-        CalibrationValue: [
-          {
-            pattern: /^[-,+]?\d+.?\d*$/,
-            message: () =>
-              this.$t("validator.template.isNumber", [
-                this.$t("Equipment.editor.CalibrationValue"),
-              ]),
-            trigger: "blur",
-          },
-        ],
-      },
+      disableNext: false,
+      rules: {},
     };
+  },
+  deactivated() {
+    this.active = 1;
+    this.disableNext = false;
   },
   methods: {
     next() {
       if (this.active++ > 3) this.active = 1;
+      switch (this.active) {
+        case 1:
+          break;
+        case 2:
+          this.disableNext = true;
+
+          this.equipmentTMP.C1StartDate = new Date();
+          break;
+        case 3:
+          this.equipmentTMP.C1EndDate = new Date();
+          this.equipmentTMP.C2StartDate = new Date();
+          break;
+      }
     },
     // 步骤条上一步的方法
     pre() {
       if (this.active-- < 2) this.active = 1;
-    },
-    downLoadXml() {
-      var data = this.modelInner.DeviceConfig.OfficialConfig;
-      let str = new Blob([data], { type: "xml/plain;charset=utf-8" });
-      saveAs(str, `config.xml`);
-    },
-    openFile(file) {
-      const fileName = file.name;
-      const fileType = fileName.substring(fileName.lastIndexOf("."));
-
-      if (fileType != ".xml") {
-        this.$refs.upload.clearFiles();
-        this.$message.error(this.$t("Only upload xml Document!"));
-        return;
+      switch (this.active) {
+        case 1:
+          this.disableNext = false;
+          this.equipmentTMP.StartDate = new Date();
+          this.equipmentTMP.C1StartDate = undefined;
+          break;
+        case 2:
+          this.disableNext = true;
+          this.setC1Data() ;
+          this.equipmentTMP.C1StartDate = new Date();
+          this.equipmentTMP.C2StartDate = undefined;
+          // this.setC1Data();
+          break;
+        case 3:
+          break;
       }
-      var reader = new FileReader();
+    },
+    setC1Data() {
+      // Math.abs(this.number
+      if (
+        this.equipmentTMP.BeforeFlow1 &&
+        this.equipmentTMP.BeforeFlow2 &&
+        this.equipmentTMP.BeforeFlow3 &&
+        this.equipmentTMP.SetFlow
+      ) {
+        let averageFlow = new Decimal(this.equipmentTMP.BeforeFlow1)
+          .plus(new Decimal(this.equipmentTMP.BeforeFlow2))
+          .plus(new Decimal(this.equipmentTMP.BeforeFlow3))
+          .div(3);
 
-      reader.onload = async () => {
-        let that = this;
-        if (reader.result) {
-          //打印文件内容
-          console.log(reader.result);
-          // if (that.modelInner.DeviceConfig) {
-          //   that.modelInner.DeviceConfig.OfficialConfig = reader.result;
-          //   that.modelInner.DeviceConfig.UpLoad = true;
-          // } else {
-          //   that.modelInner.DeviceConfig = {
-          //     OfficialConfig: reader.result,
-          //   };
-          // }
-          let config = {};
-          let configIsNew =
-            that.createNew || that.modelInner.DeviceConfig == null;
-          let configApi = that.$insert;
+        let difference = averageFlow
+          .minus(new Decimal(this.equipmentTMP.SetFlow))
+          .div(new Decimal(this.equipmentTMP.SetFlow))
+          .times(100)
+          .abs(); // 取绝对值
+        // 保留两位小数
+        this.equipmentTMP.BeforeRelativeError = difference.toFixed(2) + "%";
+        this.equipmentTMP.BeforeSetFlow = difference > new Decimal("10");
+        if (!this.equipmentTMP.BeforeSetFlow) {
+          this.disableNext = false;
+        }
+      }
+      if (this.equipmentTMP.BeforeSetFlow) {
+        if (
+          this.equipmentTMP.BehindFlow1 &&
+          this.equipmentTMP.BehindFlow2 &&
+          this.equipmentTMP.BehindFlow3 &&
+          this.equipmentTMP.SetFlow2
+        ) {
+          let averageFlow = new Decimal(this.equipmentTMP.BehindFlow1)
+            .plus(new Decimal(this.equipmentTMP.BehindFlow2))
+            .plus(new Decimal(this.equipmentTMP.BehindFlow3))
+            .div(3);
 
-          if (configIsNew) {
-            config.Version = 1;
-          } else {
-            config.Version = 1 + that.modelInner.DeviceConfig.Version;
-          }
-          config.OfficialConfig = reader.result;
-          configApi("DeviceConfig", config)
-            .then((t) => {
-              console.log(t);
-              that.modelInner.DeviceConfigId = t.Id;
-              that.modelInner.DeviceConfig = {
-                UpLoad: true,
-                OfficialConfig: reader.result,
-              };
+          let difference = averageFlow
+            .minus(new Decimal(this.equipmentTMP.SetFlow2))
+            .div(new Decimal(this.equipmentTMP.SetFlow2))
+            .times(100)
+            .abs(); // 取绝对值
+          // 保留两位小数
+          this.equipmentTMP.BehindRelativeError = difference.toFixed(2) + "%";
+          this.equipmentTMP.BehindSetFlow = difference > new Decimal("10");
+          this.disableNext = false;
+        }
+      }
+    },
+    setC2Data() {
+      // if (
+      //   this.equipmentTMP.EquipmentZero &&
+      //   this.equipmentTMP.EquipmentReal1 &&
+      //   this.equipmentTMP.EquipmentReal2 &&
+      //   this.equipmentTMP.SetFlow
+      // ) {
+      //   let averageFlow = new Decimal(this.equipmentTMP.EquipmentReal1)
+      //     .plus(new Decimal(this.equipmentTMP.EquipmentReal2))
+      //     .div(2);
+
+      //   let difference = averageFlow
+      //     .minus(new Decimal(this.equipmentTMP.EquipmentZero))
+      //     .div(new Decimal(this.equipmentTMP.EquipmentZero))
+      //     .times(100)
+      //     .abs(); // 取绝对值
+      //   // 保留两位小数
+      //   this.equipmentTMP.EquipmentRelativeError = difference.toFixed(2) + "%";
+      //   this.equipmentTMP.BeforeSetFlow = difference > new Decimal("10");
+      // }
+      if (this.equipmentTMP.EquipmentSpan && this.equipmentTMP.EquipmentReal3) {
+        let averageFlow = new Decimal(this.equipmentTMP.EquipmentReal3);
+        // .plus(new Decimal(this.equipmentTMP.BehindFlow2))
+        // .plus(new Decimal(this.equipmentTMP.BehindFlow3))
+        // .div(3);
+
+        let difference = averageFlow
+          .minus(new Decimal(this.equipmentTMP.EquipmentSpan))
+          .div(new Decimal(this.equipmentTMP.EquipmentSpan))
+          .times(100)
+          .abs(); // 取绝对值
+        // 保留两位小数
+        this.equipmentTMP.BehindEquipmentRelativeError =
+          difference.toFixed(2) + "%";
+        this.equipmentTMP.BehindEquipmentQualified =
+          difference < new Decimal("10");
+      }
+    },
+    async onAcceptClick() {
+      for (let prop in this.equipmentTMP) {
+        if (this.equipmentTMP[prop] == undefined) this.equipmentTMP[prop] = "";
+      }
+      this.equipmentTMP.C2EndDate = new Date();
+      this.equipmentTMP.EndDate = new Date();
+
+      let data = cloneDeep(vue.toRaw(this.equipmentTMP));
+
+      const rsp = (await this.$insert("EquipmentTPM", data)) as any;
+
+      // this.$message.success(this.$t("template.addSuccess"));
+
+      // let equipment = cloneDeep(vue.toRaw(this.modelInner)) as Equipment;
+      var updateData = false;
+      let equipment = {
+        Id: this.modelInner?.Id,
+      } as Equipment;
+
+      if (this.equipmentTMP.ResetC2Equipment) {
+        equipment.ControlNumber = this.equipmentTMP.ResetC2Equipment;
+        updateData = true;
+      } else if (this.equipmentTMP.ResetC1Equipment) {
+        equipment.ControlNumber = this.equipmentTMP.ResetC1Equipment;
+        updateData = true;
+      }
+      if (updateData) {
+        await this.$update("Equipment", equipment);
+      }
+
+      ElMessageBox.confirm("是否导出pdf?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          const lastData = (
+            await oDataQuery("EquipmentTPM", {
+              $filter: `(Id eq ${rsp.Id})`,
+              $expand:
+                "Equipment($select=Id,Name;$expand=Location($select=Name),EquipmentType($select=Description))",
             })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      };
-      reader.readAsText(file.raw);
-    },
-    changeCalibrationDate(date) {
-      if (this.modelInner.NextCalibrationDate) {
-        if (date.getTime() >= this.modelInner.NextCalibrationDate) {
-          this.modelInner.NextCalibrationDate = undefined;
-        }
-      }
-    },
-    disabledNextCalibrationDate(date) {
-      if (this.modelInner.CalibrationDate) {
-        if (date.getTime() <= this.modelInner.CalibrationDate) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
-    },
-    // changeInput() {
-    //   if (this.modelInner.CalibrationValue.indexOf(".") >= 0) {
-    //     this.modelInner.CalibrationValue =this.modelInner.CalibrationValue.substring(
-    //       0,
-    //       this.modelInner.CalibrationValue.indexOf(".") + 6
-    //     );
-    //   }
-    // },
+          ).value as Partial<EquipmentTPM>[];
+          equipmentTMPExport(lastData[0] as EquipmentTPM);
 
-    onAcceptClick() {
-      this.$refs.editForm.validate((valid) => {
-        if (valid) {
-          this.$emit("update:model", this.modelInner);
-          this.visibleInner = false;
+          this.$message.success("成功");
           this.$emit("accept");
-        } else {
-          return false;
-        }
-      });
+        })
+        .catch(() => {
+          this.$message.success("成功");
+
+          this.$emit("accept");
+        });
     },
+    exportPdf() {},
   },
 });
 </script>
@@ -1133,6 +1019,16 @@ export default defineComponent({
   margin-right: 0px;
   font-weight: bold;
   text-align: center;
+}
+.steps-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.steps-container .el-steps {
+  width: 90%; /* 或者您希望的宽度 */
 }
 .info-title {
   display: block;

@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <!-- <el-header>
       <el-form ref="queryForm" :inline="true" :model="queryModel">
         <el-row :gutter="24">
           <el-col :xl="4" :lg="5" :md="6" :sm="24">
@@ -61,6 +61,16 @@
           </el-col>
         </el-row>
       </el-form>
+    </el-header> -->
+    <el-header>
+      <el-switch
+        :style="{ float: 'right' }"
+        v-model="queryModel.IsActive"
+        :active-value="true"
+        :inactive-value="false"
+        :active-text="$t('template.showDisabled')"
+        @change="loadData"
+      />
     </el-header>
     <el-main>
       <el-table
@@ -224,7 +234,8 @@ import cloneDeep from "lodash.clonedeep";
 import SvgIcon from "@/components/SvgIcon";
 export default defineComponent({
   name: "UserList",
-  components: { ODataSelector, SvgIcon, UserQuery, UserEditor, UserPassword },
+  // ODataSelector, SvgIcon,
+  components: { UserQuery, UserEditor, UserPassword },
   mixins: [ListMixin],
   data() {
     return {

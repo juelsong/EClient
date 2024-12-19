@@ -152,7 +152,7 @@
             <span>
               {{
                 `${
-                  modelInner.DeviceConfig == undefined
+                  modelInner.EquipmentConfig == undefined
                     ? $t("Equipment.editor.configEmpty")
                     : $t("Equipment.editor.configHasData")
                 }`
@@ -194,13 +194,13 @@
 <script>
 import { defineComponent, toRaw, computed, ref } from "vue";
 import cloneDeep from "lodash.clonedeep";
-// import ODataSelector from "@/components/ODataSelector.vue";
-// import RegionTree from "@/components/RegionTree.vue";
+import ODataSelector from "@/components/ODataSelector.vue";
+//import RegionTree from "@/components/RegionTree.vue";
 import { saveAs } from "file-saver";
 
 export default defineComponent({
   name: "EquipmentEditor",
-  // components: { ODataSelector, RegionTree },
+  components: { ODataSelector },
   props: {
     visible: {
       type: Boolean,
@@ -240,7 +240,7 @@ export default defineComponent({
       }
       this.$nextTick(() => {
         if (newVal) {
-          this.$refs.regionTreeRef.loadData();
+          // this.$refs.regionTreeRef.loadData();
         }
         this.$refs.editForm.clearValidate();
         this.$refs["EquipmentType"].loadData();
@@ -302,7 +302,7 @@ export default defineComponent({
   },
   methods: {
     downLoadXml() {
-      var data = this.modelInner.DeviceConfig.OfficialConfig;
+      var data = this.modelInner.EquipmentConfig.OfficialConfig;
       let str = new Blob([data], { type: "xml/plain;charset=utf-8" });
       saveAs(str, `config.xml`);
     },
@@ -322,30 +322,30 @@ export default defineComponent({
         if (reader.result) {
           //打印文件内容
           console.log(reader.result);
-          // if (that.modelInner.DeviceConfig) {
-          //   that.modelInner.DeviceConfig.OfficialConfig = reader.result;
-          //   that.modelInner.DeviceConfig.UpLoad = true;
+          // if (that.modelInner.EquipmentConfig) {
+          //   that.modelInner.EquipmentConfig.OfficialConfig = reader.result;
+          //   that.modelInner.EquipmentConfig.UpLoad = true;
           // } else {
-          //   that.modelInner.DeviceConfig = {
+          //   that.modelInner.EquipmentConfig = {
           //     OfficialConfig: reader.result,
           //   };
           // }
           let config = {};
           let configIsNew =
-            that.createNew || that.modelInner.DeviceConfig == null;
+            that.createNew || that.modelInner.EquipmentConfig == null;
           let configApi = that.$insert;
 
           if (configIsNew) {
             config.Version = 1;
           } else {
-            config.Version = 1 + that.modelInner.DeviceConfig.Version;
+            config.Version = 1 + that.modelInner.EquipmentConfig.Version;
           }
           config.OfficialConfig = reader.result;
-          configApi("DeviceConfig", config)
+          configApi("EquipmentConfig", config)
             .then((t) => {
               console.log(t);
-              that.modelInner.DeviceConfigId = t.Id;
-              that.modelInner.DeviceConfig = {
+              that.modelInner.EquipmentConfigId = t.Id;
+              that.modelInner.EquipmentConfig = {
                 UpLoad: true,
                 OfficialConfig: reader.result,
               };

@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const CompressionPlugin = require("compression-webpack-plugin");
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir);
 }
 
@@ -26,6 +26,12 @@ let configObj = {
     //     alias: {
     //         '@': resolve('src')
     //     }
+    // }
+    // config.externals = {
+    //   'jspdf': 'jspdf',
+    //   'jspdf-autotable': 'jspdf-autotable',
+    //   // 假设您的字体文件名为 SourceHanSansCN-ExtraLight-normal.js
+    //   'SourceHanSansCN-ExtraLight-normal': 'SourceHanSansCN-ExtraLight-normal',
     // }
   },
   chainWebpack: (config) => {
@@ -125,7 +131,7 @@ let configObj = {
         .end();
       config.optimization.splitChunks({
         chunks: "all",
-        cacheGroups: {          
+        cacheGroups: {
           libs: {
             name: "chunk-libs",
             test: /[\\/]node_modules[\\/]/,

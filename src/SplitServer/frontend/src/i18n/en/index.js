@@ -163,6 +163,10 @@ let msgs = {
     analyse: "Analyse",
     settings: "Settings",
     particleCounterData: "particleCounterData",
+    equipment:"设备管理",
+    equipmentTPM: "设备维护",
+    equipments: "设备列表",
+    equipmentTPMList: "维护清单",
   },
   permission: {
     system: "system",

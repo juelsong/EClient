@@ -71,7 +71,7 @@
           :placeholder="$t('User.editor.EmployeeId')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('User.editor.Department')" prop="DepartmentId">
+      <!-- <el-form-item :label="$t('User.editor.Department')" prop="DepartmentId">
         <o-data-selector
           ref="departmentRef"
           :placeholder="`${$t('template.select', [
@@ -85,7 +85,7 @@
           label="Name"
           value="Id"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('User.editor.EMail')" prop="EMail">
         <el-input
           ref="modelInner.EMail"
