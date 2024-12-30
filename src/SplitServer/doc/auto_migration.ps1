@@ -26,9 +26,9 @@ Clear
 $MIGRATION_PROJ = "ESys.Db.${DB_TYPE}"
 $MIGRATION_CFG = "Migration${DB_TYPE}"
 $env:NETCORE_ENVIRONMENT=${MIGRATION_CFG}
-$DB_PATH = [IO.Path]::Combine("${PSScriptRoot}",  "backend", ${MIGRATION_PROJ})
+$DB_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "backend", ${MIGRATION_PROJ})
 
-$SLN_PATH = [IO.Path]::Combine("${PSScriptRoot}", "backend")
+$SLN_PATH = [IO.Path]::Combine("${PSScriptRoot}","..", "backend")
 $IGNORE_PROJECT = "ESys.Client","ESys.Lasair","ESys.Device","EntityViewGenerator","Tools","ESys.Importer"
 dotnet clean -v q --nologo $SLN_PATH
 Get-ChildItem $SLN_PATH | ForEach-Object -Process{

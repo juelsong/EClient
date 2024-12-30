@@ -33,7 +33,7 @@
                 value="Id"
               />
             </el-form-item>
-            <el-form-item label="设备Id" prop="equipmentId">
+            <el-form-item label="设备Id和名称" prop="equipmentId">
               <el-input v-model="queryModel.equipmentId" />
             </el-form-item>
             <el-form-item label="设备名称" prop="EquipmentName">
@@ -86,7 +86,7 @@
               width="100"
             />
             <el-table-column
-              prop="EquipmentName"
+              prop="Equipment.EquipmentType.Description"
               :label="`设备类型`"
               sortable="custom"
               width="110"
@@ -181,7 +181,7 @@ import { EquipmentQueryModel } from "./QueryModel";
 import ODataSelector from "@/components/ODataSelector.vue";
 import moment from "moment";
 
-import { equipmentTMPExport} from "@/utils/ExportPdf";
+import { equipmentTMPExport } from "@/utils/ExportPdf";
 
 export default vue.defineComponent({
   name: "EquipmentTMPList",
@@ -215,7 +215,7 @@ export default vue.defineComponent({
       return new Promise((resolve) => {
         let filterStr = new Array<string>();
         if (queryModel.value.equipmentId) {
-          filterStr.push(`EquipmentId eq ${queryModel.value.equipmentId}`);
+          filterStr.push(`Equipment/SerialNumber eq '${queryModel.value.equipmentId}'`);
         }
         if (queryModel.value.EquipmentName) {
           filterStr.push(

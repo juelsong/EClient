@@ -21,7 +21,6 @@
  *          ┃┫┫ ┃┫┫
  *          ┗┻┛ ┗┻┛+ + + +
  */
-
 #if MIGRATION
 
 using ESys.Contract.Db;
@@ -35,6 +34,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MySqlConnector;
+using Npgsql;
 using System;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -67,9 +67,11 @@ namespace ESys.Db.DbContext
                 throw new NullReferenceException($"typeStr ======{this.configurationSection}");
             }
             var type = Enum.Parse<DbType>(typeStr);
+            Console.WriteLine($"-----------------{tenantId}{typeStr}{type}");
             return type switch
             {
                 DbType.MySQL => this.GetTenant<MySqlConnection, MySqlCommand>(tenantId),
+                DbType.PostgreSQL => this.GetTenant<NpgsqlConnection, NpgsqlCommand>(tenantId),
                 DbType.SQLServer => this.GetTenant<SqlConnection, SqlCommand>(tenantId),
                 DbType.SQLite => this.GetTenant<SqliteConnection, SqliteCommand>(tenantId),
                 _ => throw new NotImplementedException(),
@@ -89,7 +91,8 @@ namespace ESys.Db.DbContext
         private Tenant GetTenant<CONN, CMD>(string tenantId) where CONN : DbConnection, new() where CMD : DbCommand, new()
         {
             var connectionStr = this.configurationSection.GetValue<string>("connectionStr");
-            var cmdStr = $"Select Code,Name,MasterDbConnStr,SlaveDbConnStr,DbType from Tenant where Code = '{tenantId}';";
+            var cmdStr = $"SELECT \"Code\",\"Name\",\"MasterDbConnStr\",\"SlaveDbConnStr\",\"DbType\" FROM \"Tenant\" where \"Code\" = '{tenantId}';";
+            //Console.WriteLine($"+++++++++++++++++++{tenantId}{connectionStr}{cmdStr}");
             Tenant ret = null;
             using var conn = new CONN();
             conn.ConnectionString = connectionStr;
@@ -160,7 +163,7 @@ namespace ESys.Db.DbContext
         }
         public CTX CreateDbContext(string[] args)
         {
-            //var ass = Furion.App.Assemblies.Where(a => a.GetName().Name.Contains("ESys")).ToArray();
+            var ass = Furion.App.Assemblies.Where(a => a.GetName().Name.Contains("ESys")).ToArray();
             //System.Diagnostics.Debugger.Launch();
             var optionsBuilder = new DbContextOptionsBuilder<CTX>();
             var constructor = typeof(CTX).GetConstructor(new[] { typeof(IServiceProvider), typeof(DbContextOptions<CTX>) });
@@ -188,11 +191,11 @@ namespace ESys.Db.DbContext
 #if MIGRATION_SQLSERVER
                 var dbType = "SqlServer";
 #endif
-#if MIGRATION_MYSQL
-                var dbType = "MySQL";
-#endif
 #if MIGRATION_POSTGRESQL
                 var dbType = "PostgreSQL";
+#endif
+#if MIGRATION_MYSQL
+                var dbType = "MySQL";
 #endif
 #if MIGRATION_SQLITE
                 var dbType = "SQLite";

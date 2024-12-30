@@ -83,6 +83,14 @@ namespace ESys.Infrastructure.Entity
         [StringLength(15)]
         public string ControlNumber { get; set; }
         /// <summary>
+        /// 经度
+        /// </summary>
+        public string Longitude { get; set; }
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public string Latitude { get; set; }
+        /// <summary>
         /// 是否运维打卡
         /// </summary>
         public bool IsOperation { get; set; }

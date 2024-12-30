@@ -4,18 +4,67 @@
       <template #header>
         <div class="card-header">
           <span>{{ $t("Equipment.entity") }}</span>
-          <el-switch
-            :style="{ float: 'right' }"
-            v-model="queryModel.IsActive"
-            :active-value="true"
-            :inactive-value="false"
-            :active-text="$t('template.showDisabled')"
-            @change="handleActiveChange"
-          />
         </div>
       </template>
       <el-container>
-        <el-main>
+        <el-header>
+          <el-form ref="queryForm" :inline="true" :model="queryModel">
+            <el-form-item
+              :label="$t('Missions.filter.Location')"
+              prop="locationId"
+            >
+              <o-data-selector
+                :placeholder="`所属区县`"
+                :multiple="false"
+                v-model="queryModel.locationId"
+                :clearable="true"
+                :auto-select="false"
+                entity="Location"
+                label="Name"
+                value="Id"
+              />
+            </el-form-item>
+            <el-form-item label="设备Id和名称" prop="equipmentId">
+              <el-input v-model="queryModel.equipmentIdAndName" />
+            </el-form-item>
+            <!-- <el-form-item label="设备名称" prop="EquipmentName">
+              <el-input v-model="queryModel.EquipmentName" />
+            </el-form-item> -->
+            <el-form-item>
+              <el-button type="primary" @click="loadData">
+                {{ $t("template.search") }}
+                <el-icon class="el-icon--right">
+                  <svg-icon icon-class="edit" />
+                </el-icon>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onResetSearchClick">
+                {{ $t("template.reset") }}
+                <el-icon class="el-icon--right">
+                  <svg-icon icon-class="refresh" />
+                </el-icon>
+              </el-button>
+            </el-form-item>
+            <el-switch
+              :style="{ float: 'right' }"
+              v-model="queryModel.isOperation"
+              :active-value="true"
+              :inactive-value="false"
+              active-text="是否运维打卡"
+              @change="handleActiveChange"
+            />
+            <!-- <el-form-item>
+              <el-button type="primary" @click="queryVisible = true">
+                {{ $t("template.advanced") }}
+                <el-icon class="el-icon--right">
+                  <svg-icon icon-class="operation" />
+                </el-icon>
+              </el-button>
+            </el-form-item> -->
+          </el-form>
+        </el-header>
+        <el-main style="margin-top: 10px">
           <el-table
             ref="dataTable"
             :always="true"
@@ -32,7 +81,7 @@
           >
             <el-table-column
               prop="SerialNumber"
-              label="设备ID"
+              label="设备Id"
               sortable="custom"
               width="150"
             />
@@ -86,7 +135,7 @@
                 </div>
               </template>
               <template #default="scope">
-                <el-button
+                <!-- <el-button
                   type="primary"
                   link
                   @click.prevent="
@@ -99,7 +148,7 @@
                       ? $t("template.disable")
                       : $t("template.enable")
                   }}
-                </el-button>
+                </el-button> -->
                 <el-button
                   type="primary"
                   link
@@ -150,10 +199,12 @@ import { dateFormat, datetimeFormat } from "@/utils/formatter";
 import moment from "moment";
 import cloneDeep from "lodash.clonedeep";
 import { toRaw } from "vue";
+import { EquipmentQueryModel } from "./QueryModel";
+import ODataSelector from "@/components/ODataSelector.vue";
 
 export default defineComponent({
   name: "EquipmentList",
-  components: { EquipmentEditor, VueBarcode },
+  components: { EquipmentEditor, VueBarcode, ODataSelector },
   mixins: [ListMixin],
   data() {
     return {
@@ -162,20 +213,11 @@ export default defineComponent({
       barcode: "",
       equipmentTypeId: undefined,
       queryModel: {
-        EquipmentTypeId: undefined,
-        Name: undefined,
-        Description: undefined,
-        Barcode: undefined,
-        UnitOfMeasureId: undefined,
-        LocationId: undefined,
-        CalibrationDate: undefined,
-        NextCalibrationDate: undefined,
-        CalibrationValue: undefined,
-        ControlNumber: undefined,
-        IsActive: undefined,
-        EquipmentConfig: {
-          Version: undefined,
-        },
+        quipmentId: undefined,
+        locationId: undefined,
+        EquipmentName: undefined,
+        isOperation: false,
+        equipmentIdAndName:undefined,
       },
       query: {
         $expand:
@@ -204,15 +246,22 @@ export default defineComponent({
   },
   methods: {
     stateFormatter: function (row, column) {
-
       return row.IsOperation ? "是" : "否";
     },
     buildFilterStr() {
       let filterStr = [];
-
-      if (this.queryModel.EquipmentTypeId) {
-        filterStr.push(`EquipmentTypeId eq ${this.queryModel.EquipmentTypeId}`);
+      // if (this.queryModel.equipmentId) {
+      //   filterStr.push(`c`);
+      // }
+      if (this.queryModel.equipmentIdAndName) {
+        filterStr.push(`(contains(SerialNumber, '${this.queryModel.equipmentIdAndName}')) or (contains(Name, '${this.queryModel.equipmentIdAndName}')) `);
       }
+      if (this.queryModel.locationId) {
+        filterStr.push(`LocationId eq ${this.queryModel.locationId}`);
+      }
+      // if (this.queryModel.EquipmentTypeId) {
+      //   filterStr.push(`EquipmentTypeId eq ${this.queryModel.EquipmentTypeId}`);
+      // }
       // if (this.queryModel.Name && this.queryModel.Name.length > 0) {
       //   filterStr.push(`contains(Name,'${this.queryModel.Name}')`);
       // }
@@ -227,8 +276,8 @@ export default defineComponent({
       // if (this.queryModel.Barcode && this.queryModel.Barcode.length > 0) {
       //   filterStr.push(`contains(Barcode,'${this.queryModel.Barcode}')`);
       // }
-      if (this.queryModel.IsActive != true) {
-        filterStr.push(`IsActive eq true`);
+      if (this.queryModel.isOperation == true) {
+        filterStr.push(`IsOperation eq true`);
       }
       if (filterStr.length > 1) {
         return map(filterStr, (f) => `(${f})`).join(" and ");

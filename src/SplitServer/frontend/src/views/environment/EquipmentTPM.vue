@@ -27,7 +27,9 @@
             <el-form-item label="设备Id" prop="equipmentId">
               <el-input v-model="queryModel.equipmentId" />
             </el-form-item>
-
+            <el-form-item label="设备名称" prop="EquipmentName">
+              <el-input v-model="queryModel.EquipmentName" />
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="loadData">
                 {{ $t("template.search") }}
@@ -200,7 +202,11 @@ export default vue.defineComponent({
         if (queryModel.value.locationId) {
           filterStr.push(`LocationId eq ${queryModel.value.locationId}`);
         }
-
+        if (queryModel.value.EquipmentName) {
+          filterStr.push(
+            `contains(Name, '${queryModel.value.EquipmentName}')`
+          );
+        }
         if (queryModel.value.equipmentId) {
           filterStr.push(`SerialNumber eq '${queryModel.value.equipmentId}'`);
         }

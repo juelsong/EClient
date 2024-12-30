@@ -12,7 +12,7 @@
     <OutputPath>$(SolutionDir)$(Configuration)_$(Platform)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <DefineConstants>MIGRATION_MYSQL</DefineConstants>
+    <DefineConstants>MIGRATION_POSTGRESQL</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,6 +25,10 @@
     <ProjectReference Include="..\ESys.Db\ESys.Db.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\ESys.Db.MySQL\MigrationFactory.cs" Link="MigrationFactory.cs" />
+  </ItemGroup>
+  
   <ItemGroup Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(ExtraDefineConstants), 'MIGRATION')) ">
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>

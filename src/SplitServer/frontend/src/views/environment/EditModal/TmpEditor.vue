@@ -23,7 +23,7 @@
         <el-button
           type="primary"
           v-no-more-click
-          :disabled="active != 3"
+          :disabled="active != 3 || disableNext || !state"
           @click="onAcceptClick"
         >
           {{ $t("template.accept") }}
@@ -385,6 +385,7 @@
                 class="ml-2"
                 width="55px"
                 inline-prompt
+                :disabled="true"
                 active-text="是"
                 inactive-text="否"
               />
@@ -474,6 +475,7 @@
               <el-switch
                 v-model="equipmentTMP.BehindSetFlow"
                 class="ml-2"
+                :disabled="true"
                 width="55px"
                 inline-prompt
                 active-text="是"
@@ -622,10 +624,7 @@
             <el-col :span="10" />
           </el-row>
         </el-form-item>
-        <el-form-item
-          label="校标"
-          class="form-lable"
-        >
+        <el-form-item label="校标" class="form-lable">
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">仪器跨度值 mg/m³</span>
@@ -688,6 +687,7 @@
             <el-col :span="10">
               <el-switch
                 v-model="equipmentTMP.BehindEquipmentQualified"
+                :disabled="true"
                 class="ml-2"
                 width="55px"
                 inline-prompt
@@ -736,7 +736,7 @@ import { getBaseUrl, getTenant, getHeader } from "@/utils/global";
 import { Equipment, EquipmentTPM } from "@/defs/Entity";
 import store from "@/store";
 import Decimal from "decimal.js";
-import { equipmentTMPExport} from "@/utils/ExportPdf";
+import { equipmentTMPExport } from "@/utils/ExportPdf";
 import { oDataQuery } from "@/utils/odata";
 import { ElMessageBox } from "element-plus";
 
@@ -758,70 +758,153 @@ export default vue.defineComponent({
       get: () => props.visible,
       set: (newVal) => ctx.emit("update:visible", newVal),
     });
+
+    const active = vue.ref(1);
+    const state = vue.ref(false);
+
+    const disableNext = vue.ref(false);
+
     const modelInner = vue.ref<Equipment>();
     const equipmentTMP = vue.ref<EquipmentTPM>({ Id: 0, EquipmentId: 0 });
-    if (getTenant() === "Longdi") {
-      equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
-    } else {
-      equipmentTMP.value!.Name = "上海爱启环境技术工程有限公司";
-    }
-    equipmentTMP.value.StartDate = new Date();
+
+    // const doubleCount = vue.computed(() => count.value * 2);
 
     vue.watch(visibleInner, (newVal) => {
       if (newVal) {
         let copyQuery = cloneDeep(vue.toRaw(props.model));
         modelInner.value = copyQuery;
+        active.value = 1;
+        disableNext.value = true;
+        state.value = false;
+        for (let prop in equipmentTMP.value) {
+          equipmentTMP.value[prop] = undefined;
+        }
+        if (getTenant() === "Longdi") {
+          equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
+        } else {
+          equipmentTMP.value!.Name = "上海爱启环境技术工程有限公司";
+        }
+        equipmentTMP.value.StartDate = new Date();
+
+        equipmentTMP.value.EquipmentId = modelInner.value!.Id;
+        equipmentTMP.value.UserName = store.state.user.userName;
+        //1为绿林 2 为朗亿
+
+        equipmentTMP.value.SetFlow =
+          modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+        equipmentTMP.value.SetFlow2 =
+          modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+
+        equipmentTMP.value.EquipmentName = modelInner.value!.Name;
+        equipmentTMP.value.EquipmentControlNumber =
+          modelInner.value!.ControlNumber;
+        equipmentTMP.value.EquipmentSerialNumber =
+          modelInner.value!.SerialNumber;
+
+        equipmentTMP.value.EquipmentZero = "0";
+        equipmentTMP.value.EquipmentSpan =
+          modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
+        equipmentTMP.value.BeforeEquipmentQualified = true;
+        equipmentTMP.value.BehindEquipmentQualified = true;
       }
+      setTimeout(() => {
+        state.value = true;
+      }, 600 * 1000); // 600000毫秒等于10分钟
       console.log(store.state.user.userName);
-
-      equipmentTMP.value.EquipmentId = modelInner.value!.Id;
-      equipmentTMP.value.UserName = store.state.user.userName;
-      //1为绿林 2 为朗亿
-
-      equipmentTMP.value.SetFlow =
-        modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
-      equipmentTMP.value.SetFlow2 =
-        modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
-
-      equipmentTMP.value.EquipmentName = modelInner.value!.Name;
-      equipmentTMP.value.EquipmentControlNumber =
-        modelInner.value!.ControlNumber;
-      equipmentTMP.value.EquipmentSerialNumber = modelInner.value!.SerialNumber;
-
-      equipmentTMP.value.EquipmentZero = "0";
-      equipmentTMP.value.EquipmentSpan =
-        modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
-      equipmentTMP.value.BeforeEquipmentQualified = true;
-      equipmentTMP.value.BehindEquipmentQualified = true;
     });
-    return { visibleInner, modelInner, equipmentTMP };
+    return {
+      state,
+      active,
+      disableNext,
+      visibleInner,
+      modelInner,
+      equipmentTMP,
+    };
   },
   data() {
     return {
       //默认第一步
-      active: 1,
-      disableNext: false,
+      // active: 1,
+      // disableNext: false,
+      //state: false,
       rules: {},
     };
   },
-  deactivated() {
-    this.active = 1;
-    this.disableNext = false;
+  // deactivated() {
+  //   this.active = 1;
+  //   this.disableNext = false;
+  // },
+  // created() {
+  //   // 当组件被创建后，设置一个定时器
+  //   setTimeout(() => {
+  //     this.state = true; // 10分钟后将状态更改为true
+  //   }, 1000 * 60); // 600000毫秒等于10分钟
+  // },
+  watch: {
+    equipmentTMP: {
+      handler: function (newVal, oldVal) {
+        this.disableNext = true;
+
+        switch (this.active) {
+          case 1:
+            if (
+              this.equipmentTMP.DeviceLocation &&
+              this.equipmentTMP.TemperatureData
+            ) {
+              this.disableNext = false;
+            }
+            break;
+          case 2:
+            if (
+              this.equipmentTMP.BeforeFlow1 &&
+              this.equipmentTMP.BeforeFlow1 &&
+              this.equipmentTMP.BeforeFlow1
+            ) {
+              if (this.equipmentTMP.BeforeSetFlow) {
+                if (
+                  this.equipmentTMP.BehindFlow1 &&
+                  this.equipmentTMP.BehindFlow2 &&
+                  this.equipmentTMP.BehindFlow3
+                ) {
+                  this.disableNext = false;
+                }
+              } else {
+                this.disableNext = false;
+              }
+            }
+            break;
+          case 3:
+            if (
+              this.equipmentTMP.EquipmentReal1 &&
+              this.equipmentTMP.EquipmentReal2 &&
+              this.equipmentTMP.EquipmentReal3
+            ) {
+              this.disableNext = false;
+            }
+            break;
+          default:
+            break;
+        }
+        // 这个回调会在`obj`或其嵌套属性变化时触发
+      },
+      deep: true,
+    },
   },
   methods: {
     next() {
       if (this.active++ > 3) this.active = 1;
+
       switch (this.active) {
         case 1:
           break;
         case 2:
-          this.disableNext = true;
-
           this.equipmentTMP.C1StartDate = new Date();
+
           break;
         case 3:
           this.equipmentTMP.C1EndDate = new Date();
           this.equipmentTMP.C2StartDate = new Date();
+
           break;
       }
     },
@@ -836,7 +919,7 @@ export default vue.defineComponent({
           break;
         case 2:
           this.disableNext = true;
-          this.setC1Data() ;
+          this.setC1Data();
           this.equipmentTMP.C1StartDate = new Date();
           this.equipmentTMP.C2StartDate = undefined;
           // this.setC1Data();
@@ -865,7 +948,8 @@ export default vue.defineComponent({
           .abs(); // 取绝对值
         // 保留两位小数
         this.equipmentTMP.BeforeRelativeError = difference.toFixed(2) + "%";
-        this.equipmentTMP.BeforeSetFlow = difference > new Decimal("10");
+        this.equipmentTMP.BeforeSetFlow = difference.greaterThan(10);
+
         if (!this.equipmentTMP.BeforeSetFlow) {
           this.disableNext = false;
         }
@@ -889,7 +973,7 @@ export default vue.defineComponent({
             .abs(); // 取绝对值
           // 保留两位小数
           this.equipmentTMP.BehindRelativeError = difference.toFixed(2) + "%";
-          this.equipmentTMP.BehindSetFlow = difference > new Decimal("10");
+          this.equipmentTMP.BehindSetFlow = difference.greaterThan(10);
           this.disableNext = false;
         }
       }
@@ -928,19 +1012,22 @@ export default vue.defineComponent({
         // 保留两位小数
         this.equipmentTMP.BehindEquipmentRelativeError =
           difference.toFixed(2) + "%";
-        this.equipmentTMP.BehindEquipmentQualified =
-          difference < new Decimal("10");
+        this.equipmentTMP.BehindEquipmentQualified = new Decimal(
+          "10"
+        ).greaterThan(difference);
       }
     },
     async onAcceptClick() {
       for (let prop in this.equipmentTMP) {
-        if (this.equipmentTMP[prop] == undefined) this.equipmentTMP[prop] = "";
+        if (prop != "Id") {
+          if (this.equipmentTMP[prop] == undefined)
+            this.equipmentTMP[prop] = "";
+        }
       }
       this.equipmentTMP.C2EndDate = new Date();
       this.equipmentTMP.EndDate = new Date();
 
       let data = cloneDeep(vue.toRaw(this.equipmentTMP));
-
       const rsp = (await this.$insert("EquipmentTPM", data)) as any;
 
       // this.$message.success(this.$t("template.addSuccess"));
@@ -962,7 +1049,7 @@ export default vue.defineComponent({
         await this.$update("Equipment", equipment);
       }
 
-      ElMessageBox.confirm("是否导出pdf?", "提示", {
+      ElMessageBox.confirm("是否下载PDF?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -990,6 +1077,12 @@ export default vue.defineComponent({
   },
 });
 </script>
+<style>
+.el-message-box {
+  width: 200px;
+}
+</style>
+
 <style scoped>
 .dotClass {
   width: 10px;

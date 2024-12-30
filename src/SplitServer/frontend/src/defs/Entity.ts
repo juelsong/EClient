@@ -1,5 +1,5 @@
 import { MomentInput } from "moment";
-export const Version = 'v0.0.1'
+export const Version = 'v0.0.2'
 /**
  * 数据实体基类
  */
@@ -50,6 +50,14 @@ export declare class Equipment extends BizEntity {
      *控制编号 用于 粉尘仪编号
      */
     ControlNumber?: string;
+    /**
+     *经度
+     */
+    Longitude?: string;
+    /**
+     *纬度
+     */
+    Latitude?: string;
     /**
      *是否运维打卡
      */

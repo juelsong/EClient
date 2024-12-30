@@ -1,13 +1,13 @@
-$SLN_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "src", "backend")
-$RELEASE_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "src", "backend", "Release_Production")
-$IGNORE_PROJECT = "EMIS.Client","EntityViewGenerator","Tools","EMIS.ODataGenerator","EMIS.Importer"
+$SLN_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "backend")
+$RELEASE_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "backend", "Release_Production")
+$IGNORE_PROJECT = "ESys.Client","EntityViewGenerator","Tools","ESys.ODataGenerator","ESys.Importer"
 $REPORT_LIB_PATH = [IO.Path]::Combine("${PSScriptRoot}", "..", "lib", "report")
 if([System.IO.Directory]::Exists($RELEASE_PATH))
 {
     rm -r -force $RELEASE_PATH
 }
 Get-ChildItem $SLN_PATH | ForEach-Object -Process{
-	if($_ -is [System.IO.DirectoryInfo] -and ($_.Name.StartsWith("EMIS.")))
+	if($_ -is [System.IO.DirectoryInfo] -and ($_.Name.StartsWith("ESys.")))
 	{
 		if($IGNORE_PROJECT -notcontains $_.Name)
 		{

@@ -381,7 +381,7 @@ namespace ESys.Security.Service
                 });
                 user.Password = PasswordHasher.HashPassword(model.Password, out var salt);
                 user.Salt = salt;
-                user.LastPasswordModified = DateTimeOffset.Now;
+                user.LastPasswordModified = DateTimeOffset.Now.UtcDateTime;
 
 
                 IEnumerable<string> changedProperties = UserPasswordModifiedPropertyNames;

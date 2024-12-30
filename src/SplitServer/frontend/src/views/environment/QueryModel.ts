@@ -5,8 +5,8 @@ export type EquipmentQueryModel = {
   endDate?: Date;
   //设备名称
   EquipmentName?: string;
-
-  
+  isOperation?: boolean;
+  equipmentIdAndName?:string;
 };
 
 export type LocationQueryModel = {
