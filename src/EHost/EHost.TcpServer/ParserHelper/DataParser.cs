@@ -1,5 +1,6 @@
 ﻿using EHost.Infrastructure.Entity.Environment;
 using log4net;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -40,7 +41,7 @@ namespace EHost.TcpServer.ParserHelper
 
             return BitConverter.ToUInt16(bytes, 0); ;
         }
-        private static DateTime ParseDateTimeFromBytes(byte[] bytes)
+        private static DateTimeOffset ParseDateTimeFromBytes(byte[] bytes)
         {
             if (bytes == null || bytes.Length != 8)
             {
@@ -64,9 +65,28 @@ namespace EHost.TcpServer.ParserHelper
             int second = bytes[5];
             int millisecond = bytes[6];
 
-            return new DateTime(
+            return new DateTimeOffset(new DateTime(
                     year + 2000, month, day, hour, minute, second, millisecond
-                 );
+                 )).UtcDateTime;
+        }
+        private static (string MnCode, ushort ReservedBytes) ConvertByteArrayToMnCodeAndReservedBytes(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length < 16)
+            {
+                throw new ArgumentException("Data array must be at least 16 bytes long.");
+            }
+
+            // 提取 MN 码（前 14 字节）
+            byte[] mnCodeBytes = new byte[14];
+            Array.Copy(bytes, 0, mnCodeBytes, 0, 14);
+            var mnCode = Encoding.ASCII.GetString(mnCodeBytes); // 假设 MN 码可以表示为一个整数
+
+            // 提取预留字节（后 2 字节）
+            byte[] reservedBytes = new byte[2];
+            Array.Copy(bytes, 14, reservedBytes, 0, 2);
+            ushort reserved = BitConverter.ToUInt16(reservedBytes, 0);
+
+            return (mnCode, reserved);
         }
         /// <summary>
         /// 从源数组获取指定长度结果
@@ -100,6 +120,10 @@ namespace EHost.TcpServer.ParserHelper
 
             sensorData.DeviceIdNet = ConvertByteArrayToId(GetTargetBytes(data, 0, 4)).ToString();
             sensorData.DeviceIdNode = ConvertByteArrayToId(GetTargetBytes(data, 4, 4)).ToString();
+            var mData = ConvertByteArrayToMnCodeAndReservedBytes(GetTargetBytes(data, 16, 16));
+
+            sensorData.MN = mData.MnCode == "??????????????" ? string.Empty : mData.MnCode;
+            sensorData.MNReverse = mData.ReservedBytes;
 
             // 解析年月日时分秒毫秒
             sensorData.UpdateDate = ParseDateTimeFromBytes(GetTargetBytes(data, 8, 8));

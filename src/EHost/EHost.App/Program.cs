@@ -26,7 +26,6 @@ var configuration = new ConfigurationBuilder()
 builder.Configuration.AddConfiguration(configuration);
 
 
-
 //var loggerFactory = LoggerFactory.Create(builder =>
 //{
 //    builder.SetMinimumLevel(LogLevel.Information); // 设置最小日志级别
@@ -69,6 +68,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+var environment = app.Services.GetService<IHostEnvironment>();
 
 var db = app.Services.GetRequiredService<EServerDbContext>();
 if (db.Database.EnsureCreated())
@@ -85,13 +85,13 @@ int port = builder.Configuration.GetValue<int>("TcpServer:Port");
 var environmentFactory = new EnvironmentFactory<EnvironmentalSensor>(db, builder.Configuration);
 try
 {
-    await environmentFactory.StartAsync();
+    environmentFactory.Start();
 }
 catch (Exception ex)
 {
     // 处理启动过程中的异常
     Console.WriteLine(ex.Message);
-    await environmentFactory.StartAsync();
+    environmentFactory.Stop();
 }
 
 await app.RunAsync();

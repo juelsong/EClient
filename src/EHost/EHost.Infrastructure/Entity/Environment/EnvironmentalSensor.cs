@@ -12,7 +12,8 @@
         public string DeviceIdNet { get; set; }
         public string DeviceIdNode { get; set; }
 
-        public DateTime UpdateDate { get; set; }
+        public DateTimeOffset UpdateDate { get; set; }
+
         public string MN { get; set; }
         /// <summary>
         /// MN 剩余保留

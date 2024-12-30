@@ -33,20 +33,21 @@
             var _logger = loggerFactory.CreateLogger<EnvironmentFactory<EnvironmentalSensor>>();
             _logger.LogInformation("Example log message");
 
-            this.port = 12345;
-            this.host = GetLocalIPAddress();
 
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.UnitTest.json", optional: true, reloadOnChange: true);
             IConfigurationRoot configuration = builder.Build();
+
+            this.port = configuration.GetSection("TcpServer").GetValue<int>("Port");
+            this.host = "127.0.0.1";// GetLocalIPAddress();
 
             environmentFactory = new EnvironmentFactory<EnvironmentalSensor>(db, configuration);
         }
         [TestInitialize]
         public void TestInit()
         {
-            _ = environmentFactory.StartAsync();
+             environmentFactory.Start();
 
         }
         [TestCleanup]
@@ -104,7 +105,7 @@
                     await stream.WriteAsync(message, 0, message.Length);
 
                     // 等待1分钟
-                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    await Task.Delay(TimeSpan.FromSeconds(1)/*.FromMinutes(1)*/);
                 }
             }
             catch (Exception ex)
@@ -133,9 +134,11 @@
             //};
             //            Debug.WriteLine("AC F3 86 06 00 00 00 2A 00 00 00 00 00 00 FC 8F 18 0B 1A 0A 39 2F 00 00 78 61 67 31 30 32 35 39 39 36 34 36 35 35 00 00 0A 08 00 00 00 00 00 20 00 00 95 2A B1 ");
 
-            byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 2A 00 00 00 00 00 00 FC 8F 18 0B 1A 0A 39 2F 00 00 78 61 67 31 30 32 35 39 39 36 34 36 35 35 00 00 0A 08 00 00 00 00 00 20 00 00 95 2A B1");
-            Debug.WriteLine(string.Join(", ", data1.Select(b => "0x" + b.ToString("X2"))));
+            //byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 2A 00 00 00 00 00 00 FC 8F 18 0B 1A 0A 39 2F 00 00 78 61 67 31 30 32 35 39 39 36 34 36 35 35 00 00 0A 08 00 00 00 00 00 20 00 00 95 2A B1");
+            byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 70 00 00 00 00 00 00 FC D1 18 0C 15 11 36 05 00 00 FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 00 03 08 00 46 00 46 00 46 00 46 04 08 01 F5 01 EA 01 DE 01 DF 05 08 01 3B 00 BB 00 2D 00 87 06 08 00 0C 00 08 00 04 00 04 07 08 00 35 00 35 00 35 00 35 08 08 01 2D 01 2D 01 2D 01 2D 11 08 28 37 28 37 28 37 28 37 0A 08 00 00 00 00 00 0B 00 01 DE 67 B1");
 
+            Debug.WriteLine(string.Join(", ", data1.Select(b => "0x" + b.ToString("X2"))));
+            
             return data1;
         }
 
