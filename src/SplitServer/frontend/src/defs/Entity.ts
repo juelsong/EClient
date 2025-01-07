@@ -1,5 +1,5 @@
 import { MomentInput } from "moment";
-export const Version = 'v0.0.2'
+export const Version = 'v0.0.3'
 /**
  * 数据实体基类
  */
@@ -275,9 +275,17 @@ export declare class Location extends BizEntity {
 }
 
 /**
- *产品实体
+ *产品实体             从前端按钮暂存 update            每次加载 刷新时间
  */
 export declare class EquipmentTPM extends BizEntity {
+    /**
+     *当前步骤 1 2 3
+     */
+    Stage?: number;
+    /**
+     *剩余时间 初始值为480 8分钟
+     */
+    RemainSecond?: number;
     /**
      *运行维护单位名称
      */
@@ -1267,6 +1275,266 @@ export declare class SiteV extends BizView {
      *是否启用
      */
     IsActive?: boolean;
+}
+
+/**
+ *天数据
+ */
+export declare class EnvironmentalSensorDaily extends BizEntity {
+    EquipmentId?: number;
+    Date?: MomentInput;
+    pm2_5_average?: number;
+    pm2_5_max?: number;
+    pm2_5_min?: number;
+    pm10_average?: number;
+    pm10_max?: number;
+    pm10_min?: number;
+    /**
+     *扬尘TSP（单位：mg/m³）
+     */
+    ParticulateMatterMin?: number;
+    ParticulateMatterMax?: number;
+    ParticulateMatterAvg?: number;
+    /**
+     *温度（单位：℃）
+     */
+    TemperatureMin?: number;
+    TemperatureMax?: number;
+    TemperatureAvg?: number;
+    /**
+     *湿度（单位：Rh%）
+     */
+    HumidityMin?: number;
+    HumidityMax?: number;
+    HumidityAvg?: number;
+    /**
+     *气压
+     */
+    AirPressureMin?: number;
+    AirPressureMax?: number;
+    AirPressureAvg?: number;
+    /**
+     *风速（单位：m/s）
+     */
+    WindSpeedMin?: number;
+    WindSpeedMax?: number;
+    WindSpeedAvg?: number;
+    /**
+     *风向（单位：°）
+     */
+    WindDirectionMin?: number;
+    WindDirectionMax?: number;
+    WindDirectionAvg?: number;
+    /**
+     *噪声（单位：dB）
+     */
+    NoiseMin?: number;
+    NoiseMax?: number;
+    NoiseAvg?: number;
+    /**
+     *CPM
+     */
+    CPMAvg?: number;
+    is_power_on?: boolean;
+    is_valid_data?: boolean;
+    equipment_data_valid_flag?: number;
+    source_of_data?: number;
+    dust_calibration_step?: number;
+}
+
+/**
+ *小时
+ */
+export declare class EnvironmentalSensorHour extends BizEntity {
+    EquipmentId?: number;
+    Date?: MomentInput;
+    pm2_5_average?: number;
+    pm2_5_max?: number;
+    pm2_5_min?: number;
+    pm10_average?: number;
+    pm10_max?: number;
+    pm10_min?: number;
+    /**
+     *扬尘TSP（单位：mg/m³）
+     */
+    ParticulateMatterMin?: number;
+    ParticulateMatterMax?: number;
+    ParticulateMatterAvg?: number;
+    /**
+     *温度（单位：℃）
+     */
+    TemperatureMin?: number;
+    TemperatureMax?: number;
+    TemperatureAvg?: number;
+    /**
+     *湿度（单位：Rh%）
+     */
+    HumidityMin?: number;
+    HumidityMax?: number;
+    HumidityAvg?: number;
+    /**
+     *气压
+     */
+    AirPressureMin?: number;
+    AirPressureMax?: number;
+    AirPressureAvg?: number;
+    /**
+     *风速（单位：m/s）
+     */
+    WindSpeedMin?: number;
+    WindSpeedMax?: number;
+    WindSpeedAvg?: number;
+    /**
+     *风向（单位：°）
+     */
+    WindDirectionMin?: number;
+    WindDirectionMax?: number;
+    WindDirectionAvg?: number;
+    /**
+     *噪声（单位：dB）
+     */
+    NoiseMin?: number;
+    NoiseMax?: number;
+    NoiseAvg?: number;
+    /**
+     *CPM
+     */
+    CPMAvg?: number;
+    is_power_on?: boolean;
+    is_valid_data?: boolean;
+    equipment_data_valid_flag?: number;
+    source_of_data?: number;
+    dust_calibration_step?: number;
+}
+
+/**
+ *天数据
+ */
+export declare class EnvironmentalSensorMinute extends BizEntity {
+    EquipmentId?: number;
+    Date?: MomentInput;
+    pm2_5_average?: number;
+    pm2_5_max?: number;
+    pm2_5_min?: number;
+    pm10_average?: number;
+    pm10_max?: number;
+    pm10_min?: number;
+    /**
+     *扬尘TSP（单位：mg/m³）
+     */
+    ParticulateMatterMin?: number;
+    ParticulateMatterMax?: number;
+    ParticulateMatterAvg?: number;
+    /**
+     *温度（单位：℃）
+     */
+    TemperatureMin?: number;
+    TemperatureMax?: number;
+    TemperatureAvg?: number;
+    /**
+     *湿度（单位：Rh%）
+     */
+    HumidityMin?: number;
+    HumidityMax?: number;
+    HumidityAvg?: number;
+    /**
+     *气压
+     */
+    AirPressureMin?: number;
+    AirPressureMax?: number;
+    AirPressureAvg?: number;
+    /**
+     *风速（单位：m/s）
+     */
+    WindSpeedMin?: number;
+    WindSpeedMax?: number;
+    WindSpeedAvg?: number;
+    /**
+     *风向（单位：°）
+     */
+    WindDirectionMin?: number;
+    WindDirectionMax?: number;
+    WindDirectionAvg?: number;
+    /**
+     *噪声（单位：dB）
+     */
+    NoiseMin?: number;
+    NoiseMax?: number;
+    NoiseAvg?: number;
+    /**
+     *CPM
+     */
+    CPMAvg?: number;
+    is_power_on?: boolean;
+    is_valid_data?: boolean;
+    equipment_data_valid_flag?: number;
+    source_of_data?: number;
+    dust_calibration_step?: number;
+}
+
+/**
+ *15分钟
+ */
+export declare class EnvironmentalSensorQuarter extends BizEntity {
+    EquipmentId?: number;
+    Date?: MomentInput;
+    pm2_5_average?: number;
+    pm2_5_max?: number;
+    pm2_5_min?: number;
+    pm10_average?: number;
+    pm10_max?: number;
+    pm10_min?: number;
+    /**
+     *扬尘TSP（单位：mg/m³）
+     */
+    ParticulateMatterMin?: number;
+    ParticulateMatterMax?: number;
+    ParticulateMatterAvg?: number;
+    /**
+     *温度（单位：℃）
+     */
+    TemperatureMin?: number;
+    TemperatureMax?: number;
+    TemperatureAvg?: number;
+    /**
+     *湿度（单位：Rh%）
+     */
+    HumidityMin?: number;
+    HumidityMax?: number;
+    HumidityAvg?: number;
+    /**
+     *气压
+     */
+    AirPressureMin?: number;
+    AirPressureMax?: number;
+    AirPressureAvg?: number;
+    /**
+     *风速（单位：m/s）
+     */
+    WindSpeedMin?: number;
+    WindSpeedMax?: number;
+    WindSpeedAvg?: number;
+    /**
+     *风向（单位：°）
+     */
+    WindDirectionMin?: number;
+    WindDirectionMax?: number;
+    WindDirectionAvg?: number;
+    /**
+     *噪声（单位：dB）
+     */
+    NoiseMin?: number;
+    NoiseMax?: number;
+    NoiseAvg?: number;
+    /**
+     *CPM
+     */
+    CPMAvg?: number;
+    is_power_on?: boolean;
+    is_valid_data?: boolean;
+    equipment_data_valid_flag?: number;
+    source_of_data?: number;
+    dust_calibration_step?: number;
 }
 
 /**

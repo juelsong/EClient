@@ -240,13 +240,13 @@ export function equipmentTMPExport(equipmentTPM: EquipmentTPM) {
   doc.setFontSize(12);
 
   (doc as any).autoTable({
-    head: [[`仪器零值`, `实测值1`, `实测值2`, `相对误差`, `校零`, `是否合格`]],
+    head: [[`仪器零值`, `实测值`,/*  `实测值2`, */ `相对误差`, `校零`, `是否合格`]],
     body: [
       [
         `${equipmentTPM.EquipmentZero}mg/m³`,
         `${equipmentTPM.EquipmentReal1}mg/m³`,
-        `${equipmentTPM.EquipmentReal2}mg/m³`,
-        `${equipmentTPM.EquipmentRelativeError}`,
+/*         `${equipmentTPM.EquipmentReal2}mg/m³`,
+ */        `${equipmentTPM.EquipmentRelativeError}`,
         ``,
         `${equipmentTPM.BeforeEquipmentQualified ? `是` : `否`}`,
       ],

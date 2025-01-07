@@ -58,7 +58,6 @@ export function queryComponents() {
     method: "get"
   })
 }
-
 export function querySystemConfig() {
   return request.request<
     Result<Record<string, string>>,

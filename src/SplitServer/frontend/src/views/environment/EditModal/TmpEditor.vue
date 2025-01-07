@@ -8,6 +8,7 @@
   >
     <template #footer>
       <span class="dialog-footer">
+        <el-button @click="handleTempSave">暂存</el-button>
         <el-button v-no-more-click v-show="active > 1" @click="pre">
           上一步
         </el-button>
@@ -23,7 +24,7 @@
         <el-button
           type="primary"
           v-no-more-click
-          :disabled="active != 3 || disableNext || !state"
+          :disabled="active != 3 || !state"
           @click="onAcceptClick"
         >
           {{ $t("template.accept") }}
@@ -36,6 +37,13 @@
         <el-step title="第二步" />
         <el-step title="第三步" />
       </el-steps>
+    </div>
+    <div class="remaining-time">
+      <el-tag type="info" size="large">
+        剩余时间: {{ Math.floor(remainingTime / 60) }}分{{
+          remainingTime % 60
+        }}秒
+      </el-tag>
     </div>
     <el-form
       ref="dataForm"
@@ -557,7 +565,7 @@
           </el-row>
           <el-row style="width: 400px">
             <el-col :span="10">
-              <span class="form-span">实测值1 mg/m³</span>
+              <span class="form-span">实测值 mg/m³</span>
             </el-col>
             <el-col :span="4" />
             <el-col :span="10">
@@ -568,7 +576,7 @@
               />
             </el-col>
           </el-row>
-          <el-row style="width: 400px">
+          <!--           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">实测值2 mg/m³</span>
             </el-col>
@@ -580,7 +588,7 @@
                 placeholder="实测值2"
               />
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row style="width: 400px">
             <el-col :span="10">
               <span class="form-span">相对误差 %</span>
@@ -740,6 +748,9 @@ import { equipmentTMPExport } from "@/utils/ExportPdf";
 import { oDataQuery } from "@/utils/odata";
 import { ElMessageBox } from "element-plus";
 
+const WAIT_TIME = 480; // 等待时间（秒）
+const INTERVAL_DELAY = 1000; // 更新间隔（毫秒）
+
 export default vue.defineComponent({
   name: "EquipmentTMPAdd",
   // components: { ODataSelector, RegionTree },
@@ -761,59 +772,165 @@ export default vue.defineComponent({
 
     const active = vue.ref(1);
     const state = vue.ref(false);
+    const startTime = vue.ref<number>(0);
 
     const disableNext = vue.ref(false);
 
     const modelInner = vue.ref<Equipment>();
-    const equipmentTMP = vue.ref<EquipmentTPM>({ Id: 0, EquipmentId: 0 });
-
+    var equipmentTMP = vue.ref<EquipmentTPM>({ Id: 0, EquipmentId: 0 });
     // const doubleCount = vue.computed(() => count.value * 2);
 
-    vue.watch(visibleInner, (newVal) => {
+    const remainingTime = vue.ref(WAIT_TIME);
+    /**
+     * 更新时间和状态
+     * Update time and state
+     */
+    const updateTimer = () => {
+      if (!startTime.value) return;
+
+      const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
+      remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
+
+      if (elapsed >= WAIT_TIME) {
+        state.value = true;
+      }
+    };
+
+    /**
+     * 初始化计时器
+     * Initialize timer
+     */
+    const initTimer = () => {
+      // 如果没有保存的剩余时间，则使用默认值
+      if (!remainingTime.value || remainingTime.value === WAIT_TIME) {
+        state.value = false;
+        startTime.value = Date.now();
+        remainingTime.value = WAIT_TIME;
+      } else {
+        // 如果有保存的剩余时间，则根据剩余时间设置状态
+        state.value = remainingTime.value <= 0;
+        startTime.value = Date.now() - (WAIT_TIME - remainingTime.value) * 1000;
+      }
+
+      const intervalId = setInterval(() => {
+        if (!startTime.value) return;
+
+        const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
+        remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
+
+        if (remainingTime.value <= 0) {
+          state.value = true;
+          // 可选：清除计时器
+          // clearInterval(intervalId);
+        }
+      }, INTERVAL_DELAY);
+
+      const handleVisibility = () => {
+        if (document.visibilityState === "visible") {
+          // 页面可见时更新时间
+          if (startTime.value) {
+            const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
+            remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
+            if (remainingTime.value <= 0) {
+              state.value = true;
+            }
+          }
+        }
+      };
+
+      document.addEventListener("visibilitychange", handleVisibility);
+
+      return () => {
+        clearInterval(intervalId);
+        document.removeEventListener("visibilitychange", handleVisibility);
+      };
+    };
+    vue.watch(visibleInner, async (newVal) => {
       if (newVal) {
         let copyQuery = cloneDeep(vue.toRaw(props.model));
-        modelInner.value = copyQuery;
-        active.value = 1;
-        disableNext.value = true;
-        state.value = false;
-        for (let prop in equipmentTMP.value) {
-          equipmentTMP.value[prop] = undefined;
-        }
-        if (getTenant() === "Longdi") {
-          equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 设置为当天的开始时间
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1); // 设置为明天的开始时间
+
+        const loadDatas = (
+          await oDataQuery("EquipmentTPM", {
+            $filter: `(EquipmentId eq ${
+              props.model?.Id ?? 0
+            })and (StartDate ge ${today.toISOString()} and StartDate lt ${tomorrow.toISOString()}) and (Stage ne 4) and (Stage ne 0)`,
+            $orderby: "Id desc",
+            $top: 1,
+            $expand:
+              "Equipment($select=Id,Name;$expand=Location($select=Name),EquipmentType($select=Description))",
+          })
+        ).value as Partial<EquipmentTPM>[];
+
+        if (loadDatas.length > 0) {
+          // 创建新对象而不是直接引用
+          equipmentTMP.value = {
+            /*             Id: 0,
+            EquipmentId: 0, */
+            ...cloneDeep(loadDatas[0]), // 使用深拷贝复制历史数据的值
+          };
+          // 恢复保存的步骤和剩余时间
+          active.value = equipmentTMP.value.Stage || 1;
+          // 设置保存的剩余时间
+          if (
+            equipmentTMP.value.RemainSecond !== undefined &&
+            equipmentTMP.value.RemainSecond !== null
+          ) {
+            remainingTime.value = equipmentTMP.value.RemainSecond;
+          } else {
+            remainingTime.value = WAIT_TIME;
+          }
         } else {
-          equipmentTMP.value!.Name = "上海爱启环境技术工程有限公司";
+          equipmentTMP.value = { Id: 0, EquipmentId: 0 };
+          modelInner.value = copyQuery;
+          active.value = 1;
+          disableNext.value = true;
+          state.value = false;
+          startTime.value = Date.now();
+          remainingTime.value = WAIT_TIME;
+          for (let prop in equipmentTMP.value) {
+            equipmentTMP.value[prop] = undefined;
+          }
+          if (getTenant() === "Longdi") {
+            equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
+          } else {
+            equipmentTMP.value!.Name = "上海爱启环境技术工程有限公司";
+          }
+          equipmentTMP.value.StartDate = new Date();
+
+          equipmentTMP.value.EquipmentId = modelInner.value!.Id;
+          equipmentTMP.value.UserName = store.state.user.userName;
+          //1为绿林 2 为朗亿
+
+          equipmentTMP.value.SetFlow =
+            modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+          equipmentTMP.value.SetFlow2 =
+            modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
+
+          equipmentTMP.value.EquipmentName = modelInner.value!.Name;
+          equipmentTMP.value.EquipmentControlNumber =
+            modelInner.value!.ControlNumber;
+          equipmentTMP.value.EquipmentSerialNumber =
+            modelInner.value!.SerialNumber;
+
+          equipmentTMP.value.EquipmentZero = "0";
+          equipmentTMP.value.EquipmentSpan =
+            modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
+          equipmentTMP.value.BeforeEquipmentQualified = true;
+          equipmentTMP.value.BehindEquipmentQualified = true;
         }
-        equipmentTMP.value.StartDate = new Date();
 
-        equipmentTMP.value.EquipmentId = modelInner.value!.Id;
-        equipmentTMP.value.UserName = store.state.user.userName;
-        //1为绿林 2 为朗亿
-
-        equipmentTMP.value.SetFlow =
-          modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
-        equipmentTMP.value.SetFlow2 =
-          modelInner.value!.EquipmentTypeId == 1 ? "2.0" : "1.2";
-
-        equipmentTMP.value.EquipmentName = modelInner.value!.Name;
-        equipmentTMP.value.EquipmentControlNumber =
-          modelInner.value!.ControlNumber;
-        equipmentTMP.value.EquipmentSerialNumber =
-          modelInner.value!.SerialNumber;
-
-        equipmentTMP.value.EquipmentZero = "0";
-        equipmentTMP.value.EquipmentSpan =
-          modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
-        equipmentTMP.value.BeforeEquipmentQualified = true;
-        equipmentTMP.value.BehindEquipmentQualified = true;
+        const cleanup = initTimer();
+        vue.onUnmounted(cleanup);
       }
-      setTimeout(() => {
-        state.value = true;
-      }, 600 * 1000); // 600000毫秒等于10分钟
-      console.log(store.state.user.userName);
     });
+
     return {
       state,
+      remainingTime,
       active,
       disableNext,
       visibleInner,
@@ -1017,18 +1134,74 @@ export default vue.defineComponent({
         ).greaterThan(difference);
       }
     },
-    async onAcceptClick() {
-      for (let prop in this.equipmentTMP) {
-        if (prop != "Id") {
-          if (this.equipmentTMP[prop] == undefined)
-            this.equipmentTMP[prop] = "";
-        }
+    // 暂存处理函数
+    async handleTempSave() {
+      this.equipmentTMP.Stage = this.active;
+      this.equipmentTMP.RemainSecond = this.remainingTime;
+
+      // 确保克隆前的数据包含 Id
+      console.log("Before clone Id:", this.equipmentTMP.Id); // 调试用
+
+      let data = cloneDeep(vue.toRaw(this.equipmentTMP)) as EquipmentTPM;
+
+      // 确保克隆后的数据包含 Id
+      console.log("After clone Id:", data.Id); // 调试用
+
+      // 显式检查并确保 Id 存在
+      if (!data.Id) {
+        data.Id = this.equipmentTMP.Id; // 如果克隆过程丢失了 Id，从原对象恢复
       }
+
+      // 确保 api 调用使用正确的方法
+      const api = data.Id && data.Id !== 0 ? this.$update : this.$insert;
+
+      try {
+        const rsp = (await api("EquipmentTPM", data)) as any;
+
+        // 保存返回的 Id
+        if (rsp && rsp.Id) {
+          this.equipmentTMP.Id = rsp.Id;
+          console.log("Saved Id:", this.equipmentTMP.Id); // 调试用
+        }
+
+        this.$message.success("成功");
+      } catch (error) {
+        console.error("Save error:", error);
+        this.$message.error("保存失败");
+      }
+    },
+
+    async onAcceptClick() {
       this.equipmentTMP.C2EndDate = new Date();
       this.equipmentTMP.EndDate = new Date();
+      this.equipmentTMP.RemainSecond = 0;
 
-      let data = cloneDeep(vue.toRaw(this.equipmentTMP));
-      const rsp = (await this.$insert("EquipmentTPM", data)) as any;
+      this.equipmentTMP.Stage = 4;
+
+      // 确保克隆前的数据包含 Id
+      console.log("Before clone Id:", this.equipmentTMP.Id); // 调试用
+
+      let data = cloneDeep(vue.toRaw(this.equipmentTMP)) as EquipmentTPM;
+
+      // 确保克隆后的数据包含 Id
+      console.log("After clone Id:", data.Id); // 调试用
+
+      // 显式检查并确保 Id 存在
+      if (!data.Id) {
+        data.Id = this.equipmentTMP.Id; // 如果克隆过程丢失了 Id，从原对象恢复
+      }
+      for (let prop in data) {
+        if (prop != "Id") {
+          if (data[prop] == undefined || data[prop] == null || data[prop] == "")
+            delete data[prop];
+        }
+      }
+
+      delete data.Equipment;
+      const api =
+        data.Id == 0 || data.Id == undefined ? this.$insert : this.$update;
+
+      const rsp = (await api("EquipmentTPM", data)) as any;
 
       // this.$message.success(this.$t("template.addSuccess"));
 
@@ -1057,7 +1230,9 @@ export default vue.defineComponent({
         .then(async () => {
           const lastData = (
             await oDataQuery("EquipmentTPM", {
-              $filter: `(Id eq ${rsp.Id})`,
+              $filter: `(Id eq ${
+                data.Id == 0 || data.Id == undefined ? rsp.Id : data.Id
+              })`,
               $expand:
                 "Equipment($select=Id,Name;$expand=Location($select=Name),EquipmentType($select=Description))",
             })
@@ -1156,5 +1331,23 @@ export default vue.defineComponent({
   font-weight: 100;
   width: 100%; /* 设置您想要的宽度 */
   display: flex; /* 或者 display: grid; */
+}
+.remaining-time {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.remaining-time .el-tag {
+  font-size: 14px;
+  padding: 8px 15px;
+  border-radius: 4px;
+}
+
+/* 当剩余时间少于1分钟时改变颜色 */
+.remaining-time .el-tag:has(span:contains("0分")) {
+  --el-tag-bg-color: var(--el-color-danger-light-9);
+  --el-tag-border-color: var(--el-color-danger);
+  --el-tag-text-color: var(--el-color-danger);
 }
 </style>

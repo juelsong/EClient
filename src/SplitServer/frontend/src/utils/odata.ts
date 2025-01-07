@@ -10,6 +10,7 @@ import {
   buildDeactivateAgainstPrompt,
   showPrompt,
 } from "./esign-inject";
+import { createToken } from "@/api/user_gen";
 
 function getODataBaseUrl() {
   const url = `${getBaseUrl()}/OData/`;

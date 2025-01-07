@@ -137,7 +137,7 @@ const actions = {
           if (!data) {
             reject("Verification failed, please Login again.");
           }
-          autoCheckToken();
+          // autoCheckToken();
           const syncService = window.syncService;
           if (syncService) {
             await syncService.setCurrentUserInfo(
@@ -178,7 +178,7 @@ const actions = {
   // user logout
   logout({ commit, state, dispatch }) {
     dispatch("system/setIsClientOffline", false);
-    stopCheckToken();
+    // stopCheckToken();
     return new Promise((resolve, reject) => {
       logout(state.token)
         .then(() => {

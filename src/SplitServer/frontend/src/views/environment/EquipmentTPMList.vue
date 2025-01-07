@@ -214,6 +214,8 @@ export default vue.defineComponent({
     filterBuilder.value = () => {
       return new Promise((resolve) => {
         let filterStr = new Array<string>();
+          filterStr.push(`(Stage eq 4 or Stage eq 0)`);
+
         if (queryModel.value.equipmentId) {
           filterStr.push(`Equipment/SerialNumber eq '${queryModel.value.equipmentId}'`);
         }

@@ -302,6 +302,68 @@ const asyncRoutesArray = [
       },
     ],
   },
+/*   {
+    path: "/environmentData",
+    component: () => import("@/layout/index.vue"),
+    name: "EnvironmentData",
+    redirect: "noRedirect",
+    meta: {
+      code: "menu.environmentData",
+      icon: "auditPrompt",
+    },
+    children: [
+      {
+        path: "/environmentMinute",
+        component: () => import("@/views/environmentData/EnvironmentData.vue"),
+        name: "EnvironmentMinute",
+        meta: {
+          code: "menu.environmentMinute",
+          icon: "auditPrompt",
+          permissions: ["equipmentTPM"],
+        },
+      },
+      {
+        path: "/environmentQuarter",
+        component: () => import("@/views/environmentData/EnvironmentQuarter.vue"),
+        name: "EnvironmentQuarter",
+        meta: {
+          code: "menu.environmentQuarter",
+          icon: "auditPrompt",
+          permissions: ["equipmentTPM"],
+        },
+      },
+      {
+        path: "/environmentHour",
+        component: () => import("@/views/environmentData/EnvironmentHour.vue"),
+        name: "EnvironmentHour",
+        meta: {
+          code: "menu.environmentHour",
+          icon: "auditPrompt",
+          permissions: ["equipmentTPM"],
+        },
+      },
+      {
+        path: "/environmentDaily",
+        component: () => import("@/views/environmentData/EnvironmentDaily.vue"),
+        name: "EnvironmentDaily",
+        meta: {
+          code: "menu.environmentDaily",
+          icon: "auditPrompt",
+          permissions: ["equipmentTPM"],
+        },
+      },
+      // {
+      //   path: "/equipmentTPMList",
+      //   component: () => import("@/views/environment/EquipmentTPMList.vue"),
+      //   name: "EquipmentTPMList",
+      //   meta: {
+      //     code: "menu.equipmentTPMList",
+      //     icon: "auditPrompt",
+      //     permissions: ["equipmentTPMList"],
+      //   },
+      // },
+    ],
+  }, */
 ];
 
 function set_parent_permission(route: RouteRecordRaw) {

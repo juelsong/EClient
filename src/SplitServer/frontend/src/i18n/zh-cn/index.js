@@ -160,6 +160,11 @@ let msgs = {
     equipmentTPM: "设备维护",
     equipments: "设备列表",
     equipmentTPMList: "维护清单",
+    environmentData: "设备数据",
+    environmentMinute: "分钟数据",
+    environmentHour: "小时数据",
+    environmentQuarter: "15分钟数据",
+    environmentDaily: "天数据",
 
   },
   permission: {
