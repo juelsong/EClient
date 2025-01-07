@@ -1,10 +1,14 @@
 ﻿namespace ESys.Infrastructure.Entity
 {
+#pragma warning disable 1591
+
     using ESys.Contract.Entity;
     using ESys.DataAnnotations;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// 天数据
@@ -13,232 +17,121 @@
     [AuditDisable]
     partial class EnvironmentalSensorMinute : BizEntity<EnvironmentalSensorMinute, long>
     {
-        /// <summary>
-        /// 设备ID-Net(高字节在前)
-        /// </summary>
-        public string DeviceIdNet { get; set; }
 
-        /// <summary>
-        /// 设备ID-Node(高字节在前)
-        /// </summary>
-        public string DeviceIdNode { get; set; }
-        /// <summary>
-        /// 年月日时分秒毫秒(高字节在前)
-        /// </summary>
+        // 主键
+        [Key]
+        [Column("id")]
+        public override long Id { get; set; }
+        [Column("device_of_data")]
+        public int EquipmentId { get; set; }
 
-        public DateTimeOffset UpdateDate { get; set; }
-        /// <summary>
-        /// 14字节MN码
-        /// </summary>
-        public string MN { get; set; }
-        /// <summary>
-        /// MN 剩余保留 +2预留字节(高字节在前)
-        /// </summary>
-        public ushort MNReverse { get; set; }
+        [Column("update_time")]
+        public DateTimeOffset Date { get; set; }
 
 
-        // PM2.5 相关属性
-        /// <summary>
-        /// PM2.5颗粒物浓度的最大值
-        /// </summary>
-        public ushort PM2_5Max { get; set; }
-        /// <summary>
-        /// PM2.5颗粒物浓度的平均值
-        /// </summary>
-        public ushort PM2_5Average { get; set; }
-        /// <summary>
-        /// PM2.5颗粒物浓度的最小值
-        /// </summary>
-        public ushort PM2_5Min { get; set; }
-        /// <summary>
-        /// PM2.5颗粒物浓度的最近值
-        /// </summary>
-        public ushort PM2_5Current { get; set; }
+        [Column("pm2_5_average")]
+        public int pm2_5_average { get; set; }
+        [Column("pm2_5_max")]
+        public int pm2_5_max { get; set; }
+        [Column("pm2_5_min")]
+        public int pm2_5_min { get; set; }
 
-        // PM10 相关属性
-        /// <summary>
-        /// PM10颗粒物浓度的最大值
-        /// </summary>
-        public ushort PM10Max { get; set; }
-        /// <summary>
-        /// PM10颗粒物浓度的平均值
-        /// </summary>
-        public ushort c { get; set; }
-        /// <summary>
-        /// PM10颗粒物浓度的最小值
-        /// </summary>
-        public ushort PM10Min { get; set; }
-        /// <summary>
-        /// PM10颗粒物浓度的最近值
-        /// </summary>
-        public ushort PM10Current { get; set; }
+        [Column("pm10_average")]
+        public int pm10_average { get; set; }
+        [Column("pm10_max")]
+        public int pm10_max { get; set; }
+        [Column("pm10_min")]
+        public int pm10_min { get; set; }
 
-        // CPM 相关属性
         /// <summary>
-        /// CPM（计数每分钟）的最大值
+        /// 扬尘TSP（单位：mg/m³）
         /// </summary>
-        public ushort CPMMax { get; set; }
-        /// <summary>
-        /// CPM（计数每分钟）的平均值
-        /// </summary>
-        public ushort CPMAverage { get; set; }
-        /// <summary>
-        /// CPM（计数每分钟）的最小值
-        /// </summary>
-        public ushort CPMMin { get; set; }
-        /// <summary>
-        /// CPM（计数每分钟）的最近值
-        /// </summary>
-        public ushort CPMCurrent { get; set; }
+        [Column("tsp_min")]
+        public int ParticulateMatterMin { get; set; }
+        [Column("tsp_max")]
+        public int ParticulateMatterMax { get; set; }
+        [Column("tsp_average")]
+        public int ParticulateMatterAvg { get; set; }
 
-        // 噪音相关属性
         /// <summary>
-        /// 噪音水平的最大值
+        /// 温度（单位：℃）
         /// </summary>
-        public ushort NoiseMax { get; set; }
-        /// <summary>
-        /// 噪音水平的平均值
-        /// </summary>
-        public ushort NoiseAverage { get; set; }
-        /// <summary>
-        /// 噪音水平的最小值
-        /// </summary>
-        public ushort NoiseMin { get; set; }
-        /// <summary>
-        /// 噪音水平的最近值
-        /// </summary>
-        public ushort NoiseCurrent { get; set; }
+        [Column("temperature_min")]
+        public int TemperatureMin { get; set; }
+        [Column("temperature_max")]
+        public int TemperatureMax { get; set; }
+        [Column("temperature_average")]
+        public int TemperatureAvg { get; set; }
 
-        // 风向相关属性
         /// <summary>
-        /// 风向的最近值
+        /// 湿度（单位：Rh%）
         /// </summary>
-        public ushort WindDirectionMax { get; set; }
-        public ushort WindDirectionAverage { get; set; }
-        public ushort WindDirectionMin { get; set; }
-        public ushort WindDirectionCurrent { get; set; }
-        // 风速相关属性
+        [Column("humidity_min")]
+        public int HumidityMin { get; set; }
+        [Column("humidity_max")]
+        public int HumidityMax { get; set; }
+        [Column("humidity_average")]
+        public int HumidityAvg { get; set; }
         /// <summary>
-        /// 风速的最大值
+        /// 气压
         /// </summary>
-        public ushort WindSpeedMax { get; set; }
-        /// <summary>
-        /// 风速的平均值
-        /// </summary>
-        public ushort WindSpeedAverage { get; set; }
-        /// <summary>
-        /// 风速的最小值
-        /// </summary>
-        public ushort WindSpeedMin { get; set; }
-        /// <summary>
-        /// 风速的最近值
-        /// </summary>
-        public ushort WindSpeedCurrent { get; set; }
+        [Column("pre_min")]
+        public int AirPressureMin { get; set; }
+        [Column("pre_max")]
+        public int AirPressureMax { get; set; }
+        [Column("pre_avg")]
+        public int AirPressureAvg { get; set; }
 
-        // 温度相关属性
         /// <summary>
-        /// 温度的最大值
+        /// 风速（单位：m/s）
         /// </summary>
-        public ushort TemperatureMax { get; set; }
-        /// <summary>
-        /// 温度的平均值
-        /// </summary>
-        public ushort TemperatureAverage { get; set; }
-        /// <summary>
-        /// 温度的最小值
-        /// </summary>
-        public ushort TemperatureMin { get; set; }
-        /// <summary>
-        /// 温度的最近值
-        /// </summary>
-        public ushort TemperatureCurrent { get; set; }
+        [Column("wind_speed_min")]
+        public int WindSpeedMin { get; set; }
+        [Column("wind_speed_max")]
+        public int WindSpeedMax { get; set; }
+        [Column("wind_speed_average")]
+        public int WindSpeedAvg { get; set; }
 
-        // 湿度相关属性
         /// <summary>
-        /// 湿度的最大值
+        /// 风向（单位：°）
         /// </summary>
-        public ushort HumidityMax { get; set; }
-        /// <summary>
-        /// 湿度的平均值
-        /// </summary>
-        public ushort HumidityAverage { get; set; }
-        /// <summary>
-        /// 湿度的最小值
-        /// </summary>
-        public ushort HumidityMin { get; set; }
-        /// <summary>
-        /// 湿度的最近值
-        /// </summary>
-        public ushort HumidityCurrent { get; set; }
+        [Column("wind_direction_min")]
+        public int WindDirectionMin { get; set; }
+        [Column("wind_direction_max")]
+        public int WindDirectionMax { get; set; }
+        [Column("wind_direction_average")]
+        public int WindDirectionAvg { get; set; }
 
-        // VOC相关属性
         /// <summary>
-        /// VOC（挥发性有机化合物）的最大值
+        /// 噪声（单位：dB）
         /// </summary>
-        public ushort VOCMax { get; set; }
-        /// <summary>
-        /// VOC（挥发性有机化合物）的平均值
-        /// </summary>
-        public ushort VOCAverage { get; set; }
-        /// <summary>
-        /// VOC（挥发性有机化合物）的最小值
-        /// </summary>
-        public ushort VOCMin { get; set; }
-        /// <summary>
-        /// VOC（挥发性有机化合物）的最近值
-        /// </summary>
-        public ushort VOCCurrent { get; set; }
-        // 大气压相关属性
-        /// <summary>
-        /// 大气压的最大值
-        /// </summary>
-        public ushort AtmosPressureMax { get; set; }
-        /// <summary>
-        /// 大气压的平均值
-        /// </summary>
-        public ushort AtmosPressureAverage { get; set; }
-        /// <summary>
-        /// 大气压的最小值
-        /// </summary>
-        public ushort AtmosPressureMin { get; set; }
-        /// <summary>
-        /// 大气压的最近值
-        /// </summary>
-        public ushort AtmosPressureCurrent { get; set; }
+        [Column("noise_min")]
+        public int NoiseMin { get; set; }
+        [Column("noise_max")]
+        public int NoiseMax { get; set; }
+        [Column("noise_average")]
+        public int NoiseAvg { get; set; }
 
-
-        // 电源输入相关属性
         /// <summary>
-        /// 设备是否正在校准的最新状态
+        /// CPM
         /// </summary>
-        public bool IsCalibratingCurrent { get; set; }
-        /// <summary>
-        /// 电源是否开启的最新状态
-        /// </summary>
-        public bool IsPowerOnCurrent { get; set; }
-        /// <summary>
-        /// RTC（实时时钟）是否需要校时的最新状态
-        /// </summary>
-        public bool RTCNeedsTimeSyncCurrent { get; set; }
-        /// <summary>
-        /// 保留字段，用于未来的功能扩展 (高字节在前)
-        /// </summary>
-        public ushort Reserved { get; set; }
-
-        ///// <summary>
-        ///// 设备Id
-        ///// </summary>
-        //public int? EquipmentId { get; set; }
-
-        ///// <summary>
-        /////设备
-        ///// </summary>
-        //public virtual Equipment Equipment { get; set; }
+        [Column("cpm")]
+        public int CPMAvg { get; set; }
+        [Column("is_power_on")]
+        public bool is_power_on { get; set; }
+        [Column("is_valid_data")]
+        public bool is_valid_data { get; set; }
+        [Column("equipment_data_valid_flag")]
+        public int equipment_data_valid_flag { get; set; }
+        [Column("source_of_data")]
+        public int source_of_data { get; set; }
+        [Column("dust_calibration_step")]
+        public int dust_calibration_step { get; set; }
 
 
         public override void Configure(EntityTypeBuilder<EnvironmentalSensorMinute> entityBuilder, DbContext dbContext, Type dbContextLocator)
         {
-            entityBuilder.HasIndex(p => p.DeviceIdNet);
+            entityBuilder.HasIndex(p => p.EquipmentId);
         }
     }
 }

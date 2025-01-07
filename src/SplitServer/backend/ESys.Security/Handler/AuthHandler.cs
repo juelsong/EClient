@@ -175,6 +175,6 @@ namespace ESys.Security.Handler
         }
 
         internal static int GetRefreshTokenExpiredMinutes(JWTSettingsOptions options)
-            => (int)(options.ExpiredTime ?? 20) + refreshTokenExpiredMins;
+            => (int)(options.ExpiredTime ?? 20) + (int)options.ClockSkew;
     }
 }

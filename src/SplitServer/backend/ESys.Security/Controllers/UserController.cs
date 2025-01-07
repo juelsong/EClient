@@ -87,6 +87,7 @@ namespace ESys.Security.ApiControllers
             if (ret.ErrorCode == ErrorCode.NoError)
             {
                 var refreshExpiredMins = AuthHandler.GetRefreshTokenExpiredMinutes(this.jwtOptions.Value);
+                this.logger.LogInformation($"refreshExpiredMins{refreshExpiredMins}");
                 var user = ret.Result;
                 var accessToken = JWTEncryption.Encrypt(new Dictionary<string, object>()
                     {

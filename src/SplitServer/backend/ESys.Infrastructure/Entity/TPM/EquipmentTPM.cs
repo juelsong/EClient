@@ -32,15 +32,25 @@ namespace ESys.Infrastructure.Entity
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// 产品实体
+    /// 产品实体 
+    /// 从前端按钮暂存 update
+    /// 每次加载 刷新时间
     /// </summary>
     [AuditDisable]
 
     public partial class EquipmentTPM : BizEntity<EquipmentTPM, int>, ITraceableEntity, ITimedEntity, IActiveEntity
     {
         /// <summary>
-        /// 运行维护单位名称
+        /// 当前步骤 1 2 3
         /// </summary>
+        public int Stage { get; set; }
+        /// <summary>
+        /// 剩余时间 初始值为480 8分钟 
+        /// </summary>
+        public int RemainSecond { get; set; }
+        /// <summary>
+        /// 运行维护单位名称
+        /// </summary>                          
         [StringLength(100)]
         public string Name { get; set; }
         /// <summary>

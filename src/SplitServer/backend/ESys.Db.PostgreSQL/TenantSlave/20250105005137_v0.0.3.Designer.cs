@@ -3,6 +3,7 @@ using System;
 using ESys.Db.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ESys.Db.PostgreSQL.TenantSlave
 {
     [DbContext(typeof(TenantSlaveDbContext))]
-    partial class TenantSlaveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250105005137_v0.0.3")]
+    partial class v003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
