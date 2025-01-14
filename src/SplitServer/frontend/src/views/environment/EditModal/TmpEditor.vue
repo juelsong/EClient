@@ -8,7 +8,15 @@
   >
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleTempSave">暂存</el-button>
+        <el-button
+          @click="handleTempSave"
+          v-show="
+            equipmentTMP.EndDate == `0001-01-01T00:00:00Z` ||
+            equipmentTMP.EndDate == null
+          "
+        >
+          暂存
+        </el-button>
         <el-button v-no-more-click v-show="active > 1" @click="pre">
           上一步
         </el-button>
@@ -18,13 +26,13 @@
         <!-- <el-button v-no-more-click v-show="active == 3" @click="exportPdf">
           导出
         </el-button> -->
-        <el-button @click="visibleInner = false">
+        <el-button @click="onCancelClick">
           {{ $t("template.cancel") }}
         </el-button>
         <el-button
           type="primary"
           v-no-more-click
-          :disabled="active != 3 || !state"
+          :disabled="accecptDisabled"
           @click="onAcceptClick"
         >
           {{ $t("template.accept") }}
@@ -39,11 +47,15 @@
       </el-steps>
     </div>
     <div class="remaining-time">
-      <el-tag type="info" size="large">
-        剩余时间: {{ Math.floor(remainingTime / 60) }}分{{
-          remainingTime % 60
-        }}秒
-      </el-tag>
+      剩余时间:
+      <span class="time" :style="{ opacity: opacityValue }">
+        {{
+          Math.floor(remainingTime / 60)
+            .toString()
+            .padStart(2, "0")
+        }}:
+        {{ (remainingTime % 60).toString().padStart(2, "0") }}
+      </span>
     </div>
     <el-form
       ref="dataForm"
@@ -745,7 +757,7 @@ import { Equipment, EquipmentTPM } from "@/defs/Entity";
 import store from "@/store";
 import Decimal from "decimal.js";
 import { equipmentTMPExport } from "@/utils/ExportPdf";
-import { oDataQuery } from "@/utils/odata";
+import { oDataQuery, oDataPost, oDataPatch } from "@/utils/odata";
 import { ElMessageBox } from "element-plus";
 
 const WAIT_TIME = 480; // 等待时间（秒）
@@ -771,12 +783,17 @@ export default vue.defineComponent({
     });
 
     const active = vue.ref(1);
-    const state = vue.ref(false);
     const startTime = vue.ref<number>(0);
 
     const disableNext = vue.ref(false);
 
     const modelInner = vue.ref<Equipment>();
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 设置为当天的开始时间
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // 设置为明天的开始时间
+
     var equipmentTMP = vue.ref<EquipmentTPM>({ Id: 0, EquipmentId: 0 });
     // const doubleCount = vue.computed(() => count.value * 2);
 
@@ -785,79 +802,16 @@ export default vue.defineComponent({
      * 更新时间和状态
      * Update time and state
      */
-    const updateTimer = () => {
-      if (!startTime.value) return;
 
-      const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
-      remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
-
-      if (elapsed >= WAIT_TIME) {
-        state.value = true;
-      }
-    };
-
-    /**
-     * 初始化计时器
-     * Initialize timer
-     */
-    const initTimer = () => {
-      // 如果没有保存的剩余时间，则使用默认值
-      if (!remainingTime.value || remainingTime.value === WAIT_TIME) {
-        state.value = false;
-        startTime.value = Date.now();
-        remainingTime.value = WAIT_TIME;
-      } else {
-        // 如果有保存的剩余时间，则根据剩余时间设置状态
-        state.value = remainingTime.value <= 0;
-        startTime.value = Date.now() - (WAIT_TIME - remainingTime.value) * 1000;
-      }
-
-      const intervalId = setInterval(() => {
-        if (!startTime.value) return;
-
-        const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
-        remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
-
-        if (remainingTime.value <= 0) {
-          state.value = true;
-          // 可选：清除计时器
-          // clearInterval(intervalId);
-        }
-      }, INTERVAL_DELAY);
-
-      const handleVisibility = () => {
-        if (document.visibilityState === "visible") {
-          // 页面可见时更新时间
-          if (startTime.value) {
-            const elapsed = Math.floor((Date.now() - startTime.value) / 1000);
-            remainingTime.value = Math.max(0, WAIT_TIME - elapsed);
-            if (remainingTime.value <= 0) {
-              state.value = true;
-            }
-          }
-        }
-      };
-
-      document.addEventListener("visibilitychange", handleVisibility);
-
-      return () => {
-        clearInterval(intervalId);
-        document.removeEventListener("visibilitychange", handleVisibility);
-      };
-    };
     vue.watch(visibleInner, async (newVal) => {
       if (newVal) {
         let copyQuery = cloneDeep(vue.toRaw(props.model));
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // 设置为当天的开始时间
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1); // 设置为明天的开始时间
 
         const loadDatas = (
           await oDataQuery("EquipmentTPM", {
             $filter: `(EquipmentId eq ${
               props.model?.Id ?? 0
-            })and (StartDate ge ${today.toISOString()} and StartDate lt ${tomorrow.toISOString()}) and (Stage ne 4) and (Stage ne 0)`,
+            })and (StartDate ge ${today.toISOString()} and StartDate lt ${tomorrow.toISOString()})`,
             $orderby: "Id desc",
             $top: 1,
             $expand:
@@ -883,17 +837,21 @@ export default vue.defineComponent({
           } else {
             remainingTime.value = WAIT_TIME;
           }
+          console.log(equipmentTMP.value.EndDate);
         } else {
           equipmentTMP.value = { Id: 0, EquipmentId: 0 };
-          modelInner.value = copyQuery;
-          active.value = 1;
-          disableNext.value = true;
-          state.value = false;
-          startTime.value = Date.now();
-          remainingTime.value = WAIT_TIME;
           for (let prop in equipmentTMP.value) {
             equipmentTMP.value[prop] = undefined;
           }
+          modelInner.value = copyQuery;
+          active.value = 1;
+          disableNext.value = true;
+          equipmentTMP.value.Stage = 1;
+
+          startTime.value = Date.now();
+          remainingTime.value = WAIT_TIME;
+          equipmentTMP.value.RemainSecond = WAIT_TIME;
+
           if (getTenant() === "Longdi") {
             equipmentTMP.value!.Name = "上海龙涤环保技术工程有限公司";
           } else {
@@ -921,21 +879,169 @@ export default vue.defineComponent({
             modelInner.value!.EquipmentTypeId == 1 ? "6.254" : "5";
           equipmentTMP.value.BeforeEquipmentQualified = true;
           equipmentTMP.value.BehindEquipmentQualified = true;
+
+          const rsp = (await oDataPost(
+            "EquipmentTPM",
+            equipmentTMP.value
+          )) as EquipmentTPM;
+          equipmentTMP.value.Id = rsp.Id;
+        }
+        startUpdatingTimer();
+      }
+    });
+    let interval: ReturnType<typeof setInterval> | null = null; // Initialize as null
+
+    const updateInterval = 10; // 每10秒更新一次数据库
+    let updateCount = 0; // 计数器，用于控制oDataPatch的调用
+    let isVisible = true; // 页面是否可见
+    let lastUpdateTime = Date.now(); // Initialize lastUpdateTime
+
+    async function updateTimerRecord() {
+      try {
+        // Update the remaining time in the database
+        await oDataPatch("EquipmentTPM", {
+          Id: equipmentTMP.value!.Id,
+          RemainSecond: remainingTime.value,
+        });
+
+        // Load the latest remaining time from the database
+        const loadDatas = (
+          await oDataQuery("EquipmentTPM", {
+            $filter: `(EquipmentId eq ${
+              props.model?.Id ?? 0
+            }) and (StartDate ge ${today.toISOString()} and StartDate lt ${tomorrow.toISOString()})`,
+            $orderby: "Id desc",
+            $top: 1,
+            $select: "RemainSecond",
+          })
+        ).value as Partial<EquipmentTPM>[];
+
+        if (loadDatas.length > 0) {
+          const newRemainingTime = loadDatas[0].RemainSecond ?? 0;
+
+          // Adjust local time only if the difference is significant
+          const localAdjustment =
+            remainingTime.value - (Date.now() - lastUpdateTime) / 1000;
+          if (Math.abs(newRemainingTime - localAdjustment) > 2) {
+            // Adjust threshold as needed
+            remainingTime.value = Math.max(newRemainingTime, 0); // Ensure remainingTime is not less than 0
+          }
+        }
+      } catch (error) {
+        console.error("Error updating timer record:", error);
+      }
+    }
+
+    const startUpdatingTimer = () => {
+      if (interval) return; // If the timer is already running, do not start it again
+
+      let updateCount = 0; // Counter to track update frequency
+
+      interval = setInterval(() => {
+        const currentTime = Date.now();
+
+        if (equipmentTMP.value.Id && remainingTime.value > 0 && isVisible) {
+          // Update the database every 10 seconds
+          if (updateCount >= 10) {
+            // Assuming updateInterval is 10
+            updateTimerRecord().then(() => {
+              updateCount = 0; // Reset counter
+            });
+          } else {
+            updateCount++; // Increment counter
+          }
+
+          // Decrease remaining time
+          remainingTime.value -= 1;
+
+          // Toggle opacity, ensuring it only blinks when remainingTime is not 0
+          if (remainingTime.value > 0) {
+            opacityValue.value = opacityValue.value === 1 ? 0 : 1; // Toggle opacity
+          }
+
+          // Update equipmentTMP's remaining time
+          equipmentTMP.value!.RemainSecond = remainingTime.value;
         }
 
-        const cleanup = initTimer();
-        vue.onUnmounted(cleanup);
+        // Handle the case when remainingTime <= 0
+        if (equipmentTMP.value.Id && remainingTime.value <= 0) {
+          equipmentTMP.value!.RemainSecond = 0;
+          updateTimerRecord(); // Update the database with remaining time as 0
+          clearTimer(); // Clear the timer
+        }
+
+        lastUpdateTime = currentTime; // Update the last update time
+      }, 1000); // Update every 1 second
+    };
+    // 处理页面可见性变化
+    document.addEventListener("visibilitychange", () => {
+      isVisible = !document.hidden; // 更新页面可见性状态
+      if (!isVisible && interval) {
+        clearTimer();
+      } else if (isVisible && !interval) {
+        startUpdatingTimer(); // 页面可见时重新启动计时器
       }
     });
 
+    // 处理页面隐藏和显示
+    window.addEventListener("pagehide", () => {
+      if (interval) {
+        clearTimer();
+      }
+    });
+
+    window.addEventListener("pageshow", () => {
+      if (!interval) {
+        startUpdatingTimer(); // 页面显示时重新启动计时器
+      }
+    });
+    function clearTimer() {
+      if (interval) {
+        clearInterval(interval); // 清除定时器
+        interval = null; // 重置 interval 为 null
+      }
+    }
+    vue.onBeforeUnmount(() => {
+      clearTimer();
+    });
+
+    const opacityValue = vue.ref(1); // 初始透明度
+
+    const onTransitionEnd = () => {
+      opacityValue.value = 1; // 过渡结束后恢复透明度
+    };
+    function dataDisable(data) {
+      return data == "" || data == undefined || data == null;
+    }
+
+    const accecptDisabled = vue.computed(() => {
+      console.log(
+        equipmentTMP.value.EndDate != `0001-01-01T00:00:00Z` ,
+          equipmentTMP.value.EndDate != null,
+          dataDisable(equipmentTMP.value.EquipmentReal1),
+          dataDisable(equipmentTMP.value.EquipmentReal3));
+      return (
+        active.value != 3 ||
+        remainingTime.value != 0 ||
+        ((equipmentTMP.value.EndDate == `0001-01-01T00:00:00Z` ||
+          equipmentTMP.value.EndDate == null ||
+          !dataDisable(equipmentTMP.value.EndDate)) ||
+          (dataDisable(equipmentTMP.value.EquipmentReal1) ||
+            dataDisable(equipmentTMP.value.EquipmentReal3)))
+      );
+    });
     return {
-      state,
+      interval,
       remainingTime,
+      clearTimer,
+      opacityValue,
+      onTransitionEnd,
       active,
       disableNext,
       visibleInner,
       modelInner,
       equipmentTMP,
+      accecptDisabled,
     };
   },
   data() {
@@ -1031,7 +1137,6 @@ export default vue.defineComponent({
       switch (this.active) {
         case 1:
           this.disableNext = false;
-          this.equipmentTMP.StartDate = new Date();
           this.equipmentTMP.C1StartDate = undefined;
           break;
         case 2:
@@ -1170,13 +1275,14 @@ export default vue.defineComponent({
         this.$message.error("保存失败");
       }
     },
-
+    onCancelClick() {
+      this.visibleInner = false;
+      this.clearTimer();
+    },
     async onAcceptClick() {
       this.equipmentTMP.C2EndDate = new Date();
       this.equipmentTMP.EndDate = new Date();
       this.equipmentTMP.RemainSecond = 0;
-
-      this.equipmentTMP.Stage = 4;
 
       // 确保克隆前的数据包含 Id
       console.log("Before clone Id:", this.equipmentTMP.Id); // 调试用
@@ -1259,6 +1365,11 @@ export default vue.defineComponent({
 </style>
 
 <style scoped>
+.custom-tag {
+  background-color: white !important; /* 设置背景颜色为白色 */
+  color: black; /* 设置文本颜色为黑色，以确保可读性 */
+  transition: opacity 0.5s; /* 过渡效果 */
+}
 .dotClass {
   width: 10px;
   height: 10px;
@@ -1332,22 +1443,31 @@ export default vue.defineComponent({
   width: 100%; /* 设置您想要的宽度 */
   display: flex; /* 或者 display: grid; */
 }
+
 .remaining-time {
+  color: #333;
+  align-items: center;
   display: flex;
   justify-content: center;
   margin: 15px 0;
+  font-size: 18px; /* 增加字体大小 */
+  font-weight: bold; /* 加粗字体 */
 }
 
-.remaining-time .el-tag {
-  font-size: 14px;
-  padding: 8px 15px;
-  border-radius: 4px;
+.remaining-time .time {
+  padding: 5px 10px; /* 内边距 */
+  border-radius: 4px; /* 圆角 */
+  animation: blink 1s infinite; /* 添加闪烁动画 */
 }
-
-/* 当剩余时间少于1分钟时改变颜色 */
-.remaining-time .el-tag:has(span:contains("0分")) {
-  --el-tag-bg-color: var(--el-color-danger-light-9);
-  --el-tag-border-color: var(--el-color-danger);
-  --el-tag-text-color: var(--el-color-danger);
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
