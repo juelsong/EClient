@@ -561,7 +561,7 @@ namespace ESys.App
 
             xhr.open('POST', '/api/user/login', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-TENANT', 'Emis');
+            xhr.setRequestHeader('X-TENANT', 'Longdi');
 
             var json = JSON.stringify({{ 'Account': userName, 'Password': password }});
 

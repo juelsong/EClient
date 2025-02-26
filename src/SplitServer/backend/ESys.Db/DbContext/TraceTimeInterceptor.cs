@@ -57,7 +57,6 @@
             foreach (var entry in dbContext.ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Modified))
             {
-
                 if (entry.Entity is ITimedEntity timedEntity)
                 {
                     timedEntity.UpdatedTime = timedEntity.UpdatedTime == default
@@ -68,6 +67,7 @@
                 {
                     traceableEntity.UpdateBy = userId;
                 }
+
             }
         }
     }

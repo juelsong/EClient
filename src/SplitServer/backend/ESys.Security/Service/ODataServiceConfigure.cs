@@ -215,43 +215,43 @@ namespace ESys.Security.Service
                     this.httpContextAccessor.HttpContext = ctx;
                     var clrType = LocationSelectExpandBinder.GetClrType(odataFeature.Model, firstPath.EdmType);
                     var tenant = ctx.GetTenantId();
-                    if (int.TryParse(ctx.User.FindFirstValue(ConstDefs.Jwt.UserId), out var userId))
-                    {
-                        var repository = ctx.RequestServices.GetRequiredService<IMSRepository<TenantMasterLocator, TenantSlaveLocator>>();
-                        var breadcrumb = repository.Slave1<User>()
-                                                   .Where(u => u.Id == userId)
-                                                   .Select(u => u.Location.LocationExtra.Breadcrumb)
-                                                   .FirstOrDefault();
-                        var visitors = ctx.RequestServices.GetServices<IEntityQueryVisitor>().ToArray();
-                        var tenantService = ctx.RequestServices.GetRequiredService<ITenantService>();
-                        tenantService.SetTenantScope(tenant);
-                        var list = new List<string>();
-                        foreach (var visitor in visitors)
-                        {
-                            var filter = visitor.VisitQuery(userId, breadcrumb, clrType);
-                            if (!string.IsNullOrEmpty(filter))
-                            {
-                                list.Add(filter);
-                            }
-                        }
-                        if (list.Count > 0)
-                        {
-                            var oriFilterStr = ctx.Request.Query["$filter"];
-                            var filterStr = string.Join(" and ", list.Union(new string[] { oriFilterStr })
-                                                                     .Where(str => !string.IsNullOrEmpty(str)).Select(x => $"({x})"));
-                            var queryString = new QueryString($"?$filter={filterStr}");
-                            foreach (var key in ctx.Request.Query.Keys.Where(k => k != "$filter"))
-                            {
 
-                                queryString = queryString.Add(key, ctx.Request.Query[key]);
-                            }
-                            ctx.Request.QueryString = queryString;
-                        }
-                        // 无需关心 IDataInjector InjectCurrentUserId，LocationSelectExpandBinder使用httpcontext的serviceprovider
-                    }
-                    else
+                    // 检查是否能够获取用户 ID
+                    if (!int.TryParse(ctx.User.FindFirstValue(ConstDefs.Jwt.UserId), out var userId))
                     {
-                        this.logger.LogError("can not get UserId\t{path}", ctx.Request.Path);
+                        // 如果无法获取用户 ID，跳过后续逻辑
+                        await this.next(ctx);
+                        return;
+                    }
+
+                    var repository = ctx.RequestServices.GetRequiredService<IMSRepository<TenantMasterLocator, TenantSlaveLocator>>();
+                    var breadcrumb = repository.Slave1<User>()
+                                               .Where(u => u.Id == userId)
+                                               .Select(u => u.Location.LocationExtra.Breadcrumb)
+                                               .FirstOrDefault();
+                    var visitors = ctx.RequestServices.GetServices<IEntityQueryVisitor>().ToArray();
+                    var tenantService = ctx.RequestServices.GetRequiredService<ITenantService>();
+                    tenantService.SetTenantScope(tenant);
+                    var list = new List<string>();
+                    foreach (var visitor in visitors)
+                    {
+                        var filter = visitor.VisitQuery(userId, breadcrumb, clrType);
+                        if (!string.IsNullOrEmpty(filter))
+                        {
+                            list.Add(filter);
+                        }
+                    }
+                    if (list.Count > 0)
+                    {
+                        var oriFilterStr = ctx.Request.Query["$filter"];
+                        var filterStr = string.Join(" and ", list.Union(new string[] { oriFilterStr })
+                                                                 .Where(str => !string.IsNullOrEmpty(str)).Select(x => $"({x})"));
+                        var queryString = new QueryString($"?$filter={filterStr}");
+                        foreach (var key in ctx.Request.Query.Keys.Where(k => k != "$filter"))
+                        {
+                            queryString = queryString.Add(key, ctx.Request.Query[key]);
+                        }
+                        ctx.Request.QueryString = queryString;
                     }
                 }
             }

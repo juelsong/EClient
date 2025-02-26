@@ -146,11 +146,18 @@ namespace ESys.Infrastructure.Entity
         /// 区域
         /// </summary>
         public virtual Location Location { get; set; }
-
         /// <summary>
-        /// 设备配置
+        /// 预警提醒
+        /// </summary>
+        public virtual ICollection<EquipmentNotification> EquipmentNotification { get; set; }
+        /// <summary>
+        /// 设备维护列表
         /// </summary>
         public virtual ICollection<EquipmentTPM> EquipmentTPMs { get; set; }
+        ///// <summary>
+        ///// 设备MN
+        ///// </summary>
+        //public virtual ICollection<EquipmentMN> EquipmentMNs { get; set; }
 
         /// <summary>
         /// 配置
@@ -177,7 +184,6 @@ namespace ESys.Infrastructure.Entity
                 .WithOne()
                 .HasForeignKey<Equipment>(i => i.EquipmentConfigId)
                 .OnDelete(DeleteBehavior.NoAction);
-
             entityBuilder.HasIndex(p => p.Name);
             entityBuilder.HasIndex(p => p.SerialNumber);
         }
