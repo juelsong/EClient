@@ -1,5 +1,5 @@
 import { MomentInput } from "moment";
-export const Version = 'v0.0.3'
+export const Version = 'v0.0.4'
 /**
  * 数据实体基类
  */
@@ -107,7 +107,11 @@ export declare class Equipment extends BizEntity {
      */
     Location?: Location;
     /**
-     *设备配置
+     *预警提醒
+     */
+    EquipmentNotification?: Array<EquipmentNotification>;
+    /**
+     *设备维护列表
      */
     EquipmentTPMs?: Array<EquipmentTPM>;
 }
@@ -272,6 +276,28 @@ export declare class Location extends BizEntity {
      *区域类型
      */
     LocationType?: LocationType;
+}
+
+/**
+ *用于数据库 单项处理 邮件或者短信发送
+ */
+export declare class EquipmentNotification extends BizEntity {
+    /**
+     *电话号
+     */
+    Phone?: string;
+    /**
+     *电话号
+     */
+    IsAlert?: string;
+    /**
+     *设备主键
+     */
+    EquipmentId?: number;
+    /**
+     *关联设备
+     */
+    Equipment?: Equipment;
 }
 
 /**
@@ -3303,506 +3329,6 @@ export declare class ESignData extends BizView {
 export declare type NotificationTypes = "Deviation" | "LoginFailure" | "InvalidESig" | "AccountLocked" | "SampleNotCompleted" | "WeeklyTestNotCompleted" | "MonthlyTestNotCompleted" | "QuarterlyTestNotCompleted" | "MaxTimeAboutToExceed" | "WorkNotYetCompletedForToday" | "OrganismFound" | "OrganismAdded" | "WorkflowError" | "EquipmentAboutToExpire" | "MediaInventoryLow" | "UserQualificationLapsed" | "UserQualificationDue";
 
 /**
- *邮件
- */
-export declare class EMail extends BizEntity {
-    /**
-     *主题
-     */
-    Subject?: string;
-    /**
-     *内容
-     */
-    Body?: string;
-    /**
-     *是否为html内容
-     */
-    IsHtmlBody?: boolean;
-    /**
-     *发送时间
-     */
-    SendDate?: MomentInput;
-    /**
-     *收件人Id
-     */
-    UserId?: number;
-    /**
-     *收件人
-     */
-    User?: User;
-    /**
-     *附件
-     */
-    Attachments?: Array<EMailAttachment>;
-    /**
-     *相关的通知
-     */
-    Notifications?: Array<Notification>;
-    /**
-     *通知关联
-     */
-    NotificationEMails?: Array<NotificationEMail>;
-}
-
-/**
- *邮件附件
- */
-export declare class EMailAttachment extends BizEntity {
-    /**
-     *文件路径
-     */
-    FilePath?: string;
-    /**
-     *内容Id，如果UsedInBody为true，则必须与body中id一致
-     */
-    ContentId?: string;
-    /**
-     *是否用于body 如果true，则用于body中展示
-     */
-    UsedInBody?: boolean;
-    /**
-     *邮件Id
-     */
-    EMailId?: number;
-    /**
-     *邮件
-     */
-    EMail?: EMail;
-}
-
-/**
- *通知实体
- */
-export declare class Notification extends BizEntity {
-    /**
-     *通知内容，可自行设置，也可通过 Messages 设置为json数组
-     */
-    Content?: string;
-    /**
-     *执行通知的时间戳
-     */
-    NotificationDate?: MomentInput;
-    /**
-     *通知类型Id
-     */
-    NotificationTypeId?: number;
-    /**
-     *创建此通知的用户Id
-     */
-    UserId?: number;
-    /**
-     *采样点Id
-     */
-    SiteId?: number;
-    /**
-     *设备Id
-     */
-    EquipmentId?: number;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-    /**
-     *是否启用
-     */
-    IsActive?: boolean;
-    /**
-     *通知类型
-     */
-    NotificationType?: NotificationType;
-    /**
-     *创建此通知的用户
-     */
-    User?: User;
-    /**
-     *采样点
-     */
-    Site?: Site;
-    /**
-     *设备
-     */
-    Equipment?: Equipment;
-    /**
-     *关联电邮
-     */
-    NotificationEMails?: Array<NotificationEMail>;
-    /**
-     *电邮
-     */
-    EMails?: Array<EMail>;
-}
-
-/**
- *通知电邮关联
- */
-export declare class NotificationEMail extends BizEntity {
-    /**
-     *通知Id
-     */
-    NotificationId?: number;
-    /**
-     *电邮Id
-     */
-    EMailId?: number;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *通知
-     */
-    Notification?: Notification;
-    /**
-     *电邮
-     */
-    EMail?: EMail;
-}
-
-/**
- *通知类型
- */
-export declare class NotificationType extends BizEntity {
-    /**
-     *通知类型标签
-     */
-    Type?: NotificationTypes;
-    /**
-     *通知类型名称
-     */
-    Name?: string;
-    /**
-     *通知类型描述
-     */
-    Description?: string;
-    /**
-     *英文
-     */
-    EnName?: string;
-    /**
-     *中文
-     */
-    ZhName?: string;
-    /**
-     *英文
-     */
-    EnDescription?: string;
-    /**
-     *中文
-     */
-    ZhDescription?: string;
-    /**
-     *通知类型处理器类型，此类通知都由一种处理器处理
-     */
-    ProcessorType?: string;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-    /**
-     *是否启用
-     */
-    IsActive?: boolean;
-    /**
-     *属于此类型的通知
-     */
-    Notifications?: Array<Notification>;
-    /**
-     *属于此类型的订阅
-     */
-    Subscriptions?: Array<Subscription>;
-}
-
-/**
- *通知视图
- */
-export declare class NotificationV extends BizView {
-    /**
-     *通知Id
-     */
-    NotificationId?: number;
-    /**
-     *通知类型Id
-     */
-    NotificationTypeId?: number;
-    /**
-     *通知类型名称
-     */
-    NotificationTypeName?: string;
-    /**
-     *通知类型描述
-     */
-    NotificationTypeDesc?: string;
-    /**
-     *执行通知的时间戳
-     */
-    NotificationDate?: MomentInput;
-    /**
-     *创建此通知的用户Id
-     */
-    UserId?: number;
-    /**
-     *创建此通知的用户区域Id
-     */
-    UserLocationId?: number;
-    /**
-     *创建此通知的用户区域Id导航
-     */
-    UserLocationBreadcrumb?: string;
-    /**
-     *采样点Id
-     */
-    SiteId?: number;
-    /**
-     *采样点名称
-     */
-    SiteName?: string;
-    /**
-     *采样点描述
-     */
-    SiteDesc?: string;
-    /**
-     *采样点区域Id
-     */
-    SiteLocationId?: number;
-    /**
-     *采样点区域Id导航
-     */
-    SiteLocationBreadcrumb?: string;
-    /**
-     *测试样本Id
-     */
-    SampleId?: number;
-    /**
-     *偏差Id
-     */
-    DeviationId?: number;
-    /**
-     *设备Id
-     */
-    EquipmentId?: number;
-    /**
-     *设备区域Id
-     */
-    EquipmentLocationId?: number;
-    /**
-     *设备区域Id导航
-     */
-    EquipmentLocationBreadcrumb?: string;
-    /**
-     *培养基Id
-     */
-    MediaId?: number;
-    /**
-     *培养基区域Id
-     */
-    MediaLocationId?: number;
-    /**
-     *培养基区域Id导航
-     */
-    MediaLocationBreadcrumb?: string;
-    /**
-     *通知内容，可自行设置，也可通过设置为json数组
-     */
-    Content?: string;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-}
-
-/**
- *订阅实体
- */
-export declare class Subscription extends BizEntity {
-    /**
-     *用户Id
-     */
-    UserId?: number;
-    /**
-     *通知类型Id
-     */
-    NotificationTypeId?: number;
-    /**
-     *属性Id
-     */
-    PlanGroupId?: number;
-    /**
-     *区域Id
-     */
-    LocationId?: number;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-    /**
-     *是否启用
-     */
-    IsActive?: boolean;
-    /**
-     *用户
-     */
-    User?: User;
-    /**
-     *通知类型
-     */
-    NotificationType?: NotificationType;
-    /**
-     *区域
-     */
-    Location?: Location;
-}
-
-/**
- *订阅视图
- */
-export declare class SubscriptionV extends BizView {
-    /**
-     *订阅Id
-     */
-    SubscriptionId?: number;
-    /**
-     *用户Id
-     */
-    UserId?: number;
-    /**
-     *用户姓名
-     */
-    RealName?: string;
-    /**
-     *用户所属部门Id
-     */
-    DepartmentId?: number;
-    /**
-     *用户区域Id
-     */
-    UserLocationId?: number;
-    /**
-     *用户区域Id面包导航
-     */
-    UserLocationBreadcrumb?: string;
-    /**
-     *用户工号
-     */
-    EmployeeId?: string;
-    /**
-     *用户职位
-     */
-    Title?: string;
-    /**
-     *用户名
-     */
-    UserName?: string;
-    /**
-     *用户电邮
-     */
-    EMail?: string;
-    /**
-     *用户状态
-     */
-    UserStatus?: UserStatus;
-    /**
-     *通知类型Id
-     */
-    NotificationTypeId?: number;
-    /**
-     *通知类型名称
-     */
-    NotificationTypeName?: string;
-    /**
-     *通知类型描述
-     */
-    NotificationTypeDescription?: string;
-    /**
-     *通知类型是否启用
-     */
-    IsNotificationTypeActive?: boolean;
-    /**
-     *属性Id
-     */
-    PlanGroupId?: number;
-    /**
-     *订阅区域Id
-     */
-    LocationId?: number;
-    /**
-     *订阅区域名称
-     */
-    LocationName?: string;
-    /**
-     *订阅区域是否启用
-     */
-    IsLocationActive?: boolean;
-    /**
-     *是否启用
-     */
-    IsActive?: boolean;
-    /**
-     *创建时间
-     */
-    CreatedTime?: MomentInput;
-    /**
-     *创建人
-     */
-    CreateBy?: number;
-    /**
-     *更新人
-     */
-    UpdateBy?: number;
-    /**
-     *更新时间
-     */
-    UpdatedTime?: MomentInput;
-}
-
-/**
  *系统配置项
  */
 export declare class ConfigItem extends BizEntity {
@@ -3904,8 +3430,4 @@ export const ActivedEntities = [
     'User',
     'ESignConfig',
     'Role',
-    'UserV',
-    'Notification',
-    'NotificationType',
-    'Subscription',
-    'SubscriptionV'];
+    'UserV'];

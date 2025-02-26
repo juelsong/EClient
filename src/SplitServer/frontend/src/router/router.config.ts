@@ -300,9 +300,20 @@ const asyncRoutesArray = [
           permissions: ["equipmentTPMList"],
         },
       },
+      {
+        path: "/equipmentNotification",
+        component: () =>
+          import("@/views/environment/EquipmentNotification.vue"),
+        name: "EquipmentNotification",
+        meta: {
+          code: "menu.equipmentNotification",
+          icon: "auditPrompt",
+          permissions: ["equipmentNotification"],
+        },
+      },
     ],
   },
-/*   {
+  {
     path: "/environmentData",
     component: () => import("@/layout/index.vue"),
     name: "EnvironmentData",
@@ -319,17 +330,18 @@ const asyncRoutesArray = [
         meta: {
           code: "menu.environmentMinute",
           icon: "auditPrompt",
-          permissions: ["equipmentTPM"],
+          permissions: ["environmentData"],
         },
       },
       {
         path: "/environmentQuarter",
-        component: () => import("@/views/environmentData/EnvironmentQuarter.vue"),
+        component: () =>
+          import("@/views/environmentData/EnvironmentQuarter.vue"),
         name: "EnvironmentQuarter",
         meta: {
           code: "menu.environmentQuarter",
           icon: "auditPrompt",
-          permissions: ["equipmentTPM"],
+          permissions: ["environmentData"],
         },
       },
       {
@@ -339,7 +351,7 @@ const asyncRoutesArray = [
         meta: {
           code: "menu.environmentHour",
           icon: "auditPrompt",
-          permissions: ["equipmentTPM"],
+          permissions: ["environmentData"],
         },
       },
       {
@@ -349,21 +361,11 @@ const asyncRoutesArray = [
         meta: {
           code: "menu.environmentDaily",
           icon: "auditPrompt",
-          permissions: ["equipmentTPM"],
+          permissions: ["environmentData"],
         },
       },
-      // {
-      //   path: "/equipmentTPMList",
-      //   component: () => import("@/views/environment/EquipmentTPMList.vue"),
-      //   name: "EquipmentTPMList",
-      //   meta: {
-      //     code: "menu.equipmentTPMList",
-      //     icon: "auditPrompt",
-      //     permissions: ["equipmentTPMList"],
-      //   },
-      // },
     ],
-  }, */
+  },
 ];
 
 function set_parent_permission(route: RouteRecordRaw) {

@@ -64,13 +64,13 @@
           :placeholder="$t('User.editor.Password2')"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="$t('User.editor.EmployeeId')" prop="EmployeeId">
+      <!-- <el-form-item :label="$t('User.editor.EmployeeId')" prop="EmployeeId">
         <el-input
           ref="modelInner.EmployeeId"
           v-model="modelInner.EmployeeId"
           :placeholder="$t('User.editor.EmployeeId')"
         ></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item :label="$t('User.editor.Department')" prop="DepartmentId">
         <o-data-selector
           ref="departmentRef"
@@ -86,7 +86,7 @@
           value="Id"
         />
       </el-form-item> -->
-      <el-form-item :label="$t('User.editor.EMail')" prop="EMail">
+      <!-- <el-form-item :label="$t('User.editor.EMail')" prop="EMail">
         <el-input
           ref="modelInner.EMail"
           v-model="modelInner.EMail"
@@ -109,7 +109,7 @@
       </el-form-item>
       <el-form-item :label="$t('User.editor.Location')" prop="Location">
         <region-tree ref="regionRef" v-model="modelInner.LocationId" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('User.editor.Roles')" prop="Roles">
         <o-data-selector
           ref="rolesRef"

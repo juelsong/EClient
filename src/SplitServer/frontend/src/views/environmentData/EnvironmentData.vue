@@ -7,7 +7,7 @@
         </div>
       </template>
       <el-container>
-        <!-- <el-header>
+        <el-header>
           <el-form ref="queryForm" :inline="true" :model="queryModel">
             <el-form-item label="时间" prop="startDate">
               <el-date-picker
@@ -19,7 +19,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="设备Id" prop="equipmentId">
-              <el-input v-model="queryModel.equipmentId" />
+              <el-input v-model="queryModel.equipmentIdAndName" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="loadData">
@@ -37,16 +37,16 @@
                 </el-icon>
               </el-button>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-button type="primary" @click="queryVisible = true">
                 {{ $t("template.advanced") }}
                 <el-icon class="el-icon--right">
                   <svg-icon icon-class="operation" />
                 </el-icon>
               </el-button>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
-        </el-header> -->
+        </el-header>
         <el-main style="margin-top: 10px">
           <el-table
             ref="dataRef"
@@ -167,6 +167,7 @@ import moment from "moment";
 import cloneDeep from "lodash.clonedeep";
 import { toRaw } from "vue";
 import {
+  Equipment,
   EnvironmentalSensorDaily,
   EnvironmentalSensorMinute,
 } from "@/defs/Entity";
@@ -174,6 +175,7 @@ import { getActiveEntityMixin } from "@/utils/tableMixin";
 import { EnvironmentQueryModel } from "./QueryModel";
 
 import ODataSelector from "@/components/ODataSelector.vue";
+import { oDataQuery } from "@/utils/odata";
 
 import { ElForm } from "element-plus";
 
@@ -211,15 +213,26 @@ export default vue.defineComponent({
     //  const defaultExpand = ``;
     //  query.$expand = defaultExpand;
     // query.$select = `Id,DeviceIdNode,PM2_5Average,PM10Average,TemperatureAverage,WindSpeedAverage`;
-    entityName.value = props.stageQuery;//"EnvironmentalSensorMinute";
-
+    entityName.value = props.stageQuery; //"EnvironmentalSensorMinute";
 
     filterBuilder.value = () => {
-      return new Promise((resolve) => {
+      return new Promise(async (resolve) => {
         let filterStr = new Array<string>();
 
-        if (queryModel.value?.equipmentId) {
-          filterStr.push(`DeviceIdNode eq '${queryModel.value?.equipmentId}'`);
+        if (queryModel.value?.equipmentIdAndName) {
+          oDataQuery("Equipment", {});
+
+          const equipmentEntities = (
+            await oDataQuery("Equipment", {
+              // $select: "EntityId, Belongs, Status",
+              $filter: `(contains(SerialNumber, '${queryModel.value?.equipmentIdAndName}')) or (contains(Name, '${queryModel.value?.equipmentIdAndName}')) `,
+              // $expand: "ApprovalItems",
+            })
+          ).value as Partial<Equipment>[];
+          if (equipmentEntities.length > 0) {
+            let equipmentIds = equipmentEntities.map((e) => e.Id).join(",");
+            filterStr.push(`EquipmentId in (${equipmentIds})`);
+          }
         }
         if (
           queryModel.value.startDate &&
@@ -233,10 +246,10 @@ export default vue.defineComponent({
           //     `EndDate le ${moment(values[0]).add(1, "day").toISOString()}`
           //   );
           // }
-          filterStr.push(`UpdateDate ge ${moment(values[0]).toISOString()}`);
+          filterStr.push(`Date ge ${moment(values[0]).toISOString()}`);
           var setDate = Date.parse(values[1]);
           endDate.setTime(setDate + 3600 * 1000 * 24 - 1000);
-          filterStr.push(`UpdateDate le ${endDate.toISOString()}`);
+          filterStr.push(`Date le ${endDate.toISOString()}`);
         }
         resolve(filterStr);
       });

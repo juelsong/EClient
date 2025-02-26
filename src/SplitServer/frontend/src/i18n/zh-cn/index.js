@@ -165,7 +165,7 @@ let msgs = {
     environmentHour: "小时数据",
     environmentQuarter: "15分钟数据",
     environmentDaily: "天数据",
-
+    equipmentNotification: "设备预警",
   },
   permission: {
     system: "系统管理",
@@ -335,6 +335,15 @@ let msgs = {
     "equipmentTPM:Edit":"编辑维护单",
     equipmentTPMList: "设备维护单列表",
     "equipmentTPM:Disable":"禁用维护单",
+    "equipmentTPM:Export":"导出维护单",
+    equipmentNotification: "设备报警通知",
+    "equipmentNotification:Add":"添加通知",
+    "equipmentNotification:Edit":"编辑通知",
+    environmentData: "环境历史数据",
+    environmentMinute: "分钟数据",
+    environmentQuarter: "15分钟数据",
+    environmentHour: "小时数据",
+    environmentDaily: "天数据",
   },
 };
 

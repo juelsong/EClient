@@ -14,16 +14,6 @@ import EnvironmentData from "./EnvironmentData.vue";
 export default vue.defineComponent({
   name: "EnvironmentDaily",
   components: { EnvironmentData },
-  props: {
-    stage: {
-      type: Number,
-      default: undefined,
-    },
-    stageQuery: {
-      type: String,
-      default: undefined,
-    },
-  },
   setup(props) {
 
   

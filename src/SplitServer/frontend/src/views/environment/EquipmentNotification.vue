@@ -3,29 +3,14 @@
     <el-card class="single-box-card">
       <template #header>
         <div class="card-header">
-          <span>{{ $t("Equipment.entity") }}</span>
+          <span>设备预警</span>
         </div>
       </template>
       <el-container>
         <el-header>
           <el-form ref="queryForm" :inline="true" :model="queryModel">
-            <el-form-item
-              :label="$t('Missions.filter.Location')"
-              prop="locationId"
-            >
-              <o-data-selector
-                :placeholder="`所属区县`"
-                :multiple="false"
-                v-model="queryModel.locationId"
-                :clearable="true"
-                :auto-select="false"
-                entity="Location"
-                label="Name"
-                value="Id"
-              />
-            </el-form-item>
-            <el-form-item label="设备Id和名称" prop="equipmentId">
-              <el-input v-model="queryModel.equipmentIdAndName" />
+            <el-form-item label="设备Id" prop="equipmentId">
+              <el-input v-model="queryModel.equipmentId" />
             </el-form-item>
             <!-- <el-form-item label="设备名称" prop="EquipmentName">
               <el-input v-model="queryModel.EquipmentName" />
@@ -46,14 +31,14 @@
                 </el-icon>
               </el-button>
             </el-form-item>
-            <el-switch
+            <!-- <el-switch
               :style="{ float: 'right' }"
               v-model="queryModel.isOperation"
               :active-value="true"
               :inactive-value="false"
-              active-text="是否运维打卡"
+              active-text="是否通知"
               @change="handleActiveChange"
-            />
+            /> -->
             <!-- <el-form-item>
               <el-button type="primary" @click="queryVisible = true">
                 {{ $t("template.advanced") }}
@@ -80,37 +65,20 @@
             @selection-change="onSelectionChange"
           >
             <el-table-column
-              prop="SerialNumber"
+              prop="Equipment.SerialNumber"
               label="设备Id"
               sortable="custom"
               width="150"
             />
             <el-table-column
-              prop="Name"
-              :label="$t('Equipment.column.Name')"
+              prop="Equipment.Name"
+              label="设备名称"
               sortable="custom"
             />
+            <el-table-column prop="Phone" label="电话联系" sortable="custom" />
             <el-table-column
-              prop="Location.Name"
-              :label="$t('Equipment.column.Location')"
-              sortable="custom"
-              width="150"
-            />
-            <el-table-column
-              prop="EquipmentType.Description"
-              label="粉尘仪型号"
-              sortable="custom"
-              width="150"
-            />
-            <el-table-column
-              prop="ControlNumber"
-              label="粉尘仪编号"
-              sortable="custom"
-              width="150"
-            />
-            <el-table-column
-              prop="IsOperation"
-              label="是否运维打卡"
+              prop="IsAlert"
+              label="是否预警"
               sortable="custom"
               :formatter="stateFormatter"
               width="150"
@@ -174,7 +142,7 @@
         </el-footer>
       </el-container>
     </el-card>
-    <equipment-editor
+    <EquipmentNotificationEditor
       v-model:visible="editModalVisible"
       v-model:model="editModel"
       v-model:createNew="createNew"
@@ -194,71 +162,51 @@ import { defineComponent } from "vue";
 import map from "lodash.map";
 import VueBarcode from "vue3-barcode";
 import { ListMixin } from "@/mixins/ListMixin";
-import EquipmentEditor from "./EditModal/EquipmentEditor.vue";
+import EquipmentNotificationEditor from "./EditModal/EquipmentNoticicationEditor.vue";
 import { dateFormat, datetimeFormat } from "@/utils/formatter";
 import moment from "moment";
 import cloneDeep from "lodash.clonedeep";
 import { toRaw } from "vue";
 import { EquipmentQueryModel } from "./QueryModel";
-import ODataSelector from "@/components/ODataSelector.vue";
+// import ODataSelector from "@/components/ODataSelector.vue";
 
 export default defineComponent({
-  name: "EquipmentList",
-  components: { EquipmentEditor, VueBarcode, ODataSelector },
+  name: "EquipmentNotification",
+  components: { EquipmentNotificationEditor, VueBarcode },
   mixins: [ListMixin],
   data() {
     return {
-      entityName: "Equipment",
+      entityName: "EquipmentNotification",
       barcodeVisable: false,
       barcode: "",
       equipmentTypeId: undefined,
       queryModel: {
-        quipmentId: undefined,
-        locationId: undefined,
-        EquipmentName: undefined,
+        equipmentId: undefined,
         isOperation: false,
-        equipmentIdAndName:undefined,
       },
       query: {
-        $expand:
-          "EquipmentType($select=Id,Description),Location($select=Id,Name),EquipmentConfig($select=Id,Version)",
-        $select:
-          "Id,EquipmentTypeId,Name,Description,Barcode,LocationId,CalibrationDate," +
-          "NextCalibrationDate,CalibrationValue,ControlNumber,IsOperation,SerialNumber,IsActive,EquipmentConfigId",
+        $select: "Id,EquipmentId,Phone,IsAlert",
+        $expand: "Equipment",
       },
       editModel: {
-        EquipmentTypeId: undefined,
-        Name: undefined,
-        Description: undefined,
-        Barcode: undefined,
-        UnitOfMeasureId: undefined,
-        LocationId: undefined,
-        CalibrationDate: undefined,
-        NextCalibrationDate: undefined,
-        CalibrationValue: undefined,
-        ControlNumber: undefined,
-        IsOperation: true,
-        EquipmentConfig: {
-          OfficialConfig: undefined,
-          Version: undefined,
-        },
+        EquipmentId: undefined,
+        Phone: undefined,
+        IsAlert: true,
       },
     };
   },
   methods: {
     stateFormatter: function (row, column) {
-      return row.IsOperation ? "是" : "否";
+      return row.IsAlert ? "是" : "否";
     },
-    buildFilterStr() {
+    buildFilterStr() {  `   `
       let filterStr = [];
       // if (this.queryModel.equipmentId) {
       //   filterStr.push(`c`);
       // }
-      if (this.queryModel.equipmentIdAndName) {
-        filterStr.push(`(contains(SerialNumber, '${this.queryModel.equipmentIdAndName}')) or (contains(Name, '${this.queryModel.equipmentIdAndName}')) `);
-      }
-      if (this.queryModel.locationId) {
-        filterStr.push(`LocationId eq ${this.queryModel.locationId}`);
+      if (this.queryModel.equipmentId) {
+        // filterStr.push(`(contains(SerialNumber, '${this.queryModel.equipmentIdAndName}')) or (contains(Name, '${this.queryModel.equipmentIdAndName}')) `);
+        filterStr.push(`EquipmentId eq ${this.queryModel.equipmentId}`);
       }
       // if (this.queryModel.EquipmentTypeId) {
       //   filterStr.push(`EquipmentTypeId eq ${this.queryModel.EquipmentTypeId}`);
@@ -278,7 +226,7 @@ export default defineComponent({
       //   filterStr.push(`contains(Barcode,'${this.queryModel.Barcode}')`);
       // }
       if (this.queryModel.isOperation == true) {
-        filterStr.push(`IsOperation eq true`);
+        filterStr.push(`IsAlert eq true`);
       }
       if (filterStr.length > 1) {
         return map(filterStr, (f) => `(${f})`).join(" and ");
@@ -296,28 +244,34 @@ export default defineComponent({
     handleActiveChange() {
       this.loadData();
     },
-    searchEquipmentType(id) {
-      this.queryModel.EquipmentTypeId = id;
-      this.editModel.EquipmentTypeId = id;
-      this.equipmentTypeId = id;
-      this.loadData();
-    },
+    // searchEquipmentType(id) {
+    //   this.queryModel.EquipmentTypeId = id;
+    //   this.editModel.EquipmentTypeId = id;
+    //   this.equipmentTypeId = id;
+    //   this.loadData();
+    // },
     onEditAccept() {
       let data = cloneDeep(toRaw(this.editModel));
       if (this.onEditAcceptOverride) {
         this.onEditAcceptOverride(data);
       }
-      if (data.LocationId === undefined) {
-        data.LocationId = null;
-      }
+      this.$query(`Equipment`, {
+        $filter: `SerialNumber eq '${data.EquipmentId}'`,
+        $select: `Id`,
+      }).then((res) => {
+        if (res.value.length > 0) {
+          data.EquipmentId = res.value[0].Id;
+          let api = this.createNew ? this.$insert : this.$update;
+          delete data.EquipmentConfig;
 
-      let api = this.createNew ? this.$insert : this.$update;
-      delete data.EquipmentConfig;
-
-      api(this.entityName, data).then(() => {
-        this.loadData();
+          api(this.entityName, data).then(() => {
+            this.loadData();
+          });
+          this.$message.success("成功");
+        } else {
+          this.$message.error("设备不存在");
+        }
       });
-      this.$message.success("成功");
     },
   },
 });

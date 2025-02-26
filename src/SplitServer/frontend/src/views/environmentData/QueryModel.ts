@@ -1,6 +1,5 @@
 export type EnvironmentQueryModel = {
-  equipmentId?: string;
-  startDate?:Date;
-  endDate?:Date;
-
+  equipmentIdAndName?: string;
+  startDate?: Date;
+  endDate?: Date;
 };

@@ -130,6 +130,7 @@ export default defineComponent({
             this.modelInner.EquipmentTypeId = this.equipmentTypeId;
           }
         }
+        this.modelInner.IsOperation = true;
       }
       this.$nextTick(() => {
         if (newVal) {
