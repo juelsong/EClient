@@ -3,6 +3,7 @@
     using EHost.Contract.Entity;
     using EHost.Infrastructure.Entity;
     using EHost.Infrastructure.Entity.Environment;
+    using EHost.Security.Entity;
     using Microsoft.EntityFrameworkCore;
     public class EServerDbContext : DbContext
     {
@@ -12,13 +13,16 @@
         {
             this.connectStr = connectStr;
         }
-        public DbSet<EnvironmentalSensorMinute> EnvironmentalSensorMinutes { get; set; }
-        public DbSet<EnvironmentalSensorDaily> EnvironmentalSensorDailies { get; set; }
-        public DbSet<EnvironmentalSensorQuarter> EnvironmentalSensorQuarters { get; set; }
-        public DbSet<EnvironmentalSensorHour> EnvironmentalSensorHours { get; set; }
+        public DbSet<User> User { get; set; }
+
+        public DbSet<MonitorDataMinute> EnvironmentalSensorMinute { get; set; }
+        public DbSet<MonitorDataDaily> EnvironmentalSensorDaily { get; set; }
+        public DbSet<MonitorDataQuarter> EnvironmentalSensorQuarter { get; set; }
+        public DbSet<MonitorDataHour> EnvironmentalSensorHour { get; set; }
 
 
-        public DbSet<FugitiveDust> FugitiveDust { get; set; }
+        //public DbSet<FugitiveDust> FugitiveDust { get; set; }
+        //public DbSet<MonitorData> MonitorData { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

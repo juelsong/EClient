@@ -1,14 +1,10 @@
 using EHost.App.Db;
-using EHost.Contract.Entity;
+using EHost.App.Service;
+using EHost.Contract.Model;
 using EHost.Infrastructure.Entity.Environment;
 using EService.Service;
 using log4net;
-using log4net.Config;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Configuration;
-using System.Reflection;
-using System.Xml;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,16 +15,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// æ³¨å†Œ JwtSettings
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 builder.Configuration.AddConfiguration(configuration);
-
-
 //var loggerFactory = LoggerFactory.Create(builder =>
 //{
-//    builder.SetMinimumLevel(LogLevel.Information); // ÉèÖÃ×îĞ¡ÈÕÖ¾¼¶±ğ
+//    builder.SetMinimumLevel(LogLevel.Information); // 
 //    builder.AddDebug();
 //    builder.AddConsole();
 //});
@@ -36,12 +33,13 @@ builder.Configuration.AddConfiguration(configuration);
 //{
 //    builder.AddDebug();
 //    builder.AddConsole();
-//    builder.SetMinimumLevel(LogLevel.Information); // ÉèÖÃ×îĞ¡ÈÕÖ¾¼¶±ğ
+//    builder.SetMinimumLevel(LogLevel.Information); // 
 //});
 
 
 builder.Logging.AddLog4Net("log4net.config");
 
+// æ³¨å†Œæ•°æ®åº“ä¸Šä¸‹æ–‡
 builder.Services.AddSingleton<EServerDbContext>(provider =>
 {
     //Replace with your desired port 
@@ -50,11 +48,15 @@ builder.Services.AddSingleton<EServerDbContext>(provider =>
     {
         var _logger = LogManager.GetLogger("Db");
         _logger.Error("Check Db connect");
-        throw new InvalidOperationException("Êı¾İ¿âÁ¬½Ó×Ö·û´®Î´ÅäÖÃ»òÎª¿Õ¡£");
+        throw new InvalidOperationException("æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²æœªé…ç½®æˆ–ä¸ºç©ºã€‚");
     }
     return new EServerDbContext(connectionString);
 
 });
+// æ³¨å†ŒæœåŠ¡
+builder.Services.AddScoped<ILoginService, LoginService>();
+
+//builder.Services.AddScoped<IDeviceService, DeviceService>();
 
 var app = builder.Build();
 
@@ -67,31 +69,32 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
+
 app.MapControllers();
 var environment = app.Services.GetService<IHostEnvironment>();
 
 var db = app.Services.GetRequiredService<EServerDbContext>();
 if (db.Database.EnsureCreated())
 {
-
+    // æ•°æ®åº“å·²åˆ›å»º
 }
 else
 {
-
+    // æ•°æ®åº“æœªåˆ›å»º
 }
 
-int port = builder.Configuration.GetValue<int>("TcpServer:Port");
-//Æô¶¯ TCP ·şÎñÆ÷ºÍ¶ÓÁĞ¼à¿ØÈÎÎñ
-var environmentFactory = new EnvironmentFactory<EnvironmentalSensor>(db, builder.Configuration);
+var environmentFactory = new EnvironmentFactory<MonitorData>(db, builder.Configuration);
+var deviceFactory = new DeviceFactory<EnvironmentalSensor>(builder.Configuration);
+
 try
 {
     environmentFactory.Start();
+    deviceFactory.Start();
 }
 catch (Exception ex)
 {
-    // ´¦ÀíÆô¶¯¹ı³ÌÖĞµÄÒì³£
     Console.WriteLine(ex.Message);
-    environmentFactory.Stop();
+    deviceFactory.Stop();
 }
 
 await app.RunAsync();

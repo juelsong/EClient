@@ -1,6 +1,7 @@
 ﻿
 namespace EHost.TcpServer.Service
 {
+    using EHost.Infrastructure.Entity;
     using EHost.Infrastructure.Entity.Environment;
     using EHost.TcpServer.ParserHelper;
     using log4net;
@@ -15,15 +16,15 @@ namespace EHost.TcpServer.Service
     /// </summary>
     public class TcpSingleServer
     {
-        private readonly int port;
+        private readonly int _port;
         private readonly TcpListener tcpListener;
         private readonly Thread listenThread;
         private readonly ILog logger = LogManager.GetLogger(nameof(TcpSingleServer));
 
-        public TcpSingleServer(int port)
+        public TcpSingleServer(int _port)
         {
-            this.port = port;
-            tcpListener = new TcpListener(IPAddress.Any, port);
+            this._port = _port;
+            tcpListener = new TcpListener(IPAddress.Any, _port);
 
             listenThread = new Thread(new ThreadStart(Listen));
             listenThread.IsBackground = true;
@@ -74,24 +75,25 @@ namespace EHost.TcpServer.Service
     /// </summary>
     public class TcpMultiServer<T>
     {
-        private readonly int port;
-        private readonly ILog logger = LogManager.GetLogger(nameof(TcpMultiServer<T>));
-        private readonly BlockingCollection<T>? _queue;
+        protected readonly int _port;
+        protected readonly ILog logger = LogManager.GetLogger(nameof(TcpMultiServer<T>));
+        protected readonly BlockingCollection<T>? _queue;
+        protected readonly ConcurrentDictionary<string, TcpClient> connectedDevices = new ConcurrentDictionary<string, TcpClient>();
 
-        private TcpListener tcpListener;
-        private bool isRunning;
+        protected TcpListener tcpListener;
+        protected bool isRunning;
 
 
-        public TcpMultiServer(IConfiguration configuration, BlockingCollection<T>? queue = null)
+        public TcpMultiServer(int port, BlockingCollection<T>? queue = null)
         {
-            port = configuration.GetValue<int>("TcpServer:Port");
+            _port = port;
             _queue = queue;
         }
 
-        public async Task StartAsync()
+        public async virtual Task StartAsync()
         {
-            logger.Info($"Starting TCP server on port {port}");
-            tcpListener = new TcpListener(IPAddress.Any, port);
+            logger.Info($"Starting GetEnvironmentPort TCP server on _port {_port}");
+            tcpListener = new TcpListener(IPAddress.Any, _port);
             tcpListener.Start();
             isRunning = true;
 
@@ -142,22 +144,15 @@ namespace EHost.TcpServer.Service
                             // 将接收到的数据添加到列表中
                             receivedData.AddRange(buffer.Take(bytesRead));
 
-                            // 检查是否收到了完整的消息（以 0xAC 开始，以 0xB1 结束）
                             while (ContainsMessageWithStartAndEndBytes(receivedData.ToArray()))
                             {
-                                // 提取完整消息
-                                int startIndex = receivedData.IndexOf(0xAC);
-                                int endIndex = receivedData.IndexOf(0xB1);
-
-                                byte[] fullMessage = receivedData.GetRange(startIndex, endIndex - startIndex + 1).ToArray();
-
+                                var fullMessage = GetSingleFullData(receivedData);
                                 // 处理完整消息
-                                ProcessFullMessage(fullMessage, bytesRead, currentClient.Address.ToString(), currentClient.Port.ToString());
+                                ProcessFullMessage(fullMessage.FullData, bytesRead, currentClient.Address.ToString(), currentClient.Port.ToString());
 
                                 // 移除已处理的消息
-                                receivedData.RemoveRange(0, endIndex + 1);
+                                receivedData.RemoveRange(0, fullMessage.EndIndex + 1);
                             }
-
                         }
                         catch (Exception ex)
                         {
@@ -170,33 +165,51 @@ namespace EHost.TcpServer.Service
             }
 
         }
+        ///
+        private (byte[] FullData, int EndIndex) GetSingleFullData(List<byte> receivedData)
+        {
+            if (typeof(T).Name is nameof(EnvironmentalSensor))
+            {
+                // 检查是否收到了完整的消息（以 0xAC 开始，以 0xB1 结束）
+                // 提取完整消息
+                int startIndex = receivedData.IndexOf(0xAC);
+                int endIndex = receivedData.IndexOf(0xB1);
+                return (receivedData.GetRange(startIndex, endIndex - startIndex + 1).ToArray(), endIndex);
+            }
+            return (receivedData.ToArray(), receivedData.Count - 1);
+        }
         /// <summary>
         /// 判断包含帧头和尾
-        /// 固定为0xAC 0xB1
+        /// 对外接口 固定为0xAC 0xB1
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         private bool ContainsMessageWithStartAndEndBytes(byte[] data)
         {
+            // 检查是否收到了完整的消息（以 0xAC 开始，以 0xB1 结束）
+
             // 检查数据是否至少包含开始和结束字节
             if (data.Length < 2)
             {
                 return false;
             }
-            // 检查数组是否包含第一个字节
-            if (Array.IndexOf(data, (byte)0xAC) == -1)
+            if (typeof(T).Name is nameof(EnvironmentalSensor))
             {
-                return false; // 如果不包含第一个字节，返回 false
-            }
+                // 检查数组是否包含第一个字节
+                if (Array.IndexOf(data, (byte)0xAC) == -1)
+                {
+                    return false; // 如果不包含第一个字节，返回 false
+                }
 
-            // 检查数组是否包含第二个字节
-            if (Array.IndexOf(data, (byte)0xB1) == -1)
-            {
-                return false; // 如果不包含第二个字节，返回 false
+                // 检查数组是否包含第二个字节
+                if (Array.IndexOf(data, (byte)0xB1) == -1)
+                {
+                    return false; // 如果不包含第二个字节，返回 false
+                }
             }
             return true; // 如果两个字节都存在，返回 true
         }
-        private void ProcessFullMessage(byte[] fullMessage, int bytesRead, string clientAddress, string clientPort)
+        private void ProcessFullMessage(byte[] fullMessage, int bytesRead, string clientAddress, string client_port)
         {
             // 这里处理完整的消息
             // 例如，您可以解析消息并更新队列或其他数据结构
@@ -226,10 +239,19 @@ namespace EHost.TcpServer.Service
                     break;
                 case nameof(FugitiveDust):
                     string data = Encoding.UTF8.GetString(fullMessage, 0, bytesRead);
-                    logger.Info($"Received data from client {clientAddress}:{clientPort} Data is [{data}]");
+                    logger.Info($"Received data from client {clientAddress}:{client_port} Data is [{data}]");
                     if (Protocol.ProtocolExtract(data, out var fugitiveDust))
                     {
                         (_queue as BlockingCollection<FugitiveDust>)?.Add(fugitiveDust.DataSegment.FugitiveDustParse());
+                    }
+
+                    break;
+                case nameof(MonitorData):
+                    string monitorDataStr = Encoding.UTF8.GetString(fullMessage, 0, bytesRead);
+                    logger.Info($"Received data from client {clientAddress}:{client_port} Data is [{monitorDataStr}]");
+                    if (Protocol.ProtocolExtract(monitorDataStr, out var monitorData))
+                    {
+                        (_queue as BlockingCollection<MonitorData>)?.Add(monitorData.DataSegment.MonitorParse());
                     }
 
                     break;
@@ -238,7 +260,7 @@ namespace EHost.TcpServer.Service
             }
 
             //string data = Encoding.UTF8.GetString(fullMessage, 0, bytesRead);
-            //logger.LogInformation($"Received data from client {clientAddress}:{clientPort} Data is [{data}]");
+            //logger.LogInformation($"Received data from client {clientAddress}:{client_port} Data is [{data}]");
             //if (Protocol.ProtocolExtract(data, out var dataStructure))
             //{
             //    _fugitiveDustQueue?.Add(dataStructure.DataSegment.FugitiveDustParse());

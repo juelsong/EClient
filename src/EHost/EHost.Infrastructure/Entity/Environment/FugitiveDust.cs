@@ -12,8 +12,17 @@
         // 主键
         [Key]
         public int Id { get; set; }
-
+        [Column("device_of_data")]
+        public int? EquipmentId { get; set; }
+        
+        [Column("update_time")]
         public DateTime Date { get; set; }
+
+        [Column("equipment_data_valid_flag")]
+        public int equipment_data_valid_flag { get; set; }
+        [Column("pm2_5_average")]
+        public int pm2_5_average { get; set; }
+
         /// <summary>
         /// 请求编号QN 精确到毫秒的时间戳 用来唯一标识一个命令请求，用于请求命令或通知命令 
         /// </summary>
@@ -71,7 +80,7 @@
         public char WindDirectionFlag { get; set; }
 
         /// <summary>
-        /// 扬尘TSP（单位：mg/m³）
+        /// 扬尘TSP（单位：mg/m³） 颗粒物 a34001
         /// </summary>
         public decimal ParticulateMatterMin { get; set; }
         public decimal ParticulateMatterMax { get; set; }

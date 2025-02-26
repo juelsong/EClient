@@ -1,4 +1,5 @@
-﻿using EHost.Infrastructure.Entity.Environment;
+﻿using EHost.Infrastructure.Entity;
+using EHost.Infrastructure.Entity.Environment;
 using log4net;
 using System.Text;
 using System.Text.Json;
@@ -104,7 +105,7 @@ namespace EHost.TcpServer.ParserHelper
 
 
         /// <summary>
-        /// 解析byte[] 
+        /// 解析byte[] 对内协议
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -231,7 +232,11 @@ namespace EHost.TcpServer.ParserHelper
             return JsonSerializer.Serialize(ParseKeyValuePairs(parts[1]));
 
         }
-
+        /// <summary>
+        /// 212 对外协议 原数据解析
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static FugitiveDust FugitiveDustParse(this string data)
         {
             FugitiveDust result = new FugitiveDust();
@@ -320,10 +325,10 @@ namespace EHost.TcpServer.ParserHelper
                 // Cpm
                 if (dataMap.ContainsKey("Cpm-Min"))
                 {
-                    result.NoiseMin = decimal.Parse(dataMap["Cpm-Min"]);
-                    result.NoiseMax = decimal.Parse(dataMap["Cpm-Max"]);
-                    result.NoiseMin = decimal.Parse(dataMap["Cpm-Avg"]);
-                    result.NoiseFlag = dataMap["Cpm-Flag"][0];
+                    result.CPMMin = decimal.Parse(dataMap["Cpm-Min"]);
+                    result.CPMMax = decimal.Parse(dataMap["Cpm-Max"]);
+                    result.CPMAvg = decimal.Parse(dataMap["Cpm-Avg"]);
+                    result.CPMFlag = dataMap["Cpm-Flag"][0];
                 }
 
             }
@@ -334,6 +339,94 @@ namespace EHost.TcpServer.ParserHelper
             // 温度监测因子
             return result;
         }
+        /// <summary>
+        /// 212 对外协议 保存至数据库
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static MonitorData MonitorParse(this string data)
+        {
+            MonitorData result = new MonitorData();
+            try
+            {
+                Dictionary<string, string> dataMap = ParseKeyValuePairs(data);
+                if (dataMap.ContainsKey("DataTime"))
+                {
+                    result.Date = ConvertTimeStampToDateTime(dataMap["DataTime"]);//DateTime.Parse(dataMap["DataTime"]);
+                }
+
+                //result.QuestCode = dataMap["QN"];
+                if (dataMap.ContainsKey("a01001-Min"))
+                {
+                    result.TemperatureMin = (int)decimal.Parse(dataMap["a01001-Min"]);
+                    result.TemperatureMax = (int)decimal.Parse(dataMap["a01001-Max"]);
+                    result.TemperatureAvg = (int)decimal.Parse(dataMap["a01001-Avg"]);
+
+                }
+
+                // 湿度监测因子
+                if (dataMap.ContainsKey("a01002-Min"))
+                {
+                    result.HumidityMin = (int)decimal.Parse(dataMap["a01002-Min"]);
+                    result.HumidityMax = (int)decimal.Parse(dataMap["a01002-Max"]);
+                    result.HumidityAvg = (int)decimal.Parse(dataMap["a01002-Avg"]);
+
+                }
+
+
+                // 气压监测因子
+                if (dataMap.ContainsKey("a01006-Min"))
+                {
+                    result.AirPressureMin = (int)decimal.Parse(dataMap["a01006-Min"]);
+                    result.AirPressureMax = (int)decimal.Parse(dataMap["a01006-Max"]);
+                    result.AirPressureAvg = (int)decimal.Parse(dataMap["a01006-Avg"]);
+                }
+                // 风速监测因子
+                if (dataMap.ContainsKey("a01007-Min"))
+                {
+                    result.WindSpeedMin = (int)decimal.Parse(dataMap["a01007-Min"]);
+                    result.WindSpeedMax = (int)decimal.Parse(dataMap["a01007-Max"]);
+                    result.WindSpeedAvg = (int)decimal.Parse(dataMap["a01007-Avg"]);
+                }
+                // 风向监测因子
+                if (dataMap.ContainsKey("a01008-Min"))
+                {
+                    result.WindDirectionMin = (int)decimal.Parse(dataMap["a01008-Min"]);
+                    result.WindDirectionMax = (int)decimal.Parse(dataMap["a01008-Max"]);
+                    result.WindDirectionAvg = (int)decimal.Parse(dataMap["a01008-Avg"]);
+                }
+                // 扬尘TSP
+
+                if (dataMap.ContainsKey("a34001-Min"))
+                {
+                    result.ParticulateMatterMin = (int)decimal.Parse(dataMap["a34001-Min"]);
+                    result.ParticulateMatterMax = (int)decimal.Parse(dataMap["a34001-Max"]);
+                    result.ParticulateMatterAvg = (int)decimal.Parse(dataMap["a34001-Avg"]);
+                }
+                // 噪声
+                if (dataMap.ContainsKey("a50001-Min"))
+                {
+                    result.NoiseMin = (int)decimal.Parse(dataMap["a50001-Min"]);
+                    result.NoiseMax = (int)decimal.Parse(dataMap["a50001-Max"]);
+                    result.NoiseMin = (int)decimal.Parse(dataMap["a50001-Avg"]);
+                }
+                // Cpm
+                if (dataMap.ContainsKey("Cpm-Min"))
+                {
+                    //result.CPMAvg = (int)decimal.Parse(dataMap["Cpm-Min"]);
+                    //result.NoiseMax = (int)decimal.Parse(dataMap["Cpm-Max"]);
+                    result.CPMAvg = (int)decimal.Parse(dataMap["Cpm-Avg"]);
+                }
+
+            }
+            catch (ArgumentException ex)
+            {
+                logger.Error($"数据转换失败，数据为:[{data}]", ex);
+            }
+            // 温度监测因子
+            return result;
+        }
+
         public static Dictionary<string, string> ParseKeyValuePairs(string data)
         {
             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
@@ -404,8 +497,8 @@ namespace EHost.TcpServer.ParserHelper
                 //int milliseconds = int.Parse(match.Groups[7].Value);
 
                 // 构建 DateTime 对象
-                DateTime dateTime = new DateTime(year, month, day, hour, minute, second, 0, DateTimeKind.Local);
-                return dateTime;
+                var dateTime = new DateTime(year, month, day, hour, minute, second, 0, DateTimeKind.Local);
+                return new DateTimeOffset(dateTime).UtcDateTime;
             }
             // 如果匹配失败，返回 DateTime.MinValue
             return DateTime.MinValue;

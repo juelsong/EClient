@@ -42,30 +42,9 @@ namespace EHost.Security.Entity
         /// </summary>
         public string RealName { get; set; }
         /// <summary>
-        /// 员工编号
-        /// </summary>
-        [StringLength(64)]
-        public string EmployeeId { get; set; }
-        /// <summary>
-        /// 电子邮件
-        /// </summary>
-        [StringLength(64)]
-        public string EMail { get; set; }
-        /// <summary>
-        /// 电话
-        /// </summary>
-        public string Phone { get; set; }
-        /// <summary>
         /// 状态
         /// </summary>
         public UserStatus Status { get; set; }
-
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string Remark { get; set; }
-
-
     }
     /// <summary>
     /// 配置

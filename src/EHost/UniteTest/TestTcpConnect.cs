@@ -14,13 +14,12 @@
     [TestClass]
     public sealed class TestTcpConnect
     {
-        private readonly EnvironmentFactory<EnvironmentalSensor> environmentFactory;
+        private readonly EnvironmentFactory<MonitorData> environmentFactory;
         private readonly int port;
         private readonly string host;
 
         public TestTcpConnect()
         {
-            var db = new EServerDbContext("Host=47.102.41.181;Port=5432;Database=environment;Username=postgres;Password=123456");
             // 创建LoggerFactory
 
             using var loggerFactory = LoggerFactory.Create(builder =>
@@ -30,7 +29,7 @@
                 builder.AddConsole();
             });
             // 使用LoggerFactory创建ILogger实例
-            var _logger = loggerFactory.CreateLogger<EnvironmentFactory<EnvironmentalSensor>>();
+            var _logger = loggerFactory.CreateLogger<EnvironmentFactory<MonitorData>>();
             _logger.LogInformation("Example log message");
 
 
@@ -40,9 +39,14 @@
             IConfigurationRoot configuration = builder.Build();
 
             this.port = configuration.GetSection("TcpServer").GetValue<int>("Port");
+            var dbString = configuration.GetSection("ConnectionStrings").GetValue<string>("connectionstr")
+                ?? throw new ArgumentNullException("未找到数据库连接字符串");
+
+            var db = new EServerDbContext(dbString);
+
             this.host = "127.0.0.1";// GetLocalIPAddress();
 
-            environmentFactory = new EnvironmentFactory<EnvironmentalSensor>(db, configuration);
+            environmentFactory = new EnvironmentFactory<MonitorData>(db, configuration);
         }
         [TestInitialize]
         public void TestInit()
@@ -58,7 +62,7 @@
         [TestMethod]
         public async Task TestTcpClient()
         {
-            int numberOfClients = 1;
+            int numberOfClients = 10;
             var tasks = new Task[numberOfClients];
 
             for (int i = 0; i < numberOfClients; i++)
@@ -99,13 +103,13 @@
                 while (true)
                 {
                     // 构造要发送的数据
-                    byte[] message = GetBytes(clientId);
+                    byte[] message = GetBytes(clientId);//GetBasicBytes(clientId);
 
                     // 发送数据
                     await stream.WriteAsync(message, 0, message.Length);
 
                     // 等待1分钟
-                    await Task.Delay(TimeSpan.FromSeconds(1)/*.FromMinutes(1)*/);
+                    await Task.Delay(TimeSpan.FromSeconds(1)/*FromMinutes(1).*/);
                 }
             }
             catch (Exception ex)
@@ -135,7 +139,8 @@
             //            Debug.WriteLine("AC F3 86 06 00 00 00 2A 00 00 00 00 00 00 FC 8F 18 0B 1A 0A 39 2F 00 00 78 61 67 31 30 32 35 39 39 36 34 36 35 35 00 00 0A 08 00 00 00 00 00 20 00 00 95 2A B1 ");
 
             //byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 2A 00 00 00 00 00 00 FC 8F 18 0B 1A 0A 39 2F 00 00 78 61 67 31 30 32 35 39 39 36 34 36 35 35 00 00 0A 08 00 00 00 00 00 20 00 00 95 2A B1");
-            byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 70 00 00 00 00 00 00 FC D1 18 0C 15 11 36 05 00 00 FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 00 03 08 00 46 00 46 00 46 00 46 04 08 01 F5 01 EA 01 DE 01 DF 05 08 01 3B 00 BB 00 2D 00 87 06 08 00 0C 00 08 00 04 00 04 07 08 00 35 00 35 00 35 00 35 08 08 01 2D 01 2D 01 2D 01 2D 11 08 28 37 28 37 28 37 28 37 0A 08 00 00 00 00 00 0B 00 01 DE 67 B1");
+            //byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 70 00 00 00 00 00 00 FC D1 18 0C 15 11 36 05 00 00 FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 00 03 08 00 46 00 46 00 46 00 46 04 08 01 F5 01 EA 01 DE 01 DF 05 08 01 3B 00 BB 00 2D 00 87 06 08 00 0C 00 08 00 04 00 04 07 08 00 35 00 35 00 35 00 35 08 08 01 2D 01 2D 01 2D 01 2D 11 08 28 37 28 37 28 37 28 37 0A 08 00 00 00 00 00 0B 00 01 DE 67 B1");
+            byte[] data1 = HexStringToByteArray("AC F3 86 06 00 00 00 34 00 00 00 00 00 00 FC 2F 00 01 01 00 03 3B 00 00 31 32 33 34 35 36 37 38 39 30 31 32 33 34 00 00 03 08 00 2F 00 2F 00 2F 00 2F 0A 08 00 00 00 00 FF FF 01 01 0D 73 B1 ");
 
             Debug.WriteLine(string.Join(", ", data1.Select(b => "0x" + b.ToString("X2"))));
             

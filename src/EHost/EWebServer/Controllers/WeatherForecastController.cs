@@ -1,5 +1,6 @@
 using EHost.Contract.Service;
 using EWebServer.Db;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EWebServer.Controllers
@@ -28,9 +29,10 @@ namespace EWebServer.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public IEnumerable<WeatherForecast> Get()
         {
-            var s = environmentDbContext.EnvironmentalSensor.FirstOrDefault();
+            //var s = environmentDbContext.EnvironmentalSensor.FirstOrDefault();
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

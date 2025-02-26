@@ -53,6 +53,7 @@ builder.Services.AddScoped<ITenantDbContextOptionsBuilder, TenantDbContextOption
 // 注册 DbContext 服务
 builder.Services.AddScoped<EnvironmentDbContext>(sp =>
 {
+    
     // 获取 ITenantDbContextOptionsBuilder 服务
     var tenantOptionsBuilder = sp.GetRequiredService<ITenantDbContextOptionsBuilder>();
     // 使用 ITenantDbContextOptionsBuilder 服务为 MyDbContext 构建选项
@@ -86,6 +87,25 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Description = "在下框中输入请求头中需要添加Jwt授权Token：Bearer Token",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme{
+                                Reference = new OpenApiReference {
+                                            Type = ReferenceType.SecurityScheme,
+                                            Id = "Bearer"}
+                           },new string[] { }
+                        } });
 });
 
 var jwtSettings = configuration.GetSection("JwtSettings");
@@ -170,314 +190,314 @@ if (app.Environment.IsDevelopment())
         //</script>
         //";
         //    c.HeadContent += jsAndCss;
-        var sb = new StringBuilder(c.HeadContent ?? "");
-        sb.AppendLine(@$"<script type='text/javascript'>
-(function ()
-{{
-    const overrider = () =>
-    {{
-        const swagger = window.ui;
-        if (!swagger) 
-        {{
-            console.error('Swagger wasn\'t found');
-            return;
-        }}
+        //        var sb = new StringBuilder(c.HeadContent ?? "");
+        //        sb.AppendLine(@$"<script type='text/javascript'>
+        //(function ()
+        //{{
+        //    const overrider = () =>
+        //    {{
+        //        const swagger = window.ui;
+        //        if (!swagger) 
+        //        {{
+        //            console.error('Swagger wasn\'t found');
+        //            return;
+        //        }}
 
-        ensureAuthorization(swagger);
-        reloadSchemaOnAuth(swagger);
-        clearInputPlaceHolder(swagger);
-        showLoginUI(swagger);
-                swagger.preRequest = function(xhr) {{
-                xhr.setRequestHeader('X-Tenant', '234');
-            }};
-    }}
+        //        ensureAuthorization(swagger);
+        //        reloadSchemaOnAuth(swagger);
+        //        clearInputPlaceHolder(swagger);
+        //        showLoginUI(swagger);
+        //                swagger.preRequest = function(xhr) {{
+        //                xhr.setRequestHeader('X-Tenant', '234');
+        //            }};
+        //    }}
 
-    const getAuthorization = (swagger) => swagger.auth()._root.entries.find(e => e[0] === 'authorized');
-    const isAuthorized = (swagger) =>
-    {{
-        const auth = getAuthorization(swagger);
-        return auth && auth[1].size !== 0;
-    }};
+        //    const getAuthorization = (swagger) => swagger.auth()._root.entries.find(e => e[0] === 'authorized');
+        //    const isAuthorized = (swagger) =>
+        //    {{
+        //        const auth = getAuthorization(swagger);
+        //        return auth && auth[1].size !== 0;
+        //    }};
 
-    // a hacky way to append authorization header - we are basically intercepting 
-    // all requests, if no authorization was attached while user did authorized himself,
-    // append token to request
-    const ensureAuthorization = (swagger) => 
-    {{
-        // retrieve bearer token from authorization
-        const getBearer = () => 
-        {{
-            const auth = getAuthorization(swagger);
-            const def = auth[1]._root.entries.find(e => e[0] === 'Bearer');
-            if (!def)
-                return undefined;
+        //    // a hacky way to append authorization header - we are basically intercepting 
+        //    // all requests, if no authorization was attached while user did authorized himself,
+        //    // append token to request
+        //    const ensureAuthorization = (swagger) => 
+        //    {{
+        //        // retrieve bearer token from authorization
+        //        const getBearer = () => 
+        //        {{
+        //            const auth = getAuthorization(swagger);
+        //            const def = auth[1]._root.entries.find(e => e[0] === 'Bearer');
+        //            if (!def)
+        //                return undefined;
 
-            const token = def[1]._root.entries.find(e => e[0] === 'value');
-            if (!token)
-                return undefined;
+        //            const token = def[1]._root.entries.find(e => e[0] === 'value');
+        //            if (!token)
+        //                return undefined;
 
-            return token[1];
-        }}
+        //            return token[1];
+        //        }}
 
-        // override fetch function of Swagger to make sure
-        // that on every request of the client is authorized append auth-header
-        const fetch = swagger.fn.fetch;
-        swagger.fn.fetch = (req) => 
-        {{
-            if (!req.headers.Authorization && isAuthorized(swagger)) 
-            {{
-                const bearer = getBearer();
-                if (bearer) 
-                {{
-                    req.headers.Authorization = bearer;
-                }}
-            }}
-            return fetch(req);
-        }}
-    }};
-    // makes that once user triggers performs authorization,
-    // the schema will be reloaded from backend url
-    const reloadSchemaOnAuth = (swagger) => 
-    {{
-        const getCurrentUrl = () => 
-        {{
-            const spec = swagger.getState()._root.entries.find(e => e[0] === 'spec');
-            if (!spec)
-                return undefined;
+        //        // override fetch function of Swagger to make sure
+        //        // that on every request of the client is authorized append auth-header
+        //        const fetch = swagger.fn.fetch;
+        //        swagger.fn.fetch = (req) => 
+        //        {{
+        //            if (!req.headers.Authorization && isAuthorized(swagger)) 
+        //            {{
+        //                const bearer = getBearer();
+        //                if (bearer) 
+        //                {{
+        //                    req.headers.Authorization = bearer;
+        //                }}
+        //            }}
+        //            return fetch(req);
+        //        }}
+        //    }};
+        //    // makes that once user triggers performs authorization,
+        //    // the schema will be reloaded from backend url
+        //    const reloadSchemaOnAuth = (swagger) => 
+        //    {{
+        //        const getCurrentUrl = () => 
+        //        {{
+        //            const spec = swagger.getState()._root.entries.find(e => e[0] === 'spec');
+        //            if (!spec)
+        //                return undefined;
 
-            const url = spec[1]._root.entries.find(e => e[0] === 'url');
-            if (!url)
-                return undefined;
+        //            const url = spec[1]._root.entries.find(e => e[0] === 'url');
+        //            if (!url)
+        //                return undefined;
 
-            return url[1];
-        }}
-        const reload = () => 
-        {{
-            const url = getCurrentUrl();
-            if (url) 
-            {{
-                swagger.specActions.download(url);
-            }}
-        }};
+        //            return url[1];
+        //        }}
+        //        const reload = () => 
+        //        {{
+        //            const url = getCurrentUrl();
+        //            if (url) 
+        //            {{
+        //                swagger.specActions.download(url);
+        //            }}
+        //        }};
 
-        const handler = (caller, args) => 
-        {{
-            const result = caller(args);
-            if (result.then) 
-            {{
-                result.then(() => reload())
-            }}
-            else
-            {{
-                reload();
-            }}
-            return result;
-        }}
+        //        const handler = (caller, args) => 
+        //        {{
+        //            const result = caller(args);
+        //            if (result.then) 
+        //            {{
+        //                result.then(() => reload())
+        //            }}
+        //            else
+        //            {{
+        //                reload();
+        //            }}
+        //            return result;
+        //        }}
 
-        const auth = swagger.authActions.authorize;
-        swagger.authActions.authorize = (args) => handler(auth, args);
-        const logout = swagger.authActions.logout;
-        swagger.authActions.logout = (args) => handler(logout, args);
-    }};
-    /**
-     * Reset input element placeholder
-     * @param {{any}} swagger
-     */
-    const clearInputPlaceHolder = (swagger) =>
-    {{
-        //https://github.com/api-platform/core/blob/main/src/Bridge/Symfony/Bundle/Resources/public/init-swagger-ui.js#L6-L41
-        new MutationObserver(function (mutations, self)
-        {{
-            var elements = document.querySelectorAll('input[type=text]');
-            for (var i = 0; i < elements.length; i++)
-                elements[i].placeholder = '';
-        }}).observe(document, {{ childList: true, subtree: true }});
-    }}
-    /**
-     * Show login UI
-     * @param {{any}} swagger
-     */
-    const showLoginUI = (swagger) =>
-    {{
-        //https://github.com/api-platform/core/blob/main/src/Bridge/Symfony/Bundle/Resources/public/init-swagger-ui.js#L6-L41
-        new MutationObserver(function (mutations, self)
-        {{
-            var rootDiv = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2)');
-            if (rootDiv == null)
-                return;
+        //        const auth = swagger.authActions.authorize;
+        //        swagger.authActions.authorize = (args) => handler(auth, args);
+        //        const logout = swagger.authActions.logout;
+        //        swagger.authActions.logout = (args) => handler(logout, args);
+        //    }};
+        //    /**
+        //     * Reset input element placeholder
+        //     * @param {{any}} swagger
+        //     */
+        //    const clearInputPlaceHolder = (swagger) =>
+        //    {{
+        //        //https://github.com/api-platform/core/blob/main/src/Bridge/Symfony/Bundle/Resources/public/init-swagger-ui.js#L6-L41
+        //        new MutationObserver(function (mutations, self)
+        //        {{
+        //            var elements = document.querySelectorAll('input[type=text]');
+        //            for (var i = 0; i < elements.length; i++)
+        //                elements[i].placeholder = '';
+        //        }}).observe(document, {{ childList: true, subtree: true }});
+        //    }}
+        //    /**
+        //     * Show login UI
+        //     * @param {{any}} swagger
+        //     */
+        //    const showLoginUI = (swagger) =>
+        //    {{
+        //        //https://github.com/api-platform/core/blob/main/src/Bridge/Symfony/Bundle/Resources/public/init-swagger-ui.js#L6-L41
+        //        new MutationObserver(function (mutations, self)
+        //        {{
+        //            var rootDiv = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2)');
+        //            if (rootDiv == null)
+        //                return;
 
-            var informationContainerDiv = rootDiv.querySelector('div.information-container.wrapper');
-            if (informationContainerDiv == null)
-                return;
+        //            var informationContainerDiv = rootDiv.querySelector('div.information-container.wrapper');
+        //            if (informationContainerDiv == null)
+        //                return;
 
-            var descriptionDiv = informationContainerDiv.querySelector('section > div > div > div.description');
-            if (descriptionDiv == null)
-                return;
+        //            var descriptionDiv = informationContainerDiv.querySelector('section > div > div > div.description');
+        //            if (descriptionDiv == null)
+        //                return;
 
-            var loginDiv = descriptionDiv.querySelector('div.login');
-            if (loginDiv != null)
-                return;
+        //            var loginDiv = descriptionDiv.querySelector('div.login');
+        //            if (loginDiv != null)
+        //                return;
 
-            //Check authentication
-            if (isAuthorized(swagger))
-                return;
+        //            //Check authentication
+        //            if (isAuthorized(swagger))
+        //                return;
 
-            //Remove elements different from information-container wrapper
-            for (var i = 0; i < rootDiv.children.length; i++)
-            {{
-                var child = rootDiv.children[i];
-                if (child !== informationContainerDiv)
-                    child.remove();
-            }}
+        //            //Remove elements different from information-container wrapper
+        //            for (var i = 0; i < rootDiv.children.length; i++)
+        //            {{
+        //                var child = rootDiv.children[i];
+        //                if (child !== informationContainerDiv)
+        //                    child.remove();
+        //            }}
 
-            //Create UI di login
-            createLoginUI(descriptionDiv);
-            
-        }}).observe(document, {{ childList: true, subtree: true }});
+        //            //Create UI di login
+        //            createLoginUI(descriptionDiv);
 
-        /**
-         * Create login ui elements
-         * @param {{any}} rootDiv
-         */
-        const createLoginUI = function (rootDiv)
-        {{
-            var div = document.createElement('div');
-            div.className = 'login';
+        //        }}).observe(document, {{ childList: true, subtree: true }});
 
-            rootDiv.appendChild(div);
-            //Tenant
-            var tenantLabel = document.createElement('label');
-            div.appendChild(tenantLabel);
+        //        /**
+        //         * Create login ui elements
+        //         * @param {{any}} rootDiv
+        //         */
+        //        const createLoginUI = function (rootDiv)
+        //        {{
+        //            var div = document.createElement('div');
+        //            div.className = 'login';
 
-            var tenantSpan = document.createElement('span');
-            tenantSpan.innerText = 'Tenant';
-            tenantLabel.appendChild(tenantSpan);
+        //            rootDiv.appendChild(div);
+        //            //Tenant
+        //            var tenantLabel = document.createElement('label');
+        //            div.appendChild(tenantLabel);
 
-            var tenantInput = document.createElement('input');
-            tenantInput.type = 'text';
-            tenantInput.placeholder = 'Enter tenant ID';
-            tenantInput.style = 'margin-left: 10px; margin-right: 10px;';
-            tenantLabel.appendChild(tenantInput);
+        //            var tenantSpan = document.createElement('span');
+        //            tenantSpan.innerText = 'Tenant';
+        //            tenantLabel.appendChild(tenantSpan);
 
-            //UserName
-            var userNameLabel = document.createElement('label');
-            div.appendChild(userNameLabel);
+        //            var tenantInput = document.createElement('input');
+        //            tenantInput.type = 'text';
+        //            tenantInput.placeholder = 'Enter tenant ID';
+        //            tenantInput.style = 'margin-left: 10px; margin-right: 10px;';
+        //            tenantLabel.appendChild(tenantInput);
 
-            var userNameSpan = document.createElement('span');
-            userNameSpan.innerText = 'User';
-            userNameLabel.appendChild(userNameSpan);
-            
-            var userNameInput = document.createElement('input');
-            userNameInput.type = 'text';
-            userNameInput.value = 'admin';
-            userNameInput.style = 'margin-left: 10px; margin-right: 10px;';
-            userNameLabel.appendChild(userNameInput);
+        //            //UserName
+        //            var userNameLabel = document.createElement('label');
+        //            div.appendChild(userNameLabel);
 
-            //Password
-            var passwordLabel = document.createElement('label');
-            div.appendChild(passwordLabel);
+        //            var userNameSpan = document.createElement('span');
+        //            userNameSpan.innerText = 'User';
+        //            userNameLabel.appendChild(userNameSpan);
 
-            var passwordSpan = document.createElement('span');
-            passwordSpan.innerText = 'Password';
-            passwordLabel.appendChild(passwordSpan);
+        //            var userNameInput = document.createElement('input');
+        //            userNameInput.type = 'text';
+        //            userNameInput.value = 'admin';
+        //            userNameInput.style = 'margin-left: 10px; margin-right: 10px;';
+        //            userNameLabel.appendChild(userNameInput);
 
-            var passwordInput = document.createElement('input');
-            passwordInput.type = 'password';
-            passwordInput.value = 'admin';
-            passwordInput.style = 'margin-left: 10px; margin-right: 10px;';
-            passwordLabel.appendChild(passwordInput);
+        //            //Password
+        //            var passwordLabel = document.createElement('label');
+        //            div.appendChild(passwordLabel);
 
-            //Login button
-            var loginButton = document.createElement('button')
-            loginButton.type = 'submit';
-            loginButton.type = 'button';
-            loginButton.classList.add('btn');
-            loginButton.classList.add('auth');
-            loginButton.classList.add('authorize');
-            loginButton.classList.add('button');
-            loginButton.innerText = 'Login';
-            loginButton.onclick = function ()
-            {{
-                var userName = userNameInput.value;
-                var password = passwordInput.value;
+        //            var passwordSpan = document.createElement('span');
+        //            passwordSpan.innerText = 'Password';
+        //            passwordLabel.appendChild(passwordSpan);
 
-                if (userName === '' || password === '')
-                {{
-                    alert('Insert userName and password!');
-                    return;
-                }}
+        //            var passwordInput = document.createElement('input');
+        //            passwordInput.type = 'password';
+        //            passwordInput.value = 'admin';
+        //            passwordInput.style = 'margin-left: 10px; margin-right: 10px;';
+        //            passwordLabel.appendChild(passwordInput);
 
-                login(userName, password);
-            }};
+        //            //Login button
+        //            var loginButton = document.createElement('button')
+        //            loginButton.type = 'submit';
+        //            loginButton.type = 'button';
+        //            loginButton.classList.add('btn');
+        //            loginButton.classList.add('auth');
+        //            loginButton.classList.add('authorize');
+        //            loginButton.classList.add('button');
+        //            loginButton.innerText = 'Login';
+        //            loginButton.onclick = function ()
+        //            {{
+        //                var userName = userNameInput.value;
+        //                var password = passwordInput.value;
 
-            div.appendChild(loginButton);
-        }}
-        /**
-         * Manage login
-         * @param {{any}} userName UserName
-         * @param {{any}} password Password
-         */
-        const login = function (userName, password)
-        {{
-            var xhr = new XMLHttpRequest();
+        //                if (userName === '' || password === '')
+        //                {{
+        //                    alert('Insert userName and password!');
+        //                    return;
+        //                }}
 
-            xhr.onreadystatechange = function ()
-            {{
-                if (xhr.readyState == XMLHttpRequest.DONE)
-                {{
-                    if (xhr.status == 200 || xhr.status == 400)
-                    {{
-                        var response = JSON.parse(xhr.responseText);
-                        if (!response.success)
-                        {{
-                            alert(response.message);
-                            return;
-                        }}
+        //                login(userName, password);
+        //            }};
 
-                        var accessToken = xhr.getResponseHeader('access-token');
-                        var xtoken =  xhr.getResponseHeader('x-access-token');
+        //            div.appendChild(loginButton);
+        //        }}
+        //        /**
+        //         * Manage login
+        //         * @param {{any}} userName UserName
+        //         * @param {{any}} password Password
+        //         */
+        //        const login = function (userName, password)
+        //        {{
+        //            var xhr = new XMLHttpRequest();
 
-                        var obj = {{
-                            'Bearer': {{
-                                'name': 'Bearer',
-                                'schema': {{
-                                    'type': 'apiKey',
-                                    'description': 'Please enter into field the word ""Bearer"" following by space and JWT',
-                                    'name': 'Authorization',
-                                    'in': 'header'
-                                }},
-                                value: 'Bearer ' + accessToken
-                            }}
-                        }};
+        //            xhr.onreadystatechange = function ()
+        //            {{
+        //                if (xhr.readyState == XMLHttpRequest.DONE)
+        //                {{
+        //                    if (xhr.status == 200 || xhr.status == 400)
+        //                    {{
+        //                        var response = JSON.parse(xhr.responseText);
+        //                        if (!response.success)
+        //                        {{
+        //                            alert(response.message);
+        //                            return;
+        //                        }}
 
-                        swagger.authActions.authorize(obj);
-                    }}
-                    else
-                    {{
-                        alert('error ' + xhr.status);
-                    }}
-                }}
-            }};
+        //                        var accessToken = xhr.getResponseHeader('access-token');
+        //                        var xtoken =  xhr.getResponseHeader('x-access-token');
 
-            xhr.open('POST', '/api/user/login', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-TENANT', '1');
+        //                        var obj = {{
+        //                            'Bearer': {{
+        //                                'name': 'Bearer',
+        //                                'schema': {{
+        //                                    'type': 'apiKey',
+        //                                    'description': 'Please enter into field the word ""Bearer"" following by space and JWT',
+        //                                    'name': 'Authorization',
+        //                                    'in': 'header'
+        //                                }},
+        //                                value: 'Bearer ' + accessToken
+        //                            }}
+        //                        }};
 
-            var json = JSON.stringify({{ 'Account': userName, 'Password': password }});
+        //                        swagger.authActions.authorize(obj);
+        //                    }}
+        //                    else
+        //                    {{
+        //                        alert('error ' + xhr.status);
+        //                    }}
+        //                }}
+        //            }};
 
-            xhr.send(json);
-        }}
-    }}
+        //            xhr.open('POST', '/api/user/login', true);
+        //            xhr.setRequestHeader('Content-Type', 'application/json');
+        //            xhr.setRequestHeader('X-TENANT', '1');
 
-    // append to event right after SwaggerUIBundle initialized
-    window.addEventListener('load', () => setTimeout(overrider, 0), false);
-}}());
-</script>");
-        sb.AppendLine(@$"<style media='screen' type='text/css'>
+        //            var json = JSON.stringify({{ 'Account': userName, 'Password': password }});
 
-</style>");
+        //            xhr.send(json);
+        //        }}
+        //    }}
 
-        c.HeadContent = sb.ToString();
+        //    // append to event right after SwaggerUIBundle initialized
+        //    window.addEventListener('load', () => setTimeout(overrider, 0), false);
+        //}}());
+        //</script>");
+        //        sb.AppendLine(@$"<style media='screen' type='text/css'>
+
+        //</style>");
+
+        //        c.HeadContent = sb.ToString();
     });
 
     app.UseMiddleware<SwaggerTenantIdMiddleware>();
