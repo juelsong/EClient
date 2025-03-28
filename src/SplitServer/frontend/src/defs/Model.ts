@@ -8,6 +8,69 @@ export declare interface Result<T = any> {
 }
 
 /**
+ *修改user接口
+ */
+export declare class UpdateLocalParam {
+    /**
+     *默认显示中英文
+     */
+    Locale?: string;
+}
+
+/**
+ *订阅模型
+ */
+export declare class SubscriptionModel {
+    /**
+     *通知类型Id
+     */
+    NotificationTypeId?: number;
+    /**
+     *订阅用户Id
+     */
+    UserId?: number;
+    /**
+     *区域Id
+     */
+    LocationId?: number;
+    /**
+     *订阅参数Id  当NotificationTypeId有值时为用户Id，当UserId有值时为NotificationTypeId
+     */
+    Subscribers?: number[];
+}
+
+/**
+ *email配置
+ */
+export declare class EMailConfig {
+    /**
+     *服务器地址
+     */
+    Server?: string;
+    /**
+     *端口
+     */
+    Port?: number;
+    /**
+     *发送者地址
+     */
+    Address?: string;
+    /**
+     *密码
+     */
+    Password?: string;
+    /**
+     *检查周期（目前租户配置无效）
+     */
+    IntervalSeconds?: number;
+    /**
+     *是否启用SSL
+     */
+    EnableSSL?: boolean;
+    Domain?: string;
+}
+
+/**
  *安全配置模型
  */
 export declare class SecurityModel {

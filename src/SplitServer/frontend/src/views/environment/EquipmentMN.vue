@@ -3,13 +3,13 @@
     <el-card class="single-box-card">
       <template #header>
         <div class="card-header">
-          <span>{{ $t("Equipment.entity") }}</span>
+          <span>设备MN管理</span>
         </div>
       </template>
       <el-container>
         <el-header>
           <el-form ref="queryForm" :inline="true" :model="queryModel">
-            <el-form-item
+            <!-- <el-form-item
               :label="$t('Missions.filter.Location')"
               prop="locationId"
             >
@@ -23,9 +23,48 @@
                 label="Name"
                 value="Id"
               />
-            </el-form-item>
-            <el-form-item label="设备Id和名称" prop="equipmentId">
-              <el-input v-model="queryModel.equipmentIdAndName" />
+            </el-form-item> -->
+            <el-form-item label="设备Id或名称" prop="equipmentIdAndName">
+              <el-autocomplete
+                v-model="queryModel.equipmentIdAndName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                @select="selectDeviceId"
+              >
+                <template #suffix>
+                  <i class="el-icon-edit el-input__icon"></i>
+                </template>
+                <template #default="{ item }">
+                  <div
+                    style="
+                      display: flex;
+                      width: 300px;
+                      justify-content: space-between;
+                    "
+                  >
+                    <div
+                      class="name"
+                      style="
+                        width: 45%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
+                      {{ item.DeviceId }}
+                    </div>
+                    <span
+                      class="addr"
+                      style="
+                        width: 45%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
+                      {{ item.DeviceName }}
+                    </span>
+                  </div>
+                </template>
+              </el-autocomplete>
             </el-form-item>
             <!-- <el-form-item label="设备名称" prop="EquipmentName">
               <el-input v-model="queryModel.EquipmentName" />
@@ -46,14 +85,14 @@
                 </el-icon>
               </el-button>
             </el-form-item>
-            <el-switch
+            <!-- <el-switch
               :style="{ float: 'right' }"
               v-model="queryModel.isOperation"
               :active-value="true"
               :inactive-value="false"
               active-text="是否运维打卡"
               @change="handleActiveChange"
-            />
+            /> -->
             <!-- <el-form-item>
               <el-button type="primary" @click="queryVisible = true">
                 {{ $t("template.advanced") }}
@@ -80,52 +119,48 @@
             @selection-change="onSelectionChange"
           >
             <el-table-column
-              prop="SerialNumber"
+              prop="DeviceId"
               label="设备Id"
               sortable="custom"
               width="150"
             />
             <el-table-column
-              prop="Name"
-              :label="$t('Equipment.column.Name')"
+              prop="DeviceName"
+              label="设备名称"
               sortable="custom"
             />
+
             <el-table-column
-              prop="Location.Name"
-              :label="$t('Equipment.column.Location')"
+              prop="MnCode"
+              label="MN码"
               sortable="custom"
               width="150"
             />
+
             <el-table-column
-              prop="EquipmentType.Description"
-              label="粉尘仪型号"
+              prop="JwMnCode"
+              label="建委MN码"
               sortable="custom"
-              width="150"
+              width="200"
             />
             <el-table-column
-              prop="ControlNumber"
-              label="粉尘仪编号"
+              prop="LockId"
+              label="锁Id"
               sortable="custom"
-              width="150"
+              width="200"
             />
-            <el-table-column
-              prop="IsOperation"
-              label="是否运维打卡"
-              sortable="custom"
-              :formatter="stateFormatter"
-              width="150"
-            />
+            <!-- , 'EquipmentMN:Disable' -->
             <el-table-column
               fixed="right"
               :label="$t('template.operation')"
               width="110"
-              v-has="['Equipment:Add', 'Equipment:Edit', 'Equipment:Disable']"
+              v-has="['equipmentMN:Add', 'equipmentMN:Edit']"
             >
               <template #header>
                 <div class="table-operation-header">
                   <span>{{ $t("template.operation") }}</span>
                   <el-button
-                    v-has="'Equipment:Add'"
+                    v-has="'equipmentMN:Add'"
                     type="primary"
                     link
                     @click="onAddClick"
@@ -153,7 +188,7 @@
                   type="primary"
                   link
                   @click.prevent="editRow(scope.$index)"
-                  v-has="'Equipment:Edit'"
+                  v-has="'equipmentMN:Edit'"
                 >
                   {{ $t("template.edit") }}
                 </el-button>
@@ -174,7 +209,7 @@
         </el-footer>
       </el-container>
     </el-card>
-    <equipment-editor
+    <EquipmentMNEditor
       v-model:visible="editModalVisible"
       v-model:model="editModel"
       v-model:createNew="createNew"
@@ -194,21 +229,22 @@ import { defineComponent } from "vue";
 import map from "lodash.map";
 import VueBarcode from "vue3-barcode";
 import { ListMixin } from "@/mixins/ListMixin";
-import EquipmentEditor from "./EditModal/EquipmentEditor.vue";
+import EquipmentMNEditor from "./EditModal/EquipmentMNEditor.vue";
 import { dateFormat, datetimeFormat } from "@/utils/formatter";
 import moment from "moment";
 import cloneDeep from "lodash.clonedeep";
 import { toRaw } from "vue";
 import { EquipmentQueryModel } from "./QueryModel";
 import ODataSelector from "@/components/ODataSelector.vue";
+import { oDataQuery } from "@/utils/odata";
 
 export default defineComponent({
   name: "EquipmentList",
-  components: { EquipmentEditor, VueBarcode, ODataSelector },
+  components: { EquipmentMNEditor, VueBarcode },
   mixins: [ListMixin],
   data() {
     return {
-      entityName: "Equipment",
+      entityName: "MonitorDevice",
       barcodeVisable: false,
       barcode: "",
       equipmentTypeId: undefined,
@@ -217,14 +253,12 @@ export default defineComponent({
         locationId: undefined,
         EquipmentName: undefined,
         isOperation: false,
-        equipmentIdAndName:undefined,
+        equipmentIdAndName: undefined,
       },
       query: {
-        $expand:
-          "EquipmentType($select=Id,Description),Location($select=Id,Name),EquipmentConfig($select=Id,Version)",
-        $select:
-          "Id,EquipmentTypeId,Name,Description,Barcode,LocationId,CalibrationDate," +
-          "NextCalibrationDate,CalibrationValue,ControlNumber,IsOperation,SerialNumber,IsActive,EquipmentConfigId",
+        // $expand:
+        //   "EquipmentType($select=Id,Description),Location($select=Id,Name),EquipmentConfig($select=Id,Version)",
+        $select: "Id,DeviceId,DeviceName,MnCode,LockId,JwMnCode",
       },
       editModel: {
         EquipmentTypeId: undefined,
@@ -254,12 +288,19 @@ export default defineComponent({
       // if (this.queryModel.equipmentId) {
       //   filterStr.push(`c`);
       // }
-      if (this.queryModel.equipmentIdAndName) {
-        filterStr.push(`(contains(SerialNumber, '${this.queryModel.equipmentIdAndName}')) or (contains(Name, '${this.queryModel.equipmentIdAndName}')) `);
+      if (this.queryModel.equipmentId) {
+        // let s = parseInt(this.queryModel.equipmentIdAndName)
+        // if(isNaN(s)){
+        //   filterStr.push(`contains(DeviceName, '${this.queryModel.equipmentIdAndName}')`);
+        // }
+        // else{
+        //   filterStr.push(`DeviceId eq '${this.queryModel.equipmentIdAndName}'`);
+        // }
+        filterStr.push(`Id eq ${this.queryModel.equipmentId}`);
       }
-      if (this.queryModel.locationId) {
-        filterStr.push(`LocationId eq ${this.queryModel.locationId}`);
-      }
+      // if (this.queryModel.locationId) {
+      //   filterStr.push(`LocationId eq ${this.queryModel.locationId}`);
+      // }
       // if (this.queryModel.EquipmentTypeId) {
       //   filterStr.push(`EquipmentTypeId eq ${this.queryModel.EquipmentTypeId}`);
       // }
@@ -302,6 +343,27 @@ export default defineComponent({
       this.equipmentTypeId = id;
       this.loadData();
     },
+    querySearchAsync(queryString, cb) {
+      if (!this.queryModel.equipmentIdAndName) {
+        oDataQuery("MonitorDevice", {
+          $select: "Id,DeviceId, DeviceName",
+        }).then((res) => {
+          cb(res.value.map((e) => e));
+        });
+      } else {
+        oDataQuery("MonitorDevice", {
+          $select: "Id,DeviceId, DeviceName",
+          $filter: `contains(DeviceId, '${this.queryModel.equipmentIdAndName}') or contains(DeviceName, '${this.queryModel.equipmentIdAndName}') `,
+        }).then((res) => {
+          cb(res.value.map((e) => e));
+        });
+      }
+    },
+
+    selectDeviceId(ev) {
+      this.queryModel.equipmentId = ev.Id;
+      this.queryModel.equipmentIdAndName = ev.DeviceId + "_" + ev.DeviceName;
+    },
     onEditAccept() {
       let data = cloneDeep(toRaw(this.editModel));
       if (this.onEditAcceptOverride) {
@@ -310,7 +372,8 @@ export default defineComponent({
       if (data.LocationId === undefined) {
         data.LocationId = null;
       }
-
+      // data.DeviceId = parseInt(data.DeviceId);
+      // data.LockId = parseInt(data.LockId);
       let api = this.createNew ? this.$insert : this.$update;
       delete data.EquipmentConfig;
 

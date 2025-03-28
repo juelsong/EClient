@@ -23,6 +23,8 @@ function getTableMixin<T>() {
     current: 1,
   });
   const tableData = ref(new Array<T>());
+  const showTableData = ref(new Array<T>());
+
   const queryModalVisible = ref(false);
   const withoutPaging = ref(false);
   const query = reactive<OdataQuery>({});

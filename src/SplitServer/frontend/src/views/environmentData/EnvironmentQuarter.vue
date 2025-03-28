@@ -1,6 +1,9 @@
 <template>
   <div style="height: 100%">
-    <EnvironmentData :stage-query="`EnvironmentalSensorQuarter`"/>
+    <EnvironmentData
+      :stage-query="`EnvironmentalSensorQuarter`"
+      :stage-name="stageName"
+    />
   </div>
 </template>
 
@@ -16,6 +19,11 @@ export default vue.defineComponent({
   components: { EnvironmentData },
   setup(props) {
     return {
+    };
+  },
+  data() {
+    return {
+      stageName: "15分钟数据",
     };
   },
 });

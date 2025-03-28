@@ -311,6 +311,17 @@ const asyncRoutesArray = [
           permissions: ["equipmentNotification"],
         },
       },
+      {
+        path: "/equipmentMN",
+        component: () =>
+          import("@/views/environment/EquipmentMN.vue"),
+        name: "EquipmentMN",
+        meta: {
+          code: "menu.equipmentMN",
+          icon: "auditPrompt",
+          permissions: ["equipmentMN"],
+        },
+      },
     ],
   },
   {

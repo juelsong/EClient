@@ -3,7 +3,7 @@
     <el-card class="single-box-card">
       <template #header>
         <div class="card-header">
-          <span>分钟数据</span>
+          <span>{{ stageName }}</span>
         </div>
       </template>
       <el-container>
@@ -12,14 +12,69 @@
             <el-form-item label="时间" prop="startDate">
               <el-date-picker
                 v-model="queryModel.startDate"
+                unlink-panels
                 type="daterange"
+                align="right"
+                :shortcuts="pickerOptions"
                 :range-separator="$t('label.dateRange.separator')"
                 :start-placeholder="$t('label.dateRange.start')"
                 :end-placeholder="$t('label.dateRange.end')"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="设备Id" prop="equipmentId">
-              <el-input v-model="queryModel.equipmentIdAndName" />
+            <!-- <el-form-item label="设备Id" prop="equipmentId">
+              <el-input v-model="queryModel.equipmentId" />
+            </el-form-item> -->
+            <el-form-item label="筛选类型" prop="filterIsAll">
+              <el-select v-model="queryModel.filterIsAll" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备Id或名称" prop="equipmentIdAndName">
+              <el-autocomplete
+                v-model="queryModel.equipmentIdAndName"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                @select="selectDeviceId"
+              >
+                <template #suffix>
+                  <i class="el-icon-edit el-input__icon"></i>
+                </template>
+                <template #default="{ item }">
+                  <div
+                    style="
+                      display: flex;
+                      width: 300px;
+                      justify-content: space-between;
+                    "
+                  >
+                    <div
+                      class="name"
+                      style="
+                        width: 45%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
+                      {{ item.DeviceId }}
+                    </div>
+                    <span
+                      class="addr"
+                      style="
+                        width: 45%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      "
+                    >
+                      {{ item.DeviceName }}
+                    </span>
+                  </div>
+                </template>
+              </el-autocomplete>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="loadData">
@@ -49,6 +104,7 @@
         </el-header>
         <el-main style="margin-top: 10px">
           <el-table
+            :key="queryModel.filterIsAll"
             ref="dataRef"
             :always="true"
             highlight-current-row
@@ -74,17 +130,25 @@
               :formatter="datetimeFormat"
             />
             <el-table-column
+              prop="ParticulateMatterAvg"
+              label="颗粒物"
+              sortable="custom"
+              width="150"
+            />
+            <!-- <el-table-column
               prop="pm2_5_average"
+              v-if="queryModel.filterIsAll"
               label="PM2.5"
               sortable="custom"
               width="150"
             />
             <el-table-column
               prop="pm10_average"
+              v-if="queryModel.filterIsAll"
               label="PM10"
               sortable="custom"
               width="150"
-            />
+            /> -->
             <el-table-column
               prop="CPMAvg"
               label="CPM"
@@ -99,49 +163,42 @@
             />
             <el-table-column
               prop="WindDirectionAvg"
+              v-if="queryModel.filterIsAll"
               label="风向"
               sortable="custom"
               width="150"
             />
             <el-table-column
               prop="WindSpeedAvg"
+              v-if="queryModel.filterIsAll"
               label="风速"
               sortable="custom"
               width="150"
             />
             <el-table-column
-              prop="TemperatureAverage"
+              prop="TemperatureAvg"
+              v-if="queryModel.filterIsAll"
               label="温度"
               sortable="custom"
               width="150"
             />
             <el-table-column
-              prop="HumidityAverage"
-              label="湿度"
-              sortable="custom"
-              width="150"
-            />
-            <el-table-column
-              prop="AirPressureAvg"
-              label="大气压"
-              sortable="custom"
-              width="150"
-            />
-            <el-table-column
+              v-if="queryModel.filterIsAll"
               prop="HumidityAvg"
               label="湿度"
               sortable="custom"
               width="150"
             />
             <el-table-column
-              prop="ParticulateMatterAvg"
-              label="TSP"
+              prop="AirPressureAvg"
+              v-if="queryModel.filterIsAll"
+              label="大气压"
               sortable="custom"
               width="150"
             />
           </el-table>
         </el-main>
-        <el-footer>
+        <!-- <el-footer>
           <el-pagination
             class="table-pagination"
             v-model:currentPage="pageInfo.current"
@@ -151,7 +208,7 @@
             :total="pageInfo.total"
             :pager-count="5"
           ></el-pagination>
-        </el-footer>
+        </el-footer> -->
       </el-container>
     </el-card>
   </div>
@@ -176,8 +233,7 @@ import { EnvironmentQueryModel } from "./QueryModel";
 
 import ODataSelector from "@/components/ODataSelector.vue";
 import { oDataQuery } from "@/utils/odata";
-
-import { ElForm } from "element-plus";
+import { ElForm, ElLoading, ElMessage } from "element-plus";
 
 // import ODataSelector from "@/components/ODataSelector.vue";
 
@@ -187,6 +243,10 @@ export default vue.defineComponent({
     stage: {
       type: Number,
       default: undefined,
+    },
+    stageName: {
+      type: String,
+      default: "分钟数据",
     },
     stageQuery: {
       type: String,
@@ -202,13 +262,83 @@ export default vue.defineComponent({
       pageInfo,
       query,
       tableData,
+      withoutPaging,
       queryModalVisible,
     } = getActiveEntityMixin<EnvironmentalSensorMinute>();
+    withoutPaging.value = true;
+    query.$orderby =  "Id desc";
 
     const queryForm = vue.ref<typeof ElForm>();
-    const queryModel = vue.ref<EnvironmentQueryModel>({});
+    const queryModel = vue.ref<EnvironmentQueryModel>({
+      filterIsAll: false,
+    });
 
     const dataRef = vue.ref<typeof ODataSelector>();
+    const options = [
+      {
+        value: false,
+        label: "导出主要参数(扬尘噪音)",
+      },
+      {
+        value: true,
+        label: "导出全部参数",
+      },
+    ];
+
+    var pickerOptions = [
+      {
+        text: "昨天",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24);
+          return [start, end];
+        },
+      },
+      {
+        text: "今天",
+        value: () => {
+          let sDate = new Date();
+          let start = new Date(
+            sDate.getFullYear(),
+            sDate.getMonth(),
+            sDate.getDate(),
+            0,
+            0,  
+            0,
+            0
+          );
+          let end = new Date(
+            sDate.getFullYear(),
+            sDate.getMonth(),
+            sDate.getDate(),
+            23,
+            59,
+            59,
+            0
+          );
+          return [start, end];
+        },
+      },
+      {
+        text: "最近7天",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+          return [start, end];
+        },
+      },
+      {
+        text: "最近30天",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+          return [start, end];
+        },
+      },
+    ];
     // 虽然列表中没用到环境，没确认所有弹窗是否使用到，因此保留环境的导航
     //  const defaultExpand = ``;
     //  query.$expand = defaultExpand;
@@ -218,22 +348,6 @@ export default vue.defineComponent({
     filterBuilder.value = () => {
       return new Promise(async (resolve) => {
         let filterStr = new Array<string>();
-
-        if (queryModel.value?.equipmentIdAndName) {
-          oDataQuery("Equipment", {});
-
-          const equipmentEntities = (
-            await oDataQuery("Equipment", {
-              // $select: "EntityId, Belongs, Status",
-              $filter: `(contains(SerialNumber, '${queryModel.value?.equipmentIdAndName}')) or (contains(Name, '${queryModel.value?.equipmentIdAndName}')) `,
-              // $expand: "ApprovalItems",
-            })
-          ).value as Partial<Equipment>[];
-          if (equipmentEntities.length > 0) {
-            let equipmentIds = equipmentEntities.map((e) => e.Id).join(",");
-            filterStr.push(`EquipmentId in (${equipmentIds})`);
-          }
-        }
         if (
           queryModel.value.startDate &&
           Array.isArray(queryModel.value.startDate)
@@ -250,7 +364,30 @@ export default vue.defineComponent({
           var setDate = Date.parse(values[1]);
           endDate.setTime(setDate + 3600 * 1000 * 24 - 1000);
           filterStr.push(`Date le ${endDate.toISOString()}`);
+        } else {
+          ElMessage.error("请先输入时间");
         }
+        if (!queryModel.value?.filterIsAll) {
+          query.$select = `Id,Date,EquipmentId, CPMAvg,NoiseAvg,ParticulateMatterAvg`;
+        } else {
+          query.$select = `Id,Date,EquipmentId, CPMAvg,NoiseAvg,ParticulateMatterAvg,pm2_5_average,pm10_average,TemperatureAvg,WindSpeedAvg,WindDirectionAvg,HumidityAvg,AirPressureAvg`;
+        }
+        if (queryModel.value?.equipmentId) {
+          // oDataQuery("Equipment", {});
+
+          // const equipmentEntities = (
+          //   await oDataQuery("EquipmentMN", {
+          //     $select: "EntityId, Belongs, Status",
+          //     $filter: `(contains(SerialNumber, '${queryModel.value?.equipmentId}')) or (contains(Name, '${queryModel.value?.equipmentId}')) `,
+          //     // $expand: "ApprovalItems",
+          //   })
+          // ).value as Partial<Equipment>[];
+          // if (equipmentEntities.length > 0) {
+          //   let equipmentIds = equipmentEntities.map((e) => e.Id).join(",");
+          // }
+          filterStr.push(`EquipmentId eq ${queryModel.value?.equipmentId}`);
+        }
+
         resolve(filterStr);
       });
     };
@@ -261,7 +398,29 @@ export default vue.defineComponent({
       loadData();
     }
 
-    vue.onMounted(loadData);
+    function querySearchAsync(queryString, cb) {
+      if (!queryModel.value?.equipmentIdAndName) {
+        oDataQuery("MonitorDevice", {
+          $select: "DeviceId, DeviceName",
+        }).then((res) => {
+          cb(res.value.map((e) => e));
+        });
+      } else {
+        oDataQuery("MonitorDevice", {
+          $select: "DeviceId, DeviceName",
+          $filter: `contains(DeviceId, '${queryModel.value.equipmentIdAndName}') or contains(DeviceName, '${queryModel.value.equipmentIdAndName}') `,
+        }).then((res) => {
+          cb(res.value.map((e) => e));
+        });
+      }
+    }
+
+    function selectDeviceId(ev) {
+      queryModel.value.equipmentId = ev.DeviceId;
+      queryModel.value.equipmentIdAndName = ev.DeviceId + "_" + ev.DeviceName;
+    }
+    //关闭自动加载
+    // vue.onMounted(loadData);
     // vue.onMounted(() => {
     //   vue.nextTick(() => {
     //     dataRef.value?.loadData();
@@ -270,6 +429,8 @@ export default vue.defineComponent({
     // vue.watch(() => tableData.value, showResult, { deep: true });
 
     return {
+      pickerOptions,
+      options,
       dataRef,
       tableData,
       filterBuilder,
@@ -281,6 +442,14 @@ export default vue.defineComponent({
       onResetClick,
       datetimeFormat,
       onSortChange,
+      querySearchAsync,
+      selectDeviceId,
+    };
+  },
+  data() {
+    return {
+      value1: "",
+      value2: "",
     };
   },
 });

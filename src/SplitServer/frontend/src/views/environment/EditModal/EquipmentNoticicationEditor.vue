@@ -24,7 +24,7 @@
       label-width="110px"
       label-position="right"
     >
-      <el-form-item label="设备ID" prop="SerialNumber">
+      <el-form-item label="设备ID" prop="EquipmentId">
         <el-input
           ref="modelInner.EquipmentId"
           v-model="modelInner.EquipmentId"
@@ -94,66 +94,82 @@ export default defineComponent({
       if (newVal) {
         let copyQuery = cloneDeep(toRaw(this.model));
         this.modelInner = copyQuery;
-        if (this.modelInner.EquipmentTypeId == undefined) {
-          if (this.equipmentTypeId) {
-            this.modelInner.EquipmentTypeId = this.equipmentTypeId;
-          }
+        if (this.modelInner.EquipmentId == undefined) {
+          this.modelInner.IsAlert = true;
+
+          // if (this.equipmentTypeId) {
+          //   this.modelInner.EquipmentTypeId = this.equipmentTypeId;
+          // }
         }
-        this.modelInner.IsAlert = true;
       }
-      this.$nextTick(() => {
-        if (newVal) {
-          // this.$refs.regionTreeRef.loadData();
-        }
-        this.$refs.editForm.clearValidate();
-        this.$refs["EquipmentType"].loadData();
-        this.$refs["modelInner.Name"].focus();
-      });
+      // this.$nextTick(() => {
+      //   if (newVal) {
+      //     // this.$refs.regionTreeRef.loadData();
+      //   }
+      //   this.$refs.editForm.clearValidate();
+      //   // this.$refs["EquipmentType"].loadData();
+      //   // this.$refs["modelInner.Name"].focus();
+      // });
     },
   },
   computed: {},
   data() {
     return {
       rules: {
-        Name: [
+        EquipmentId: [
           {
             required: true,
-            message: () =>
-              this.$t("validator.template.required", [
-                this.$t("Equipment.editor.Name"),
-              ]),
+            message: () => this.$t("validator.template.required", "设备Id"),
+            trigger: "blur",
+          },
+          // {
+          //   validator: (rule, value, callback) => {
+          //     if (value) {
+          //       this.$query("EquipmentNotification", {
+          //         $filter: `EquipmentId eq ${value}`,
+          //       }).then((rsp) => {
+          //         if (rsp.data.value.length > 0) {
+          //           callback(
+          //             new Error(
+          //               this.$t("validator.template.exist", [
+          //                 this.$t("Equipment.editor.Name"),
+          //               ])
+          //             )
+          //           );
+          //         } else {
+          //           callback();
+          //         }
+          //       });
+          //     }
+          //   },
+          //   trigger: "blur",
+          // },
+        ],
+        Phone: [
+          {
+            required: true,
+            message: () => this.$t("validator.template.required", "电话"),
             trigger: "blur",
           },
           {
             validator: (rule, value, callback) => {
-              if (value) {
+              if (this.createNew && value && this.modelInner.EquipmentId) {
                 this.$query("EquipmentNotification", {
-                  $filter: `EquipmentId eq ${value}`,
+                  $filter: `EquipmentId eq ${this.modelInner.EquipmentId} and Phone eq '${value}'`,
                 }).then((rsp) => {
-                  if (rsp.data.value.length > 0) {
-                    callback(
-                      new Error(
-                        this.$t("validator.template.exist", [
-                          this.$t("Equipment.editor.Name"),
-                        ])
-                      )
-                    );
+                  if (
+                    rsp.value.length > 0 &&
+                    (!this.model?.Id || this.model.Id !== rsp.value[0].Id)
+                  ) {
+                    callback(new Error("该设备Id和电话的组合已存在"));
                   } else {
                     callback();
                   }
                 });
+              } else {
+                callback();
               }
             },
-            trigger: "blur",
-          },
-        ],
-        CalibrationValue: [
-          {
-            pattern: /^[-,+]?\d+.?\d*$/,
-            message: () =>
-              this.$t("validator.template.isNumber", [
-                this.$t("Equipment.editor.CalibrationValue"),
-              ]),
             trigger: "blur",
           },
         ],
@@ -164,9 +180,19 @@ export default defineComponent({
     onAcceptClick() {
       this.$refs.editForm.validate((valid) => {
         if (valid) {
-          this.modelInner.EquipmentId = parseInt(
-            this.modelInner.EquipmentId.trim()
-          );
+          // this.modelInner.EquipmentId = parseInt(
+          //   this.modelInner.EquipmentId.trim()
+          // );
+          let equipmentId = this.modelInner.EquipmentId;
+          if (typeof equipmentId === "string") {
+            equipmentId = parseInt(equipmentId.trim());
+            // 如果转换失败（NaN），可以设置一个默认值或进行错误处理
+            if (isNaN(equipmentId)) {
+              equipmentId = 0; // 或其他默认值
+              // 或者抛出错误: throw new Error('无效的设备ID');
+            }
+          }
+          this.modelInner.EquipmentId = equipmentId;
           this.$emit("update:model", this.modelInner);
           this.visibleInner = false;
           this.$emit("accept");

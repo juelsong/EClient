@@ -114,7 +114,7 @@ export function equipmentTMPExport(equipmentTPM: EquipmentTPM) {
       fontStyle: `normal`, // 设置表格字体样式
     },
   });
-  doc.text(`现场设备位置:${equipmentTPM.DeviceLocation}`, 10, 220);
+  doc.text(`设备现场情况(设备现场位置是否合格是否有喷淋遮挡、设备有无损坏):${equipmentTPM.DeviceLocation}`, 10, 220);
 
   doc.text(`操作人:${equipmentTPM.UserName}`, 10, 280);
 
@@ -292,7 +292,7 @@ export function equipmentTMPExport(equipmentTPM: EquipmentTPM) {
   );
 
   //保存PDF
-  doc.save(`设备维护结果表.pdf`);
+  doc.save(`${equipmentTPM.EquipmentName}-${getDate(new Date())}-运维台账.pdf`);
   // doc.text(`Hello world!`, 10, 10);
   // editModalVisible = true;
 }
